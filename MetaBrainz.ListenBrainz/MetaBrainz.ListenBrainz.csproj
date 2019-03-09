@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+
   <Import Project="..\build\NuGetPackage.props" />
+
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
   </PropertyGroup>
+
   <PropertyGroup>
     <Version>0.1.0-pre</Version>
     <AssemblyVersion>0.1</AssemblyVersion>
@@ -12,13 +15,17 @@
       First version.
     </PackageReleaseNotes>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
+
   <PropertyGroup>
     <Title>ListenBrainz Web Service Client Library</Title>
     <Description>This package provides classes for accessing the ListenBrainz API (v1).</Description>
     <PackageTags>ListenBrainz music metadata listens audioscrobbler last.fm</PackageTags>
   </PropertyGroup>
+
   <Import Project="..\build\NuGetPackage.targets" />
+
 </Project>
