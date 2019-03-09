@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 
 namespace MetaBrainz.ListenBrainz {
 
+  /// <summary>Main class for accessing the ListenBrainz API.</summary>
   [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
   [SuppressMessage("ReSharper", "UnusedMember.Global")]
@@ -133,25 +134,34 @@ namespace MetaBrainz.ListenBrainz {
     public string UserToken { get; set; } = null;
 
     #endregion
- 
+
     #region Public API
-    
-    public RateLimitInfo RateLimitInfo = new RateLimitInfo();
-    
-    public ILatestImport LatestImport(string userName) {
+
+    /// <summary>Information about the active rate limiting. Gets refreshed after every API call.</summary>
+    public readonly RateLimitInfo RateLimitInfo = new RateLimitInfo();
+
+    /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
+    /// <param name="userName">The MusicBrainz ID of the user whose data is needed.</param>
+    /// <returns>An object providing the user's ID and latest import timestamp.</returns>
+    /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
+    public ILatestImport GetLatestImport(string userName) {
       var json = this.PerformRequest("latest-import", Method.GET, userName);
       return JsonConvert.DeserializeObject<LatestImport>(json);
     }
-    
-    public async Task<ILatestImport> LatestImportAsync(string userName) {
+
+    /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
+    /// <param name="userName">The MusicBrainz ID of the user whose data is needed.</param>
+    /// <returns>An object providing the user's ID and latest import timestamp.</returns>
+    /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
+    public async Task<ILatestImport> GetLatestImportAsync(string userName) {
       var json = await this.PerformRequestAsync("latest-import", Method.GET, userName).ConfigureAwait(false);
       return JsonConvert.DeserializeObject<LatestImport>(json);
     }
-    
+
     #endregion
-    
+
     #region Internals
-    
+
     private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings {
       CheckAdditionalContent = true,
       MissingMemberHandling  = MissingMemberHandling.Error
@@ -162,11 +172,11 @@ namespace MetaBrainz.ListenBrainz {
     private readonly SemaphoreSlim _clientLock = new SemaphoreSlim(1);
 
     private bool _disposed;
-    
+
     private readonly string _fullUserAgent;
 
     private WebClient _webClient;
-    
+
     private WebClient WebClient {
       get {
         if (this._disposed)
@@ -190,14 +200,14 @@ namespace MetaBrainz.ListenBrainz {
         this._clientLock.Release();
       }
     }
-    
+
     /// <summary>Disposes the web client in use by this query, if there is one.</summary>
     /// <remarks>Further attempts at web service requests will cause <see cref="ObjectDisposedException"/> to be thrown.</remarks>
     public void Dispose() {
       this.Dispose(true);
       GC.SuppressFinalize(this);
     }
-    
+
     private void Dispose(bool disposing) {
       if (!disposing)
         return;
@@ -209,11 +219,12 @@ namespace MetaBrainz.ListenBrainz {
         this._disposed = true;
       }
     }
-    
+
+    /// <summary>Finalizes this instance.</summary>
     ~ListenBrainz() {
       this.Dispose(false);
     }
-    
+
     #endregion
 
     #region Basic Request Execution
@@ -287,11 +298,11 @@ namespace MetaBrainz.ListenBrainz {
         this._clientLock.Release();
       }
     }
-    
+
     #endregion
-    
+
     #endregion
-    
+
   }
 
 }
