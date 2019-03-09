@@ -3,15 +3,15 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild Condition=" $(Configuration) == 'Release' ">True</GeneratePackageOnBuild>
-    <Company>MetaBrainz</Company>
     <Authors>Zastai</Authors>
-    <Copyright>Copyright © 2018 Tim Van Holder</Copyright>
+    <Company>MetaBrainz</Company>
+    <Copyright>Copyright © 2018, 2019 Tim Van Holder. All rights reserved.</Copyright>
     <Product>MetaBrainz.ListenBrainz</Product>
     <PackageIconUrl>https://raw.githubusercontent.com/metabrainz/metabrainz-logos/master/final-logos/ListenBrainz/PIXEL/PNG/ListenBrainz_logo_small_notext.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/Zastai/ListenBrainz/blob/master/README.md</PackageProjectUrl>
-    <PackageLicenseUrl>https://opensource.org/licenses/ms-pl</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/Zastai/ListenBrainz</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
+    <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
   </PropertyGroup>
 
 </Project>
