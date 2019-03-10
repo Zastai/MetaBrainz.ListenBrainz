@@ -138,7 +138,9 @@ namespace MetaBrainz.ListenBrainz {
     #region Public API
 
     /// <summary>Information about the active rate limiting. Gets refreshed after every API call.</summary>
-    public readonly RateLimitInfo RateLimitInfo = new RateLimitInfo();
+    public RateLimitInfo RateLimitInfo { get; private set; }
+
+    #region /1/latest-import
 
     /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
     /// <param name="userName">The MusicBrainz ID of the user whose data is needed.</param>
@@ -157,6 +159,8 @@ namespace MetaBrainz.ListenBrainz {
       var json = await this.PerformRequestAsync("latest-import", Method.GET, userName).ConfigureAwait(false);
       return JsonConvert.DeserializeObject<LatestImport>(json);
     }
+
+    #endregion
 
     #endregion
 
@@ -256,7 +260,7 @@ namespace MetaBrainz.ListenBrainz {
         finally {
           if (response != null)
             Debug.Print($"[{DateTime.UtcNow}] => RESPONSE: {response}");
-          this.RateLimitInfo.SetFrom(wc.ResponseHeaders);
+          this.RateLimitInfo = RateLimitInfo.From(wc.ResponseHeaders);
         }
       }
       finally {
@@ -291,7 +295,7 @@ namespace MetaBrainz.ListenBrainz {
         finally {
           if (response != null)
             Debug.Print($"[{DateTime.UtcNow}] => RESPONSE: {response}");
-          this.RateLimitInfo.SetFrom(wc.ResponseHeaders);
+          this.RateLimitInfo = RateLimitInfo.From(wc.ResponseHeaders);
         }
       }
       finally {
