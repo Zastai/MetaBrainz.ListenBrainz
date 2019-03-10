@@ -7,7 +7,10 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
 
     /// <summary>The timestamp of the newest listen submitted in previous imports.</summary>
     DateTime Timestamp { get; }
-    
+
+    /// <summary>The timestamp of the newest listen submitted in previous imports.</summary>
+    long UnixTimestamp { get; }
+
     /// <summary>The MusicBrainz ID of the user.</summary>
     string User { get; }
 
