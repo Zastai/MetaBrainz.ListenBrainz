@@ -8,11 +8,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support Files", "Support Files", "{F997B31A-CF25-4C63-BEB5-172F7E13D9B3}"
 	ProjectSection(SolutionItems) = preProject
 		build\Common.props = build\Common.props
+		build\Common.targets = build\Common.targets
 		Directory.Build.props = Directory.Build.props
-		build\FrameworkVersion.DefineConstants.props = build\FrameworkVersion.DefineConstants.props
-		build\NuGetPackage.props = build\NuGetPackage.props
-		build\NuGetPackage.targets = build\NuGetPackage.targets
+		Directory.Build.targets = Directory.Build.targets
+		build\PackageIcon.targets = build\PackageIcon.targets
 		README.md = README.md
+		build\TargetFrameworkVersionDefineConstants.targets = build\TargetFrameworkVersionDefineConstants.targets
+		build\Versioning.targets = build\Versioning.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaBrainz.ListenBrainz", "MetaBrainz.ListenBrainz\MetaBrainz.ListenBrainz.csproj", "{7432E8B5-BAEF-4B24-ABE0-3410853F3273}"
