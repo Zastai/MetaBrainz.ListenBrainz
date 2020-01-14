@@ -1,26 +1,31 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 using MetaBrainz.ListenBrainz.Interfaces;
-using Newtonsoft.Json;
 
 namespace MetaBrainz.ListenBrainz.Objects {
 
-  [JsonObject]
-  internal sealed class TrackMetadata : ITrackMetaData {
+  internal sealed class TrackMetadata : JsonBasedObject, ITrackMetaData {
 
-    [JsonProperty("artist_name", Required = Required.Always)]
-    public string Artist { get; private set; }
+    [JsonPropertyName("artist_name")]
+    [UsedImplicitly]
+    public string Artist { get; set; }
 
-    [JsonIgnore]
-    public IReadOnlyDictionary<string, object> Info => this._info;
+    public IReadOnlyDictionary<string, object> Info => this._info ??= JsonUtils.Unwrap(this.TheInfo);
 
-    [JsonProperty("additional_info", Required = Required.Default)]
-    private Dictionary<string, object> _info = null;
+    private Dictionary<string, object> _info;
 
-    [JsonProperty("track_name", Required = Required.Always)]
-    public string Name { get; private set; }
+    [JsonPropertyName("additional_info")]
+    [UsedImplicitly]
+    public Dictionary<string, object> TheInfo { get; set; }
 
-    [JsonProperty("release_name", Required = Required.Default)]
-    public string Release { get; private set; }
+    [JsonPropertyName("track_name")]
+    [UsedImplicitly]
+    public string Name { get; set; }
+
+    [JsonPropertyName("release_name")]
+    [UsedImplicitly]
+    public string Release { get; set; }
 
   }
 

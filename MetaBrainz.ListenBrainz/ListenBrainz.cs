@@ -3,23 +3,19 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-
+using JetBrains.Annotations;
 using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
-
-using Newtonsoft.Json;
 
 namespace MetaBrainz.ListenBrainz {
 
   /// <summary>Main class for accessing the ListenBrainz API.</summary>
-  [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
-  [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-  [SuppressMessage("ReSharper", "UnusedMember.Global")]
+  [PublicAPI]
   public sealed class ListenBrainz : IDisposable {
 
     #region Constants
@@ -74,12 +70,12 @@ namespace MetaBrainz.ListenBrainz {
     /// When <paramref name="userAgent"/> is <see langword="null"/>, and no default was set via <see cref="DefaultUserAgent"/>.
     /// </exception>
     public ListenBrainz(string userAgent = null) {
-      this.UserAgent = userAgent ?? ListenBrainz.DefaultUserAgent;
+      this.UserAgent = userAgent ?? DefaultUserAgent;
       if (this.UserAgent == null) throw new ArgumentNullException(nameof(userAgent));
       if (this.UserAgent.Trim().Length == 0) throw new ArgumentException("The user agent must not be blank.", nameof(userAgent));
       { // Set full user agent, including this library's information
         var an = typeof(ListenBrainz).Assembly.GetName();
-        this._fullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({ListenBrainz.UserAgentUrl})";
+        this._fullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({UserAgentUrl})";
       }
     }
 
@@ -121,7 +117,7 @@ namespace MetaBrainz.ListenBrainz {
       this.UserAgent = $"{application}/{version} ({contact})";
       { // Set full user agent, including this library's information
         var an = typeof(ListenBrainz).Assembly.GetName();
-        this._fullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({ListenBrainz.UserAgentUrl})";
+        this._fullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({UserAgentUrl})";
       }
     }
 
@@ -130,16 +126,16 @@ namespace MetaBrainz.ListenBrainz {
     #region Public Instance Fields / Properties
 
     /// <summary>The base URI for all requests.</summary>
-    public Uri BaseUri => new UriBuilder(this.UrlScheme, this.Server, this.Port, ListenBrainz.WebServiceRoot).Uri;
+    public Uri BaseUri => new UriBuilder(this.UrlScheme, this.Server, this.Port, WebServiceRoot).Uri;
 
     /// <summary>The port number to use for requests (-1 to not specify any explicit port).</summary>
-    public int Port { get; set; } = ListenBrainz.DefaultPort;
+    public int Port { get; set; } = DefaultPort;
 
     /// <summary>The server to use for requests.</summary>
-    public string Server { get; set; } = ListenBrainz.DefaultServer;
+    public string Server { get; set; } = DefaultServer;
 
     /// <summary>The internet access protocol to use for requests.</summary>
-    public string UrlScheme { get; set; } = ListenBrainz.DefaultUrlScheme;
+    public string UrlScheme { get; set; } = DefaultUrlScheme;
 
     /// <summary>The user agent to use for requests.</summary>
     public string UserAgent { get; }
@@ -156,7 +152,7 @@ namespace MetaBrainz.ListenBrainz {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     private static NameValueCollection OptionsForLatestImport(string user_name) {
       var options = new NameValueCollection(1);
-      options.Set("user_name", user_name);
+      options.Set(nameof(user_name), user_name);
       return options;
     }
 
@@ -165,8 +161,8 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>An object providing the user's ID and latest import timestamp.</returns>
     /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
     public ILatestImport GetLatestImport(string user) {
-      var json = this.PerformRequest("latest-import", Method.GET, ListenBrainz.OptionsForLatestImport(user));
-      return JsonConvert.DeserializeObject<LatestImport>(json);
+      var json = this.PerformRequest("latest-import", Method.Get, OptionsForLatestImport(user));
+      return JsonSerializer.Deserialize<LatestImport>(json);
     }
 
     /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
@@ -174,9 +170,9 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>An object providing the user's ID and latest import timestamp.</returns>
     /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
     public async Task<ILatestImport> GetLatestImportAsync(string user) {
-      var task = this.PerformRequestAsync("latest-import", Method.GET, ListenBrainz.OptionsForLatestImport(user));
+      var task = this.PerformRequestAsync("latest-import", Method.Get, OptionsForLatestImport(user));
       var json = await task.ConfigureAwait(false);
-      return JsonConvert.DeserializeObject<LatestImport>(json);
+      return JsonSerializer.Deserialize<LatestImport>(json);
     }
 
     /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
@@ -204,7 +200,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
     /// </remarks>
     public void SetLatestImport(string user, string token, long timestamp) {
-      this.PerformRequest("latest-import", Method.POST, $"{{ ts: {timestamp} }}", OptionsForLatestImport(user), token);
+      this.PerformRequest("latest-import", Method.Post, $"{{ ts: {timestamp} }}", OptionsForLatestImport(user), token);
     }
 
     /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
@@ -232,7 +228,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
     /// </remarks>
     public async Task SetLatestImportAsync(string user, string token, long timestamp) {
-      var task = this.PerformRequestAsync("latest-import", Method.POST, $"{{ ts: {timestamp} }}", OptionsForLatestImport(user), token);
+      var task = this.PerformRequestAsync("latest-import", Method.Post, $"{{ ts: {timestamp} }}", OptionsForLatestImport(user), token);
       await task.ConfigureAwait(false);
     }
 
@@ -256,11 +252,11 @@ namespace MetaBrainz.ListenBrainz {
     private static NameValueCollection OptionsForGetListens(int? count, long? min_ts, long? max_ts) {
       var options = new NameValueCollection(3);
       if (max_ts.HasValue)
-        options.Set("max_ts", max_ts.Value.ToString(CultureInfo.InvariantCulture));
+        options.Set(nameof(max_ts), max_ts.Value.ToString(CultureInfo.InvariantCulture));
       if (min_ts.HasValue)
-        options.Set("min_ts", min_ts.Value.ToString(CultureInfo.InvariantCulture));
+        options.Set(nameof(min_ts), min_ts.Value.ToString(CultureInfo.InvariantCulture));
       if (count.HasValue)
-        options.Set("count", count.Value.ToString(CultureInfo.InvariantCulture));
+        options.Set(nameof(count), count.Value.ToString(CultureInfo.InvariantCulture));
       return options;
     }
 
@@ -277,8 +273,8 @@ namespace MetaBrainz.ListenBrainz {
     /// </param>
     /// <returns>The requested listens.</returns>
     public IFetchedListens GetListens(string user, string token = null, int? count = null) {
-      var json = this.PerformRequest("user/" + user + "/listens", Method.GET, OptionsForGetListens(count, null, null));
-      return JsonConvert.DeserializeObject<Payload<FetchedListens>>(json, ListenBrainz.SerializerSettings).Contents;
+      var json = this.PerformRequest("user/" + user + "/listens", Method.Get, OptionsForGetListens(count, null, null));
+      return JsonSerializer.Deserialize<Payload<FetchedListens>>(json, SerializerOptions).Contents;
     }
 
     /// <summary>Gets listens for a user, starting from a particular timestamp.</summary>
@@ -318,8 +314,8 @@ namespace MetaBrainz.ListenBrainz {
     /// </param>
     /// <returns>The requested listens.</returns>
     public IFetchedListens GetListensAfter(string user, long timestamp, string token = null, int? count = null) {
-      var json = this.PerformRequest("user/" + user + "/listens", Method.GET, OptionsForGetListens(count, timestamp, null), token);
-      return JsonConvert.DeserializeObject<Payload<FetchedListens>>(json, ListenBrainz.SerializerSettings).Contents;
+      var json = this.PerformRequest("user/" + user + "/listens", Method.Get, OptionsForGetListens(count, timestamp, null), token);
+      return JsonSerializer.Deserialize<Payload<FetchedListens>>(json, SerializerOptions).Contents;
     }
 
     /// <summary>Gets listens for a user, ending at a particular timestamp.</summary>
@@ -359,8 +355,8 @@ namespace MetaBrainz.ListenBrainz {
     /// </param>
     /// <returns>The requested listens.</returns>
     public IFetchedListens GetListensBefore(string user, long timestamp, string token = null, int? count = null) {
-      var json = this.PerformRequest("user/" + user + "/listens", Method.GET, OptionsForGetListens(count, null, timestamp), token);
-      return JsonConvert.DeserializeObject<Payload<FetchedListens>>(json, ListenBrainz.SerializerSettings).Contents;
+      var json = this.PerformRequest("user/" + user + "/listens", Method.Get, OptionsForGetListens(count, null, timestamp), token);
+      return JsonSerializer.Deserialize<Payload<FetchedListens>>(json, SerializerOptions).Contents;
     }
 
     #endregion
@@ -387,9 +383,11 @@ namespace MetaBrainz.ListenBrainz {
 
     #region Internals
 
-    private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings {
-      CheckAdditionalContent = true,
-      MissingMemberHandling  = MissingMemberHandling.Ignore
+    private static readonly JsonSerializerOptions SerializerOptions = new JsonSerializerOptions {
+      AllowTrailingCommas = false,
+      IgnoreNullValues = false,
+      IgnoreReadOnlyProperties = true,
+      PropertyNameCaseInsensitive = false,
     };
 
     #region Web Client / IDisposable
@@ -406,7 +404,7 @@ namespace MetaBrainz.ListenBrainz {
       get {
         if (this._disposed)
           throw new ObjectDisposedException(nameof(ListenBrainz));
-        var wc = this._webClient ?? (this._webClient = new WebClient { Encoding = Encoding.UTF8 });
+        var wc = this._webClient ??= new WebClient { Encoding = Encoding.UTF8 };
         wc.BaseAddress = this.BaseUri.ToString();
         return wc;
       }
@@ -414,7 +412,6 @@ namespace MetaBrainz.ListenBrainz {
 
     /// <summary>Closes the web client in use by this query, if there is one.</summary>
     /// <remarks>The next web service request will create a new client.</remarks>
-    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     public void Close() {
       this._clientLock.Wait();
       try {
@@ -454,55 +451,7 @@ namespace MetaBrainz.ListenBrainz {
 
     #region Basic Request Execution
 
-    #region Error Response Handling
-
-    #pragma warning disable 649
-
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
-    private sealed class ErrorInfo {
-      [JsonProperty] public int    code;
-      [JsonProperty] public string error;
-    }
-
-    #pragma warning restore 649
-
-    private static ErrorInfo ExtractError(WebResponse response) {
-      if (response == null || response.ContentLength == 0)
-        return null;
-      try {
-        var stream = response.GetResponseStream();
-        if (stream == null || !stream.CanRead)
-          return null;
-        if (response.ContentType.StartsWith("application/json")) {
-          var charset = (response as HttpWebResponse)?.CharacterSet;
-          var encoding = string.IsNullOrWhiteSpace(charset) ? Encoding.UTF8 : Encoding.GetEncoding(charset);
-          try {
-            using (var sr = new StreamReader(stream, encoding, false, 1024, true)) {
-              var json = sr.ReadToEnd();
-              Debug.Print($"[{DateTime.UtcNow}] => RESPONSE ({response.ContentType}): \"{json}\"");
-              var ei = JsonConvert.DeserializeObject<ErrorInfo>(json);
-              Debug.Print($"[{DateTime.UtcNow}] => ERROR: ({ei?.code}): \"{ei?.error}\"");
-              return ei;
-            }
-          }
-          finally {
-            if (stream.CanSeek)
-              stream.Seek(0, SeekOrigin.Begin);
-          }
-        }
-        Debug.Print($"[{DateTime.UtcNow}] => UNHANDLED ERROR RESPONSE ({response.ContentType}): <{response.ContentLength} byte(s)>");
-      }
-      catch (Exception e) {
-        Debug.Print($"[{DateTime.UtcNow}] => FAILED TO PROCESS ERROR RESPONSE: [{e.GetType()}] {e.Message}");
-        /* keep calm and fall through */
-      }
-      return null;
-    }
-
-    #endregion
-
-    private WebClient PrepareRequest(NameValueCollection options, string token)
-    {
+    private WebClient PrepareRequest(NameValueCollection options, string token) {
       var wc = this.WebClient;
       wc.Headers.Set("Content-Type", "application/json");
       wc.Headers.Set("Accept",       "application/json");
@@ -526,7 +475,7 @@ namespace MetaBrainz.ListenBrainz {
         var wc = this.PrepareRequest(options, token);
         string response = null;
         try {
-          if (method == Method.GET)
+          if (method == Method.Get)
             return response = wc.DownloadString(address);
           else {
             if (body != null)
@@ -535,9 +484,9 @@ namespace MetaBrainz.ListenBrainz {
           }
         }
         catch (WebException we) {
-          var ei = ListenBrainz.ExtractError(we.Response);
+          var ei = ErrorInfo.ExtractFrom(we.Response as HttpWebResponse);
           if (ei != null)
-            throw new QueryException(ei.code, ei.error, we);
+            throw new QueryException(ei.Code, ei.Error, we);
           throw;
         }
         finally {
@@ -562,7 +511,7 @@ namespace MetaBrainz.ListenBrainz {
         var wc = this.PrepareRequest(options, token);
         string response = null;
         try {
-          if (method == Method.GET)
+          if (method == Method.Get)
             return response = await wc.DownloadStringTaskAsync(address).ConfigureAwait(false);
           else {
             if (body != null)
@@ -571,9 +520,9 @@ namespace MetaBrainz.ListenBrainz {
           }
         }
         catch (WebException we) {
-          var ei = ListenBrainz.ExtractError(we.Response);
+          var ei = await ErrorInfo.ExtractFromAsync(we.Response as HttpWebResponse);
           if (ei != null)
-            throw new QueryException(ei.code, ei.error, we);
+            throw new QueryException(ei.Code, ei.Error, we);
           throw;
         }
         finally {

@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace MetaBrainz.ListenBrainz.Interfaces {
 
   /// <summary>Metadata about a listened track.</summary>
-  public interface ITrackMetaData {
+  [PublicAPI]
+  public interface ITrackMetaData : IJsonBasedObject {
 
     /// <summary>The name of the track's artist.</summary>
     string Artist { get; }

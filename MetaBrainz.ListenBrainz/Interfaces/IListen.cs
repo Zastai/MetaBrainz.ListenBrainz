@@ -1,12 +1,14 @@
 using System;
+using JetBrains.Annotations;
 
 namespace MetaBrainz.ListenBrainz.Interfaces {
 
   /// <summary>Information about a single listen.</summary>
-  public interface IListen {
+  [PublicAPI]
+  public interface IListen : IJsonBasedObject {
 
     /// <summary>The MessyBrainz ID for the recording that was listened to.</summary>
-    Guid? MessyRecording { get; }
+    Guid? MessyRecordingId { get; }
 
     /// <summary>The timestamp for the listen.</summary>
     DateTime Timestamp { get; }
@@ -16,6 +18,9 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
 
     /// <summary>The timestamp for the listen.</summary>
     long UnixTimestamp { get; }
+
+    /// <summary>The MusicBrainz ID of the user who submitted the listen.</summary>
+    string User { get; }
 
   }
 

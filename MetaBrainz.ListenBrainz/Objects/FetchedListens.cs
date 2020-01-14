@@ -1,23 +1,40 @@
+using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+using JetBrains.Annotations;
+
 using MetaBrainz.ListenBrainz.Interfaces;
-using Newtonsoft.Json;
 
 namespace MetaBrainz.ListenBrainz.Objects {
 
-  [JsonObject]
-  internal sealed class FetchedListens : IFetchedListens {
+  internal sealed class FetchedListens : JsonBasedObject, IFetchedListens {
 
-    [JsonProperty("count", Required = Required.Always)]
-    public int Count { get; private set; }
+    [JsonPropertyName("count")]
+    [UsedImplicitly]
+    public int Count { get; set; }
+
+    public IReadOnlyList<IListen> Listens => this.TheListens;
+
+    [JsonPropertyName("listens")]
+    [UsedImplicitly]
+    public IReadOnlyList<Listen> TheListens { get; set; }
 
     [JsonIgnore]
-    public IReadOnlyList<IListen> Listens => _listens;
+    public DateTime Timestamp { get; private set; }
 
-    [JsonProperty("listens", Required = Required.Always)]
-    private Listen[] _listens = null;
+    [JsonPropertyName("latest_listen_ts")]
+    [UsedImplicitly]
+    public long UnixTimestamp {
+      get => this._unixTimestamp;
+      set => this.Timestamp = UnixTime.Convert(this._unixTimestamp = value);
+    }
 
-    [JsonProperty("user_id", Required = Required.Always)]
-    public string User { get; private set; }
+    private long _unixTimestamp = 0;
+
+    [JsonPropertyName("user_id")]
+    [UsedImplicitly]
+    public string User { get; set; }
 
   }
 

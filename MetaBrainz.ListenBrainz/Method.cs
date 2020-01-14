@@ -1,18 +1,24 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace MetaBrainz.ListenBrainz {
 
-  /// <summary>Enumeration of the supported request methods.</summary>  
-  [SuppressMessage("ReSharper", "InconsistentNaming")]
+  /// <summary>Enumeration of the supported request methods.</summary>
+  [PublicAPI]
   internal enum Method {
+
     /// <summary>HTTP DELETE: Delete a resource.</summary>
-    DELETE,
+    Delete,
+
     /// <summary>HTTP GET: Request data from a resource.</summary>
-    GET,
+    Get,
+
     /// <summary>HTTP POST: Submit data to a resource.</summary>
-    POST,
+    Post,
+
     /// <summary>HTTP PUT: Upload data representing a resource.</summary>
-    PUT,
+    Put,
+
   }
 
 }

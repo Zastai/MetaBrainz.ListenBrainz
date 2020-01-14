@@ -1,12 +1,13 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 
 namespace MetaBrainz.ListenBrainz.Objects {
 
-  [JsonObject]
-  internal sealed class Payload<T> {
+  internal sealed class Payload<T> : JsonBasedObject {
 
-    [JsonProperty("payload", Required = Required.Always)]
-    public T Contents { get; private set; }
+    [JsonPropertyName("payload")]
+    [UsedImplicitly]
+    public T Contents { get; set; }
 
   }
 

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace MetaBrainz.ListenBrainz {
 
   /// <summary>Utility class for working with Unix time values (seconds since 1970-01-01T00:00:00).</summary>
-  [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-  [SuppressMessage("ReSharper", "UnusedMember.Global")]
+  [PublicAPI]
   public static class UnixTime {
 
     /// <summary>The epoch for Unix time values (1970-01-01T00:00:00).</summary>
@@ -19,7 +19,6 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>Computes the date/time corresponding to the specified Unix time value.</summary>
     /// <param name="value">The Unix time value to convert to a date/time.</param>
     /// <returns>The corresponding date/time.</returns>
-    [SuppressMessage("ReSharper", "ImpureMethodCallOnReadonlyValueField")]
     public static DateTime Convert(long value) => UnixTime.Epoch.AddSeconds(value);
 
   }

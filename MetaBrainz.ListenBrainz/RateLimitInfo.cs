@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using JetBrains.Annotations;
 
 namespace MetaBrainz.ListenBrainz {
 
   /// <summary>
   /// Information about any rate limiting that is in effect, as returned in the response headers for web service requests.
   /// </summary>
-  [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-  [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
+  [PublicAPI]
   public struct RateLimitInfo {
 
     /// <summary>The total number of requests allowed in the current time window.</summary>
