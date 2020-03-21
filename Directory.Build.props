@@ -5,7 +5,7 @@
   <!-- Settings used by the common settings. -->
   <PropertyGroup>
     <PackageCopyrightYears>2018-2020</PackageCopyrightYears>
-    <PackageRepositoryName>ListenBrainz</PackageRepositoryName>
+    <PackageRepositoryName>MetaBrainz.ListenBrainz</PackageRepositoryName>
   </PropertyGroup>
 
   <!-- Get common settings. -->
