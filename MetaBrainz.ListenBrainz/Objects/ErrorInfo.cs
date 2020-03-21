@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+
 using JetBrains.Annotations;
 
 namespace MetaBrainz.ListenBrainz.Objects {

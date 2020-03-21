@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
+
 using JetBrains.Annotations;
 
 namespace MetaBrainz.ListenBrainz {
