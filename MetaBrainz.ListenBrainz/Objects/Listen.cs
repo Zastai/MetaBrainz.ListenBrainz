@@ -3,36 +3,25 @@ using System.Text.Json.Serialization;
 
 using JetBrains.Annotations;
 
+using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects {
 
+  [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
   internal sealed class Listen : JsonBasedObject, IListen {
 
     [JsonPropertyName("recording_msid")]
-    [UsedImplicitly]
     public Guid? MessyRecordingId { get; set; }
 
-    [JsonIgnore]
-    public DateTime Timestamp { get; private set; }
-
-    public ITrackMetaData Track => this.TheTrack;
+    [JsonConverter(typeof(UnixTime.JsonConverter))]
+    [JsonPropertyName("listened_at")]
+    public DateTime Timestamp { get; set; }
 
     [JsonPropertyName("track_metadata")]
-    [UsedImplicitly]
-    public TrackMetadata TheTrack { get; set; }
-
-    [JsonPropertyName("listened_at")]
-    [UsedImplicitly]
-    public long UnixTimestamp {
-      get => this._unixTimestamp;
-      set => this.Timestamp = UnixTime.Convert(this._unixTimestamp = value);
-    }
-
-    private long _unixTimestamp = 0;
+    public ITrackMetaData Track  { get; set; }
 
     [JsonPropertyName("user_name")]
-    [UsedImplicitly]
     public string User { get; set; }
 
   }

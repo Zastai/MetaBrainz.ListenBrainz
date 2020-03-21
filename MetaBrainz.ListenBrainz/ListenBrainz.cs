@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
+using MetaBrainz.Common.Json;
+using MetaBrainz.Common.Json.Converters;
 using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
 
@@ -72,12 +74,12 @@ namespace MetaBrainz.ListenBrainz {
     /// When <paramref name="userAgent"/> is <see langword="null"/>, and no default was set via <see cref="DefaultUserAgent"/>.
     /// </exception>
     public ListenBrainz(string userAgent = null) {
-      this.UserAgent = userAgent ?? DefaultUserAgent;
+      this.UserAgent = userAgent ?? ListenBrainz.DefaultUserAgent;
       if (this.UserAgent == null) throw new ArgumentNullException(nameof(userAgent));
       if (this.UserAgent.Trim().Length == 0) throw new ArgumentException("The user agent must not be blank.", nameof(userAgent));
       { // Set full user agent, including this library's information
         var an = typeof(ListenBrainz).Assembly.GetName();
-        this._fullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({UserAgentUrl})";
+        this._fullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({ListenBrainz.UserAgentUrl})";
       }
     }
 
@@ -119,7 +121,7 @@ namespace MetaBrainz.ListenBrainz {
       this.UserAgent = $"{application}/{version} ({contact})";
       { // Set full user agent, including this library's information
         var an = typeof(ListenBrainz).Assembly.GetName();
-        this._fullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({UserAgentUrl})";
+        this._fullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({ListenBrainz.UserAgentUrl})";
       }
     }
 
@@ -128,16 +130,16 @@ namespace MetaBrainz.ListenBrainz {
     #region Public Instance Fields / Properties
 
     /// <summary>The base URI for all requests.</summary>
-    public Uri BaseUri => new UriBuilder(this.UrlScheme, this.Server, this.Port, WebServiceRoot).Uri;
+    public Uri BaseUri => new UriBuilder(this.UrlScheme, this.Server, this.Port, ListenBrainz.WebServiceRoot).Uri;
 
     /// <summary>The port number to use for requests (-1 to not specify any explicit port).</summary>
-    public int Port { get; set; } = DefaultPort;
+    public int Port { get; set; } = ListenBrainz.DefaultPort;
 
     /// <summary>The server to use for requests.</summary>
-    public string Server { get; set; } = DefaultServer;
+    public string Server { get; set; } = ListenBrainz.DefaultServer;
 
     /// <summary>The internet access protocol to use for requests.</summary>
-    public string UrlScheme { get; set; } = DefaultUrlScheme;
+    public string UrlScheme { get; set; } = ListenBrainz.DefaultUrlScheme;
 
     /// <summary>The user agent to use for requests.</summary>
     public string UserAgent { get; }
@@ -163,8 +165,8 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>An object providing the user's ID and latest import timestamp.</returns>
     /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
     public ILatestImport GetLatestImport(string user) {
-      var json = this.PerformRequest("latest-import", Method.Get, OptionsForLatestImport(user));
-      return JsonSerializer.Deserialize<LatestImport>(json);
+      var json = this.PerformRequest("latest-import", Method.Get, ListenBrainz.OptionsForLatestImport(user));
+      return JsonUtils.Deserialize<LatestImport>(json, ListenBrainz.SerializerOptions);
     }
 
     /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
@@ -172,9 +174,9 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>An object providing the user's ID and latest import timestamp.</returns>
     /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
     public async Task<ILatestImport> GetLatestImportAsync(string user) {
-      var task = this.PerformRequestAsync("latest-import", Method.Get, OptionsForLatestImport(user));
+      var task = this.PerformRequestAsync("latest-import", Method.Get, ListenBrainz.OptionsForLatestImport(user));
       var json = await task.ConfigureAwait(false);
-      return JsonSerializer.Deserialize<LatestImport>(json);
+      return JsonUtils.Deserialize<LatestImport>(json, ListenBrainz.SerializerOptions);
     }
 
     /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
@@ -202,7 +204,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
     /// </remarks>
     public void SetLatestImport(string user, string token, long timestamp) {
-      this.PerformRequest("latest-import", Method.Post, $"{{ ts: {timestamp} }}", OptionsForLatestImport(user), token);
+      this.PerformRequest("latest-import", Method.Post, $"{{ ts: {timestamp} }}", ListenBrainz.OptionsForLatestImport(user), token);
     }
 
     /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
@@ -230,7 +232,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
     /// </remarks>
     public async Task SetLatestImportAsync(string user, string token, long timestamp) {
-      var task = this.PerformRequestAsync("latest-import", Method.Post, $"{{ ts: {timestamp} }}", OptionsForLatestImport(user), token);
+      var task = this.PerformRequestAsync("latest-import", Method.Post, $"{{ ts: {timestamp} }}", ListenBrainz.OptionsForLatestImport(user), token);
       await task.ConfigureAwait(false);
     }
 
@@ -275,8 +277,8 @@ namespace MetaBrainz.ListenBrainz {
     /// </param>
     /// <returns>The requested listens.</returns>
     public IFetchedListens GetListens(string user, string token = null, int? count = null) {
-      var json = this.PerformRequest("user/" + user + "/listens", Method.Get, OptionsForGetListens(count, null, null));
-      return JsonSerializer.Deserialize<Payload<FetchedListens>>(json, SerializerOptions).Contents;
+      var json = this.PerformRequest("user/" + user + "/listens", Method.Get, ListenBrainz.OptionsForGetListens(count, null, null));
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
     }
 
     /// <summary>Gets listens for a user, starting from a particular timestamp.</summary>
@@ -316,8 +318,8 @@ namespace MetaBrainz.ListenBrainz {
     /// </param>
     /// <returns>The requested listens.</returns>
     public IFetchedListens GetListensAfter(string user, long timestamp, string token = null, int? count = null) {
-      var json = this.PerformRequest("user/" + user + "/listens", Method.Get, OptionsForGetListens(count, timestamp, null), token);
-      return JsonSerializer.Deserialize<Payload<FetchedListens>>(json, SerializerOptions).Contents;
+      var json = this.PerformRequest("user/" + user + "/listens", Method.Get, ListenBrainz.OptionsForGetListens(count, timestamp, null), token);
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
     }
 
     /// <summary>Gets listens for a user, ending at a particular timestamp.</summary>
@@ -357,8 +359,8 @@ namespace MetaBrainz.ListenBrainz {
     /// </param>
     /// <returns>The requested listens.</returns>
     public IFetchedListens GetListensBefore(string user, long timestamp, string token = null, int? count = null) {
-      var json = this.PerformRequest("user/" + user + "/listens", Method.Get, OptionsForGetListens(count, null, timestamp), token);
-      return JsonSerializer.Deserialize<Payload<FetchedListens>>(json, SerializerOptions).Contents;
+      var json = this.PerformRequest("user/" + user + "/listens", Method.Get, ListenBrainz.OptionsForGetListens(count, null, timestamp), token);
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
     }
 
     #endregion
@@ -386,10 +388,25 @@ namespace MetaBrainz.ListenBrainz {
     #region Internals
 
     private static readonly JsonSerializerOptions SerializerOptions = new JsonSerializerOptions {
-      AllowTrailingCommas = false,
-      IgnoreNullValues = false,
-      IgnoreReadOnlyProperties = true,
+      // @formatter:off
+      AllowTrailingCommas         = false,
+      IgnoreNullValues            = false,
+      IgnoreReadOnlyProperties    = true,
       PropertyNameCaseInsensitive = false,
+      WriteIndented               = true,
+      // @formatter:on
+      Converters = {
+        // Mappers for interfaces that appear in scalar properties.
+        // @formatter:off
+        new InterfaceConverter<ITrackMetaData, TrackMetadata>(),
+        // @formatter:on
+        // Mappers for interfaces that appear in array properties.
+        // @formatter:off
+        new ReadOnlyListOfInterfaceConverter<IListen, Listen>(),
+        // @formatter:on
+        // This one is for UnhandledProperties - it tries to create useful types for a field of type 'object'
+        new AnyObjectConverter(),
+      }
     };
 
     #region Web Client / IDisposable

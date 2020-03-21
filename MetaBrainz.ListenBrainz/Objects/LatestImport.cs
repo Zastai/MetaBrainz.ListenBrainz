@@ -3,26 +3,19 @@ using System.Text.Json.Serialization;
 
 using JetBrains.Annotations;
 
+using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects {
 
+  [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
   internal sealed class LatestImport : JsonBasedObject, ILatestImport {
 
-    [JsonIgnore]
-    public DateTime Timestamp { get; private set; }
-
+    [JsonConverter(typeof(UnixTime.JsonConverter))]
     [JsonPropertyName("latest_import")]
-    [UsedImplicitly]
-    public long UnixTimestamp {
-      get => this._unixTimestamp;
-      set => this.Timestamp = UnixTime.Convert(this._unixTimestamp = value);
-    }
-
-    private long _unixTimestamp = 0;
+    public DateTime Timestamp { get; set; }
 
     [JsonPropertyName("musicbrainz_id")]
-    [UsedImplicitly]
     public string User { get; set; }
 
   }

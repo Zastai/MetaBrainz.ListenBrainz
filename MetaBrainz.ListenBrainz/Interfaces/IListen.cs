@@ -2,6 +2,8 @@ using System;
 
 using JetBrains.Annotations;
 
+using MetaBrainz.Common.Json;
+
 namespace MetaBrainz.ListenBrainz.Interfaces {
 
   /// <summary>Information about a single listen.</summary>
@@ -16,9 +18,6 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
 
     /// <summary>Information about the track that was listened to.</summary>
     ITrackMetaData Track { get; }
-
-    /// <summary>The timestamp for the listen.</summary>
-    long UnixTimestamp { get; }
 
     /// <summary>The MusicBrainz ID of the user who submitted the listen.</summary>
     string User { get; }

@@ -2,6 +2,8 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
+using MetaBrainz.Common.Json;
+
 namespace MetaBrainz.ListenBrainz.Interfaces {
 
   /// <summary>Metadata about a listened track.</summary>

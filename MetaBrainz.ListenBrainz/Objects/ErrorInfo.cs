@@ -11,16 +11,17 @@ using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
+using MetaBrainz.Common.Json;
+
 namespace MetaBrainz.ListenBrainz.Objects {
 
+  [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
   internal sealed class ErrorInfo : JsonBasedObject {
 
     [JsonPropertyName("code")]
-    [UsedImplicitly]
     public int Code { get; set; }
 
     [JsonPropertyName("error")]
-    [UsedImplicitly]
     public string? Error { get; set; }
 
     public static ErrorInfo? ExtractFrom(HttpWebResponse? response) {

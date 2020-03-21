@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using JetBrains.Annotations;
 
@@ -20,6 +22,24 @@ namespace MetaBrainz.ListenBrainz {
     /// <param name="value">The Unix time value to convert to a date/time.</param>
     /// <returns>The corresponding date/time.</returns>
     public static DateTime Convert(long value) => UnixTime.Epoch.AddSeconds(value);
+
+    /// <summary>A JSON converter for serializing Unix time values to/from .NET <see cref="DateTime"/> values.
+    /// </summary>
+    public sealed class JsonConverter : JsonConverter<DateTime> {
+
+      /// <inheritdoc />
+      public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+        if (reader.TokenType == JsonTokenType.Number && reader.TryGetInt64(out var unixTime))
+          return UnixTime.Convert(unixTime);
+        throw new JsonException("The value for a Unix time field must be a valid 64-bit integer.");
+      }
+
+      /// <inheritdoc />
+      public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options) {
+        writer.WriteNumberValue(UnixTime.Convert(value));
+      }
+
+    }
 
   }
 

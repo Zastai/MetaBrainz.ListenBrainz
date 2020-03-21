@@ -2,12 +2,14 @@ using System.Text.Json.Serialization;
 
 using JetBrains.Annotations;
 
+using MetaBrainz.Common.Json;
+
 namespace MetaBrainz.ListenBrainz.Objects {
 
+  [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
   internal sealed class Payload<T> : JsonBasedObject {
 
     [JsonPropertyName("payload")]
-    [UsedImplicitly]
     public T Contents { get; set; }
 
   }
