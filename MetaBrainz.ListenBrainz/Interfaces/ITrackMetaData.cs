@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 using JetBrains.Annotations;
 
 using MetaBrainz.Common.Json;
@@ -10,11 +8,11 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
   [PublicAPI]
   public interface ITrackMetaData : IJsonBasedObject {
 
+    /// <summary>Additional information about the track.</summary>
+    IAdditionalInfo AdditionalInfo { get; }
+
     /// <summary>The name of the track's artist.</summary>
     string Artist { get; }
-
-    /// <summary>Additional information about the track.</summary>
-    IReadOnlyDictionary<string, object> Info { get; }
 
     /// <summary>The name of the track.</summary>
     string Name { get; }

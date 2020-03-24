@@ -398,7 +398,8 @@ namespace MetaBrainz.ListenBrainz {
       Converters = {
         // Mappers for interfaces that appear in scalar properties.
         // @formatter:off
-        new InterfaceConverter<ITrackMetaData, TrackMetadata>(),
+        new InterfaceConverter<IAdditionalInfo, AdditionalInfo>(),
+        new InterfaceConverter<ITrackMetaData,  TrackMetadata >(),
         // @formatter:on
         // Mappers for interfaces that appear in array properties.
         // @formatter:off

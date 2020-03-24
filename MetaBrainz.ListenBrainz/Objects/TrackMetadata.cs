@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 using JetBrains.Annotations;
@@ -11,11 +10,11 @@ namespace MetaBrainz.ListenBrainz.Objects {
   [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
   internal sealed class TrackMetadata : JsonBasedObject, ITrackMetaData {
 
+    [JsonPropertyName("additional_info")]
+    public IAdditionalInfo AdditionalInfo { get; set; }
+
     [JsonPropertyName("artist_name")]
     public string Artist { get; set; }
-
-    [JsonPropertyName("additional_info")]
-    public IReadOnlyDictionary<string, object> Info { get; set; }
 
     [JsonPropertyName("track_name")]
     public string Name { get; set; }
