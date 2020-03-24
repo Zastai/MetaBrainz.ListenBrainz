@@ -16,13 +16,13 @@ namespace MetaBrainz.ListenBrainz.Objects {
 
     [JsonConverter(typeof(UnixTime.JsonConverter))]
     [JsonPropertyName("listened_at")]
-    public DateTime Timestamp { get; set; }
+    public DateTime? Timestamp { get; set; }
 
     [JsonPropertyName("track_metadata")]
-    public ITrackMetaData Track  { get; set; }
+    public ITrackMetaData? Track  { get; set; }
 
     [JsonPropertyName("user_name")]
-    public string User { get; set; }
+    public string? User { get; set; }
 
   }
 

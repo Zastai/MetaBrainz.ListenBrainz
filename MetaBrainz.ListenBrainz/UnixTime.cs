@@ -25,18 +25,23 @@ namespace MetaBrainz.ListenBrainz {
 
     /// <summary>A JSON converter for serializing Unix time values to/from .NET <see cref="DateTime"/> values.
     /// </summary>
-    public sealed class JsonConverter : JsonConverter<DateTime> {
+    public sealed class JsonConverter : JsonConverter<DateTime?> {
 
       /// <inheritdoc />
-      public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+      public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+        if (reader.TokenType == JsonTokenType.Null)
+          return null;
         if (reader.TokenType == JsonTokenType.Number && reader.TryGetInt64(out var unixTime))
           return UnixTime.Convert(unixTime);
         throw new JsonException("The value for a Unix time field must be a valid 64-bit integer.");
       }
 
       /// <inheritdoc />
-      public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options) {
-        writer.WriteNumberValue(UnixTime.Convert(value));
+      public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options) {
+        if (value.HasValue)
+          writer.WriteNumberValue(UnixTime.Convert(value.Value));
+        else
+          writer.WriteNullValue();
       }
 
     }

@@ -11,10 +11,10 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
   public interface ILatestImport : IJsonBasedObject {
 
     /// <summary>The timestamp of the newest listen submitted in previous imports.</summary>
-    DateTime Timestamp { get; }
+    DateTime? Timestamp { get; }
 
     /// <summary>The MusicBrainz ID of the user.</summary>
-    string User { get; }
+    string? User { get; }
 
   }
 

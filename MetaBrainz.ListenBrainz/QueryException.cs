@@ -14,7 +14,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <param name="code">The HTTP message code for the error.</param>
     /// <param name="message">The message for the error.</param>
     /// <param name="cause">The exception that caused the error (if any).</param>
-    public QueryException(int code, string message, Exception cause = null) : base(message, cause) {
+    public QueryException(int code, string? message, Exception? cause = null) : base(message, cause) {
       this.Code = code;
     }
 

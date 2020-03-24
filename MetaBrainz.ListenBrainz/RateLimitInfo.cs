@@ -45,7 +45,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <see cref="AllowedRequests"/>, <see cref="RemainingRequests"/>, and <see cref="ResetIn"/> will be set to -1 if not
     /// available; <see cref="ResetAt"/> will be set to <see cref="LastRequest"/> when not available.
     /// </returns>
-    public static RateLimitInfo From(WebHeaderCollection headers) {
+    public static RateLimitInfo From(WebHeaderCollection? headers) {
       var now = DateTime.UtcNow;
       if (headers == null) {
         return new RateLimitInfo {

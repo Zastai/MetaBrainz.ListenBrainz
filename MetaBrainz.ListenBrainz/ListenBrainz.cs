@@ -59,7 +59,7 @@ namespace MetaBrainz.ListenBrainz {
     public static string DefaultUrlScheme { get; set; } = "https";
 
     /// <summary>The default user agent to use for requests.</summary>
-    public static string DefaultUserAgent { get; set; } = null;
+    public static string? DefaultUserAgent { get; set; }
 
     #endregion
 
@@ -73,10 +73,13 @@ namespace MetaBrainz.ListenBrainz {
     /// <exception cref="ArgumentNullException">
     /// When <paramref name="userAgent"/> is <see langword="null"/>, and no default was set via <see cref="DefaultUserAgent"/>.
     /// </exception>
-    public ListenBrainz(string userAgent = null) {
-      this.UserAgent = userAgent ?? ListenBrainz.DefaultUserAgent;
-      if (this.UserAgent == null) throw new ArgumentNullException(nameof(userAgent));
-      if (this.UserAgent.Trim().Length == 0) throw new ArgumentException("The user agent must not be blank.", nameof(userAgent));
+    public ListenBrainz(string? userAgent = null) {
+      userAgent ??= ListenBrainz.DefaultUserAgent;
+      if (userAgent == null)
+        throw new ArgumentNullException(nameof(userAgent));
+      if (string.IsNullOrWhiteSpace(userAgent))
+        throw new ArgumentException("The user agent must not be blank.", nameof(userAgent));
+      this.UserAgent = userAgent;
       { // Set full user agent, including this library's information
         var an = typeof(ListenBrainz).Assembly.GetName();
         this._fullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({ListenBrainz.UserAgentUrl})";
@@ -90,12 +93,8 @@ namespace MetaBrainz.ListenBrainz {
     /// The contact address (typically HTTP, HTTPS or MAILTO) to use in the user agent property for all requests.
     /// </param>
     /// <exception cref="T:System.ArgumentException">When <paramref name="application"/> is blank.</exception>
-    /// <exception cref="T:System.ArgumentNullException">
-    /// When <paramref name="application"/>, <paramref name="version"/> and/or <paramref name="contact"/> are
-    /// <see langword="null"/>.
-    /// </exception>
     public ListenBrainz(string application, Version version, Uri contact)
-    : this(application, version?.ToString(), contact?.ToString())
+    : this(application, version.ToString(), contact.ToString())
     { }
 
     /// <summary>Creates a new instance of the <see cref="T:ListenBrainz"/> class.</summary>
@@ -107,17 +106,13 @@ namespace MetaBrainz.ListenBrainz {
     /// <exception cref="ArgumentException">
     /// When <paramref name="application"/>, <paramref name="version"/> and/or <paramref name="contact"/> are blank.
     /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// When <paramref name="application"/>, <paramref name="version"/> and/or <paramref name="contact"/> are
-    /// <see langword="null"/>.
-    /// </exception>
     public ListenBrainz(string application, string version, string contact) {
-      if (application == null) throw new ArgumentNullException(nameof(application));
-      if (version     == null) throw new ArgumentNullException(nameof(version));
-      if (contact     == null) throw new ArgumentNullException(nameof(contact));
-      if (application.Trim().Length == 0) throw new ArgumentException("The application name must not be blank.", nameof(application));
-      if (version    .Trim().Length == 0) throw new ArgumentException("The version number must not be blank.",   nameof(version));
-      if (contact    .Trim().Length == 0) throw new ArgumentException("The contact address must not be blank.",  nameof(contact));
+      if (string.IsNullOrWhiteSpace(application))
+        throw new ArgumentException("The application name must not be blank.", nameof(application));
+      if (string.IsNullOrWhiteSpace(version))
+        throw new ArgumentException("The version number must not be blank.", nameof(version));
+      if (string.IsNullOrWhiteSpace(contact))
+        throw new ArgumentException("The contact address must not be blank.", nameof(contact));
       this.UserAgent = $"{application}/{version} ({contact})";
       { // Set full user agent, including this library's information
         var an = typeof(ListenBrainz).Assembly.GetName();
@@ -238,12 +233,6 @@ namespace MetaBrainz.ListenBrainz {
 
     #endregion
 
-    #region /1/refresh-spotify-token
-
-    // TODO
-
-    #endregion
-
     #region /1/submit-listens
 
     // TODO
@@ -276,7 +265,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
     /// </param>
     /// <returns>The requested listens.</returns>
-    public IFetchedListens GetListens(string user, string token = null, int? count = null) {
+    public IFetchedListens? GetListens(string user, string? token = null, int? count = null) {
       var json = this.PerformRequest("user/" + user + "/listens", Method.Get, ListenBrainz.OptionsForGetListens(count, null, null));
       return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
     }
@@ -297,7 +286,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
     /// </param>
     /// <returns>The requested listens.</returns>
-    public IFetchedListens GetListensAfter(string user, DateTime timestamp, string token = null, int? count = null) {
+    public IFetchedListens? GetListensAfter(string user, DateTime timestamp, string? token = null, int? count = null) {
       return this.GetListensAfter(user, UnixTime.Convert(timestamp), token, count);
     }
 
@@ -317,7 +306,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
     /// </param>
     /// <returns>The requested listens.</returns>
-    public IFetchedListens GetListensAfter(string user, long timestamp, string token = null, int? count = null) {
+    public IFetchedListens? GetListensAfter(string user, long timestamp, string? token = null, int? count = null) {
       var json = this.PerformRequest("user/" + user + "/listens", Method.Get, ListenBrainz.OptionsForGetListens(count, timestamp, null), token);
       return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
     }
@@ -338,7 +327,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
     /// </param>
     /// <returns>The requested listens.</returns>
-    public IFetchedListens GetListensBefore(string user, DateTime timestamp, string token = null, int? count = null) {
+    public IFetchedListens? GetListensBefore(string user, DateTime timestamp, string? token = null, int? count = null) {
       return this.GetListensBefore(user, UnixTime.Convert(timestamp), token, count);
     }
 
@@ -358,7 +347,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
     /// </param>
     /// <returns>The requested listens.</returns>
-    public IFetchedListens GetListensBefore(string user, long timestamp, string token = null, int? count = null) {
+    public IFetchedListens? GetListensBefore(string user, long timestamp, string? token = null, int? count = null) {
       var json = this.PerformRequest("user/" + user + "/listens", Method.Get, ListenBrainz.OptionsForGetListens(count, null, timestamp), token);
       return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
     }
@@ -418,7 +407,7 @@ namespace MetaBrainz.ListenBrainz {
 
     private readonly string _fullUserAgent;
 
-    private WebClient _webClient;
+    private WebClient? _webClient;
 
     private WebClient WebClient {
       get {
@@ -471,7 +460,7 @@ namespace MetaBrainz.ListenBrainz {
 
     #region Basic Request Execution
 
-    private WebClient PrepareRequest(NameValueCollection options, string token) {
+    private WebClient PrepareRequest(NameValueCollection? options, string? token) {
       var wc = this.WebClient;
       wc.Headers.Set("Content-Type", "application/json");
       wc.Headers.Set("Accept",       "application/json");
@@ -484,16 +473,16 @@ namespace MetaBrainz.ListenBrainz {
       return wc;
     }
 
-    private string PerformRequest(string address, Method method, NameValueCollection options = null, string token = null) {
+    private string PerformRequest(string address, Method method, NameValueCollection? options = null, string? token = null) {
       return this.PerformRequest(address, method, null, options, token);
     }
 
-    private string PerformRequest(string address, Method method, string body, NameValueCollection options = null, string token = null) {
+    private string PerformRequest(string address, Method method, string? body, NameValueCollection? options = null, string? token = null) {
       Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method} {this.BaseUri}{address}");
       this._clientLock.Wait();
       try {
         var wc = this.PrepareRequest(options, token);
-        string response = null;
+        string? response = null;
         try {
           if (method == Method.Get)
             return response = wc.DownloadString(address);
@@ -520,16 +509,16 @@ namespace MetaBrainz.ListenBrainz {
       }
     }
 
-    private Task<string> PerformRequestAsync(string address, Method method, NameValueCollection options = null, string token = null) {
+    private Task<string> PerformRequestAsync(string address, Method method, NameValueCollection? options = null, string? token = null) {
       return this.PerformRequestAsync(address, method, null, options, token);
     }
 
-    private async Task<string> PerformRequestAsync(string address, Method method, string body, NameValueCollection options, string token = null) {
+    private async Task<string> PerformRequestAsync(string address, Method method, string? body, NameValueCollection? options, string? token = null) {
       Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method} {this.BaseUri}{address}");
       await this._clientLock.WaitAsync();
       try {
         var wc = this.PrepareRequest(options, token);
-        string response = null;
+        string? response = null;
         try {
           if (method == Method.Get)
             return response = await wc.DownloadStringTaskAsync(address).ConfigureAwait(false);

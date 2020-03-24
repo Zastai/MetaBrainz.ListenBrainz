@@ -12,16 +12,16 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
   public interface IFetchedListens : IJsonBasedObject {
 
     /// <summary>The number of listens fetched.</summary>
-    int Count { get; }
+    int? Count { get; }
 
     /// <summary>The listens that were fetched.</summary>
-    IReadOnlyList<IListen> Listens { get; }
+    IReadOnlyList<IListen>? Listens { get; }
 
     /// <summary>The timestamp of the newest listen for the user specified by <see cref="User"/>.</summary>
-    DateTime Timestamp { get; }
+    DateTime? Timestamp { get; }
 
     /// <summary>The MusicBrainz ID of the user for which the listens were fetched.</summary>
-    string User { get; }
+    string? User { get; }
 
   }
 

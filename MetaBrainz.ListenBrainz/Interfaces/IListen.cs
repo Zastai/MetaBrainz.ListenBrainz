@@ -14,13 +14,13 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     Guid? MessyRecordingId { get; }
 
     /// <summary>The timestamp for the listen.</summary>
-    DateTime Timestamp { get; }
+    DateTime? Timestamp { get; }
 
     /// <summary>Information about the track that was listened to.</summary>
-    ITrackMetaData Track { get; }
+    ITrackMetaData? Track { get; }
 
     /// <summary>The MusicBrainz ID of the user who submitted the listen.</summary>
-    string User { get; }
+    string? User { get; }
 
   }
 

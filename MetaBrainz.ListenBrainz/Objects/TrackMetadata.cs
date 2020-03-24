@@ -11,16 +11,16 @@ namespace MetaBrainz.ListenBrainz.Objects {
   internal sealed class TrackMetadata : JsonBasedObject, ITrackMetaData {
 
     [JsonPropertyName("additional_info")]
-    public IAdditionalInfo AdditionalInfo { get; set; }
+    public IAdditionalInfo? AdditionalInfo { get; set; }
 
     [JsonPropertyName("artist_name")]
-    public string Artist { get; set; }
+    public string? Artist { get; set; }
 
     [JsonPropertyName("track_name")]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     [JsonPropertyName("release_name")]
-    public string Release { get; set; }
+    public string? Release { get; set; }
 
   }
 

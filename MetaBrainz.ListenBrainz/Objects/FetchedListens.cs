@@ -13,17 +13,17 @@ namespace MetaBrainz.ListenBrainz.Objects {
   internal sealed class FetchedListens : JsonBasedObject, IFetchedListens {
 
     [JsonPropertyName("count")]
-    public int Count { get; set; }
+    public int? Count { get; set; }
 
     [JsonPropertyName("listens")]
-    public IReadOnlyList<IListen> Listens { get; set; }
+    public IReadOnlyList<IListen>? Listens { get; set; }
 
     [JsonConverter(typeof(UnixTime.JsonConverter))]
     [JsonPropertyName("latest_listen_ts")]
-    public DateTime Timestamp { get; set; }
+    public DateTime? Timestamp { get; set; }
 
     [JsonPropertyName("user_id")]
-    public string User { get; set; }
+    public string? User { get; set; }
 
   }
 

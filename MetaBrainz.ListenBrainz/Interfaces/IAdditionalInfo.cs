@@ -15,73 +15,73 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
 
     /// <summary>All additional information fields.</summary>
     /// <remarks>Please file a ticket if there's a common field for which you want an explicit property to be added.</remarks>
-    IReadOnlyDictionary<string, object> AllFields { get; }
+    IReadOnlyDictionary<string, object>? AllFields { get; }
 
     /// <summary>The MusicBrainz IDs of the track's artists.</summary>
-    public IReadOnlyList<Guid> ArtistIds { get; }
+    IReadOnlyList<Guid>? ArtistIds { get; }
 
     /// <summary>The names of the track's artists.</summary>
-    public IReadOnlyList<string> ArtistNames { get; }
+    IReadOnlyList<string>? ArtistNames { get; }
 
     /// <summary>The track's disc number.</summary>
-    public int? DiscNumber { get; }
+    int? DiscNumber { get; }
 
     /// <summary>The track's duration.</summary>
-    public TimeSpan? Duration { get; }
+    TimeSpan? Duration { get; }
 
     /// <summary>The ISRC for the track.</summary>
-    public string Isrc { get; }
+    string? Isrc { get; }
 
     /// <summary>The application used to listed to the track.</summary>
-    public string ListeningFrom { get; }
+    string? ListeningFrom { get; }
 
     /// <summary>The MessyBrainz ID for the track's artist.</summary>
-    public Guid? MessyArtistId { get; }
+    Guid? MessyArtistId { get; }
 
     /// <summary>The MessyBrainz ID for the track's recording.</summary>
-    public Guid? MessyRecordingId { get; }
+    Guid? MessyRecordingId { get; }
 
     /// <summary>The MessyBrainz ID for the track's release.</summary>
-    public Guid? MessyReleaseId { get; }
+    Guid? MessyReleaseId { get; }
 
     /// <summary>The MusicBrainz ID for the track's recording.</summary>
-    public Guid? RecordingId { get; }
+    Guid? RecordingId { get; }
 
     /// <summary>The artist name for the track's release.</summary>
-    public string ReleaseArtistName { get; }
+    string? ReleaseArtistName { get; }
 
     /// <summary>The artist names for the track's release.</summary>
-    public IReadOnlyList<string> ReleaseArtistNames { get; }
+    IReadOnlyList<string>? ReleaseArtistNames { get; }
 
     /// <summary>The MusicBrainz ID for the track's release group.</summary>
-    public Guid? ReleaseGroupId { get; }
+    Guid? ReleaseGroupId { get; }
 
     /// <summary>The MusicBrainz ID for the track's release.</summary>
-    public Guid? ReleaseId { get; }
+    Guid? ReleaseId { get; }
 
     /// <summary>The Spotify IDs for the track's album artists.</summary>
-    public IReadOnlyList<Uri> SpotifyAlbumArtistIds { get; }
+    IReadOnlyList<Uri>? SpotifyAlbumArtistIds { get; }
 
     /// <summary>The Spotify ID for the track's album.</summary>
-    public Uri SpotifyAlbumId { get; }
+    Uri? SpotifyAlbumId { get; }
 
     /// <summary>The Spotify IDs for the track's artists.</summary>
-    public IReadOnlyList<Uri> SpotifyArtistIds { get; }
+    IReadOnlyList<Uri>? SpotifyArtistIds { get; }
 
     /// <summary>The track's Spotify ID.</summary>
-    public Uri SpotifyId { get; }
+    Uri? SpotifyId { get; }
 
     /// <summary>The track's tags.</summary>
-    public IReadOnlyList<string> Tags { get; }
+    IReadOnlyList<string>? Tags { get; }
 
     /// <summary>The MusicBrainz ID for the track.</summary>
-    public Guid? TrackId { get; }
+    Guid? TrackId { get; }
 
     /// <summary>The track's track number.</summary>
-    public int? TrackNumber { get; }
+    int? TrackNumber { get; }
 
     /// <summary>The MusicBrainz IDs of the track's associated works.</summary>
-    public IReadOnlyList<Guid> WorkIds { get; }
+    IReadOnlyList<Guid>? WorkIds { get; }
 
   }
 
