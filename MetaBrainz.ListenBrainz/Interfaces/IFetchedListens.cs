@@ -17,7 +17,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     /// <summary>The listens that were fetched.</summary>
     IReadOnlyList<IListen>? Listens { get; }
 
-    /// <summary>Indicates whether this set of listens represents a currently playing track..</summary>
+    /// <summary>Indicates whether this set of listens represents a currently playing track.</summary>
     bool? PlayingNow { get; }
 
     /// <summary>The timestamp of the newest listen for the user specified by <see cref="User"/>.</summary>
@@ -25,6 +25,9 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
 
     /// <summary>The MusicBrainz ID of the user for which the listens were fetched.</summary>
     string? User { get; }
+
+    /// <summary>A comma-separated list of the MusicBrainz IDs of the users for which the listens were fetched.</summary>
+    string? UserList { get; }
 
   }
 

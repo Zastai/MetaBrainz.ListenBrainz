@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -384,7 +385,43 @@ namespace MetaBrainz.ListenBrainz {
 
     #region /1/users/xxx/recent-listens
 
-    // TODO
+    /// <summary>Gets recent listen(s) for a set of users.</summary>
+    /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
+    /// <returns>The requested listens.</returns>
+    public IFetchedListens? GetRecentListens(params string[] users) {
+      var userList = string.Join(",", users.Select(Uri.EscapeDataString));
+      var json = this.PerformRequest($"users/{userList}/recent-listens", Method.Get);
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+    }
+
+    /// <summary>Gets recent listen(s) for a set of users.</summary>
+    /// <param name="limit">The maximum number of listens to return.</param>
+    /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
+    /// <returns>The requested listens.</returns>
+    public IFetchedListens? GetRecentListens(int limit, params string[] users) {
+      var userList = string.Join(",", users.Select(Uri.EscapeDataString));
+      var json = this.PerformRequest($"users/{userList}/recent-listens", Method.Get);
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+    }
+
+    /// <summary>Gets recent listen(s) for a set of users.</summary>
+    /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
+    /// <returns>A task returning the requested listens.</returns>
+    public async Task<IFetchedListens?> GetRecentListensAsync(params string[] users) {
+      var userList = string.Join(",", users.Select(Uri.EscapeDataString));
+      var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.Get);
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+    }
+
+    /// <summary>Gets recent listen(s) for a set of users.</summary>
+    /// <param name="limit">The maximum number of listens to return.</param>
+    /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
+    /// <returns>A task returning the requested listens.</returns>
+    public async Task<IFetchedListens?> GetRecentListensAsync(int limit, params string[] users) {
+      var userList = string.Join(",", users.Select(Uri.EscapeDataString));
+      var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.Get);
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+    }
 
     #endregion
 

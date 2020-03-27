@@ -28,6 +28,9 @@ namespace MetaBrainz.ListenBrainz.Objects {
     [JsonPropertyName("user_id")]
     public string? User { get; set; }
 
+    [JsonPropertyName("user_list")]
+    public string? UserList { get; set; }
+
   }
 
 }
