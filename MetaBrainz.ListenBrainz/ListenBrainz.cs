@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -427,7 +428,56 @@ namespace MetaBrainz.ListenBrainz {
 
     #region /1/validate-token
 
-    // TODO
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    private sealed class TokenValidationResult {
+
+      [JsonPropertyName("code")]
+      public int? Code { get; set; }
+
+      [JsonPropertyName("message")]
+      public string? Message { get; set; }
+
+      [JsonPropertyName("user_name")]
+      public string? User { get; set; }
+
+      [JsonPropertyName("valid")]
+      public bool? Valid { get; set; }
+
+    }
+
+    /// <summary>Validates a given user token.</summary>
+    /// <param name="token">The user token to validate.</param>
+    /// <returns><see langword="true"/> when <paramref name="token"/> is valid; <see langword="false"/> otherwise.</returns>
+    public bool ValidateToken(string token) => this.ValidateToken(token, out _);
+
+    /// <summary>Validates a given user token.</summary>
+    /// <param name="token">The user token to validate.</param>
+    /// <param name="user">The name of the user associated with the user token, if available.</param>
+    /// <returns><see langword="true"/> when <paramref name="token"/> is valid; <see langword="false"/> otherwise.</returns>
+    public bool ValidateToken(string token, out string? user) {
+      var json = this.PerformRequest($"validate-token?token={token}", Method.Get);
+      var tvr = JsonUtils.Deserialize<TokenValidationResult>(json);
+      user = tvr.User;
+      if (tvr.Valid.HasValue)
+        return tvr.Valid.Value;
+      // Older implementations only return a message.
+      return tvr.Code == 200 && tvr.Message == "Token valid.";
+    }
+
+    /// <summary>Validates a given user token.</summary>
+    /// <param name="token">The user token to validate.</param>
+    /// <returns>
+    /// A task returning a tuple containing a flag indicating the validity of <paramref name="token"/> (<see langword="true"/> when
+    /// it is valid; <see langword="false"/> otherwise) and the name of the user associated with the user token, if available.
+    /// </returns>
+    public async Task<(bool, string?)> ValidateTokenAsync(string token) {
+      var json = await this.PerformRequestAsync($"validate-token?token={token}", Method.Get).ConfigureAwait(false);
+      var tvr = JsonUtils.Deserialize<TokenValidationResult>(json);
+      if (tvr.Valid.HasValue)
+        return (tvr.Valid.Value, tvr.User);
+      // Older implementations only return a message.
+      return (tvr.Code == 200 && tvr.Message == "Token valid.", null);
+    }
 
     #endregion
 
