@@ -364,7 +364,21 @@ namespace MetaBrainz.ListenBrainz {
 
     #region /1/user/xxx/playing-now
 
-    // TODO
+    /// <summary>Gets a user's currently-playing listen(s).</summary>
+    /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
+    /// <returns>The requested listens (typically 0 or 1).</returns>
+    public IFetchedListens? GetPlayingNow(string user) {
+      var json = this.PerformRequest($"user/{user}/playing-now", Method.Get);
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+    }
+
+    /// <summary>Gets a user's currently-playing listen(s).</summary>
+    /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
+    /// <returns>A task returning the requested listens (typically 0 or 1).</returns>
+    public async Task<IFetchedListens?> GetPlayingNowAsync(string user) {
+      var json = await this.PerformRequestAsync($"user/{user}/playing-now", Method.Get);
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+    }
 
     #endregion
 

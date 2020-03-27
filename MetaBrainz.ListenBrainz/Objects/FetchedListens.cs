@@ -18,6 +18,9 @@ namespace MetaBrainz.ListenBrainz.Objects {
     [JsonPropertyName("listens")]
     public IReadOnlyList<IListen>? Listens { get; set; }
 
+    [JsonPropertyName("playing_now")]
+    public bool? PlayingNow { get; set; }
+
     [JsonConverter(typeof(UnixTime.JsonConverter))]
     [JsonPropertyName("latest_listen_ts")]
     public DateTime? Timestamp { get; set; }

@@ -17,6 +17,9 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     /// <summary>The listens that were fetched.</summary>
     IReadOnlyList<IListen>? Listens { get; }
 
+    /// <summary>Indicates whether this set of listens represents a currently playing track..</summary>
+    bool? PlayingNow { get; }
+
     /// <summary>The timestamp of the newest listen for the user specified by <see cref="User"/>.</summary>
     DateTime? Timestamp { get; }
 
