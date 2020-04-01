@@ -17,7 +17,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     DateTime? Timestamp { get; }
 
     /// <summary>Information about the track that was listened to.</summary>
-    ITrackMetaData? Track { get; }
+    ITrackInfo? Track { get; }
 
     /// <summary>The MusicBrainz ID of the user who submitted the listen.</summary>
     string? User { get; }

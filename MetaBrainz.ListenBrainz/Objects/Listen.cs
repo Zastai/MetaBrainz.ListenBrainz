@@ -19,7 +19,7 @@ namespace MetaBrainz.ListenBrainz.Objects {
     public DateTime? Timestamp { get; set; }
 
     [JsonPropertyName("track_metadata")]
-    public ITrackMetaData? Track  { get; set; }
+    public ITrackInfo? Track  { get; set; }
 
     [JsonPropertyName("user_name")]
     public string? User { get; set; }

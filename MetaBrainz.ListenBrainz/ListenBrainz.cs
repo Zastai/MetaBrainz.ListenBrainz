@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -180,7 +180,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
     public ILatestImport GetLatestImport(string user) {
       var json = this.PerformRequest("latest-import", Method.Get, ListenBrainz.OptionsForLatestImport(user));
-      return JsonUtils.Deserialize<LatestImport>(json, ListenBrainz.SerializerOptions);
+      return JsonUtils.Deserialize<LatestImport>(json, ListenBrainz.JsonOptionsForRead);
     }
 
     /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
@@ -190,7 +190,7 @@ namespace MetaBrainz.ListenBrainz {
     public async Task<ILatestImport> GetLatestImportAsync(string user) {
       var task = this.PerformRequestAsync("latest-import", Method.Get, ListenBrainz.OptionsForLatestImport(user));
       var json = await task.ConfigureAwait(false);
-      return JsonUtils.Deserialize<LatestImport>(json, ListenBrainz.SerializerOptions);
+      return JsonUtils.Deserialize<LatestImport>(json, ListenBrainz.JsonOptionsForRead);
     }
 
     /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
@@ -221,8 +221,8 @@ namespace MetaBrainz.ListenBrainz {
     /// <param name="user">The MusicBrainz ID of the user whose data should be modified.</param>
     /// <param name="timestamp">The timestamp to set.</param>
     /// <return>A task that will perform the operation.</return>
-    /// <remarks>This will access the <c>POST /1/latest-import</c> endpoint.</remarks>
     /// <remarks>
+    /// This will access the <c>POST /1/latest-import</c> endpoint.<br/>
     /// Users can find their token on their profile page:
     /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
     /// </remarks>
@@ -236,8 +236,8 @@ namespace MetaBrainz.ListenBrainz {
     /// The timestamp to set, specified as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
     /// </param>
     /// <return>A task that will perform the operation.</return>
-    /// <remarks>This will access the <c>POST /1/latest-import</c> endpoint.</remarks>
     /// <remarks>
+    /// This will access the <c>POST /1/latest-import</c> endpoint.<br/>
     /// Users can find their token on their profile page:
     /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
     /// </remarks>
@@ -251,7 +251,288 @@ namespace MetaBrainz.ListenBrainz {
 
     #region /1/submit-listens
 
-    // TODO
+    #region Import Listens
+
+    /// <summary>The maximum number of listens that can fit into a single API request.</summary>
+    /// <remarks>
+    /// A JSON listen payload contains:
+    /// <list type="bullet">
+    /// <item>
+    ///   <term>a minimum of 37 characters of fixed overhead: </term>
+    ///   <description><c>{"listen_type":"import","payload":[]}</c></description>
+    /// </item>
+    /// <item>
+    ///   <term>a minimum of 71 characters for the listen data: </term>
+    ///   <description><c>{"listened_at":0,"track_metadata":{"artist_name":"?","track_name":"?"}}</c></description>
+    /// </item>
+    /// </list>
+    /// The listens are comma-separated, so we need to add one to the listen size and subtract one from the fixed overhead.<br/>
+    /// So the maximum listens that can be submitted at once is ((<see cref="MaxListenSize"/> - 36) / 72) (currently 141).
+    /// </remarks>
+    private const int MaxListensInOnePayload = ((ListenBrainz.MaxListenSize - 36) / 72);
+
+    /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="listens">The listens to import.</param>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
+    /// If the listen data would exceed <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid
+    /// hitting that limit. As such, one call to this method may result in multiple web service requests, which may affect rate
+    /// limiting.
+    /// </remarks>
+    public void ImportListens(IEnumerable<ISubmittedListen> listens) {
+      var payload = SubmissionPayload.CreateImport();
+      // FIXME: Should this use foreach instead and forcibly perform a submission after MaxListensInOnePayload listens were added?
+      // FIXME: That way, it could support a huge range of listens coming from the enumerable in a streaming fashion.
+      payload.Listens.AddRange(listens);
+      foreach (var json in this.SerializeImport(payload))
+        this.PerformRequest("submit-listens", Method.Post, json);
+    }
+
+    /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="listens">The listens to import.</param>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
+    /// If the listen data would exceed <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid
+    /// hitting that limit. As such, one call to this method may result in multiple web service requests, which may affect rate
+    /// limiting.
+    /// </remarks>
+    public void ImportListens(params ISubmittedListen[] listens) {
+      var payload = SubmissionPayload.CreateImport();
+      payload.Listens.AddRange(listens);
+      foreach (var json in this.SerializeImport(payload))
+        this.PerformRequest("submit-listens", Method.Post, json);
+    }
+
+    /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="listens">The listens to import.</param>
+    /// <return>A task that will perform the operation.</return>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
+    /// If the listen data would exceed <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid
+    /// hitting that limit. As such, one call to this method may result in multiple web service requests, which may affect rate
+    /// limiting.
+    /// </remarks>
+    public async Task ImportListensAsync(IAsyncEnumerable<ISubmittedListen> listens) {
+      var payload = SubmissionPayload.CreateImport();
+      // FIXME: Should this forcibly perform a submission after MaxListensInOnePayload listens were added?
+      // FIXME: That way, it could support a huge range of listens coming from the enumerable in a streaming fashion.
+      await foreach(var listen in listens)
+        payload.Listens.Add(listen);
+      foreach (var json in this.SerializeImport(payload)) {
+        var task = this.PerformRequestAsync("submit-listens", Method.Post, json);
+        await task.ConfigureAwait(false);
+      }
+    }
+
+    /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="listens">The listens to import.</param>
+    /// <return>A task that will perform the operation.</return>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
+    /// If the listen data would exceed <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid
+    /// hitting that limit. As such, one call to this method may result in multiple web service requests, which may affect rate
+    /// limiting.
+    /// </remarks>
+    public async Task ImportListensAsync(IEnumerable<ISubmittedListen> listens) {
+      var payload = SubmissionPayload.CreateImport();
+      // FIXME: Should this use foreach instead and forcibly perform a submission after MaxListensInOnePayload listens were added?
+      // FIXME: That way, it could support a huge range of listens coming from the enumerable in a streaming fashion.
+      payload.Listens.AddRange(listens);
+      foreach (var json in this.SerializeImport(payload)) {
+        var task = this.PerformRequestAsync("submit-listens", Method.Post, json);
+        await task.ConfigureAwait(false);
+      }
+    }
+
+    /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="listens">The listens to import.</param>
+    /// <return>A task that will perform the operation.</return>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
+    /// If the listen data would exceed <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid
+    /// hitting that limit. As such, one call to this method may result in multiple web service requests, which may affect rate
+    /// limiting.
+    /// </remarks>
+    public async Task ImportListensAsync(params ISubmittedListen[] listens) {
+      var payload = SubmissionPayload.CreateImport();
+      payload.Listens.AddRange(listens);
+      foreach (var json in this.SerializeImport(payload)) {
+        var task = this.PerformRequestAsync("submit-listens", Method.Post, json);
+        await task.ConfigureAwait(false);
+      }
+    }
+
+    private IEnumerable<string> SerializeImport(SubmissionPayload<ISubmittedListen> payload) {
+      var json = JsonSerializer.Serialize(payload, ListenBrainz.JsonOptionsForWrite);
+      // If it's small enough, or we can't split up the listens, we're done
+      if (json.Length <= ListenBrainz.MaxListenSize || payload.Listens.Count <= 1) {
+        yield return json;
+        yield break;
+      }
+      // Otherwise, split the list of listens in half
+      var firstHalf = payload.Listens.Count / 2;
+      var secondHalf = payload.Listens.Count - firstHalf;
+      { // Recurse over first half
+        var partialPayload = SubmissionPayload.CreateImport();
+        partialPayload.Listens.AddRange(payload.Listens.GetRange(0, firstHalf));
+        foreach (var part in this.SerializeImport(partialPayload))
+          yield return part;
+      }
+      { // Recurse over second half
+        var partialPayload = SubmissionPayload.CreateImport();
+        partialPayload.Listens.AddRange(payload.Listens.GetRange(firstHalf, secondHalf));
+        foreach (var part in this.SerializeImport(partialPayload))
+          yield return part;
+      }
+    }
+
+    #endregion
+
+    #region Set "Now Playing"
+
+    /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="listen">The listen data to send.</param>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
+    /// </remarks>
+    public void SetNowPlaying(ISubmittedListenData listen) {
+      var payload = SubmissionPayload.CreatePlayingNow(listen);
+      var json = JsonSerializer.Serialize(payload, ListenBrainz.JsonOptionsForWrite);
+      this.PerformRequest("submit-listens", Method.Post, json);
+    }
+
+    /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="track">The name of the track being listened to.</param>
+    /// <param name="artist">The name of the artist performing the track being listened to.</param>
+    /// <param name="release">The name of the release containing the track being listened to.</param>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
+    /// </remarks>
+    public void SetNowPlaying(string track, string artist, string? release = null) {
+      var listen = new SubmittedListenData(track, artist);
+      listen.Track.Release = release;
+      this.SetNowPlaying(listen);
+    }
+
+    /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="listen">The listen data to send.</param>
+    /// <return>A task that will perform the operation.</return>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
+    /// </remarks>
+    public async Task SetNowPlayingAsync(ISubmittedListenData listen) {
+      var payload = SubmissionPayload.CreatePlayingNow(listen);
+      var json = JsonSerializer.Serialize(payload, ListenBrainz.JsonOptionsForWrite);
+      var task = this.PerformRequestAsync("submit-listens", Method.Post, json);
+      await task.ConfigureAwait(false);
+    }
+
+    /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="track">The name of the track being listened to.</param>
+    /// <param name="artist">The name of the artist performing the track being listened to.</param>
+    /// <param name="release">The name of the release containing the track being listened to.</param>
+    /// <return>A task that will perform the operation.</return>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
+    /// </remarks>
+    public async Task SetNowPlayingAsync(string track, string artist, string? release = null) {
+      var listen = new SubmittedListenData(track, artist);
+      listen.Track.Release = release;
+      await this.SetNowPlayingAsync(listen);
+    }
+
+    #endregion
+
+    #region Submit Single Listen
+
+    /// <summary>
+    /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
+    /// </summary>
+    /// <param name="listen">The listen to send.</param>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
+    /// </remarks>
+    public void SubmitSingleListen(ISubmittedListen listen) {
+      var payload = SubmissionPayload.CreateSingle(listen);
+      var json = JsonSerializer.Serialize(payload, ListenBrainz.JsonOptionsForWrite);
+      this.PerformRequest("submit-listens", Method.Post, json);
+    }
+
+    /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="track">The name of the track being listened to.</param>
+    /// <param name="artist">The name of the artist performing the track being listened to.</param>
+    /// <param name="timestamp">
+    /// The date and time when the track was listened to.
+    /// If not specified or <see langword="null"/>, the current date and time will be used.
+    /// </param>
+    /// <param name="release">The name of the release containing the track being listened to.</param>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
+    /// </remarks>
+    public void SubmitSingleListen(string track, string artist, DateTime? timestamp = null, string? release = null) {
+      var listen = new SubmittedListen(track, artist, timestamp);
+      listen.Track.Release = release;
+      this.SubmitSingleListen(listen);
+    }
+
+    /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="listen">The listen data to send.</param>
+    /// <return>A task that will perform the operation.</return>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
+    /// </remarks>
+    public async Task SubmitSingleListenAsync(ISubmittedListen listen) {
+      var payload = SubmissionPayload.CreateSingle(listen);
+      var json = JsonSerializer.Serialize(payload, ListenBrainz.JsonOptionsForWrite);
+      var task = this.PerformRequestAsync("submit-listens", Method.Post, json);
+      await task.ConfigureAwait(false);
+    }
+
+    /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <param name="track">The name of the track being listened to.</param>
+    /// <param name="artist">The name of the artist performing the track being listened to.</param>
+    /// <param name="timestamp">
+    /// The date and time when the track was listened to.
+    /// If not specified or <see langword="null"/>, the current date and time will be used.
+    /// </param>
+    /// <param name="release">The name of the release containing the track being listened to.</param>
+    /// <return>A task that will perform the operation.</return>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
+    /// </remarks>
+    public async Task SubmitSingleListenAsync(string track, string artist, DateTime? timestamp = null, string? release = null) {
+      var listen = new SubmittedListen(track, artist, timestamp);
+      listen.Track.Release = release;
+      await this.SubmitSingleListenAsync(listen);
+    }
+
+    #endregion
 
     #endregion
 
@@ -296,7 +577,7 @@ namespace MetaBrainz.ListenBrainz {
     public IFetchedListens? GetListens(string user, long? after, long? before, int? count = null) {
       var options = ListenBrainz.OptionsForGetListens(count, after, before);
       var json = this.PerformRequest($"user/{user}/listens", Method.Get, options);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
     }
 
     /// <summary>Gets the most recent listens for a user.</summary>
@@ -343,7 +624,7 @@ namespace MetaBrainz.ListenBrainz {
     public async Task<IFetchedListens?> GetListensAsync(string user, long? after, long? before, int? count = null) {
       var options = ListenBrainz.OptionsForGetListens(count, after, before);
       var json = await this.PerformRequestAsync($"user/{user}/listens", Method.Get, options);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
     }
 
     /// <summary>Gets the most recent listens for a user.</summary>
@@ -371,7 +652,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>The requested listens (typically 0 or 1).</returns>
     public IFetchedListens? GetPlayingNow(string user) {
       var json = this.PerformRequest($"user/{user}/playing-now", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
     }
 
     /// <summary>Gets a user's currently-playing listen(s).</summary>
@@ -379,7 +660,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>A task returning the requested listens (typically 0 or 1).</returns>
     public async Task<IFetchedListens?> GetPlayingNowAsync(string user) {
       var json = await this.PerformRequestAsync($"user/{user}/playing-now", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
     }
 
     #endregion
@@ -392,7 +673,7 @@ namespace MetaBrainz.ListenBrainz {
     public IFetchedListens? GetRecentListens(params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
       var json = this.PerformRequest($"users/{userList}/recent-listens", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
     }
 
     /// <summary>Gets recent listen(s) for a set of users.</summary>
@@ -402,7 +683,7 @@ namespace MetaBrainz.ListenBrainz {
     public IFetchedListens? GetRecentListens(int limit, params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
       var json = this.PerformRequest($"users/{userList}/recent-listens", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
     }
 
     /// <summary>Gets recent listen(s) for a set of users.</summary>
@@ -411,7 +692,7 @@ namespace MetaBrainz.ListenBrainz {
     public async Task<IFetchedListens?> GetRecentListensAsync(params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
       var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
     }
 
     /// <summary>Gets recent listen(s) for a set of users.</summary>
@@ -421,7 +702,7 @@ namespace MetaBrainz.ListenBrainz {
     public async Task<IFetchedListens?> GetRecentListensAsync(int limit, params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
       var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.SerializerOptions).Contents;
+      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
     }
 
     #endregion
@@ -485,19 +766,17 @@ namespace MetaBrainz.ListenBrainz {
 
     #region Internals
 
-    private static readonly JsonSerializerOptions SerializerOptions = new JsonSerializerOptions {
+    private static readonly JsonSerializerOptions JsonOptionsForRead = new JsonSerializerOptions {
       // @formatter:off
       AllowTrailingCommas         = false,
       IgnoreNullValues            = false,
-      IgnoreReadOnlyProperties    = true,
       PropertyNameCaseInsensitive = false,
-      WriteIndented               = true,
       // @formatter:on
       Converters = {
         // Mappers for interfaces that appear in scalar properties.
         // @formatter:off
         new InterfaceConverter<IAdditionalInfo, AdditionalInfo>(),
-        new InterfaceConverter<ITrackMetaData,  TrackMetadata >(),
+        new InterfaceConverter<ITrackInfo,      TrackInfo     >(),
         // @formatter:on
         // Mappers for interfaces that appear in array properties.
         // @formatter:off
@@ -506,6 +785,19 @@ namespace MetaBrainz.ListenBrainz {
         // This one is for UnhandledProperties - it tries to create useful types for a field of type 'object'
         new AnyObjectConverter(),
       }
+    };
+
+    private static readonly JsonSerializerOptions JsonOptionsForWrite = new JsonSerializerOptions() {
+      // @formatter:off
+      IgnoreNullValues         = false,
+      IgnoreReadOnlyProperties = false,
+      // @formatter:on
+#if DEBUG
+      WriteIndented = true,
+#else
+      WriteIndented = false,
+#endif
+      Converters = { new SubmissionSerializer() }
     };
 
     #region Web Client / IDisposable
@@ -622,7 +914,7 @@ namespace MetaBrainz.ListenBrainz {
       return this.PerformRequestAsync(address, method, null, options);
     }
 
-    private async Task<string> PerformRequestAsync(string address, Method method, string? body, NameValueCollection? options) {
+    private async Task<string> PerformRequestAsync(string address, Method method, string? body, NameValueCollection? options = null) {
       Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method} {this.BaseUri}{address}");
       await this._clientLock.WaitAsync();
       try {

@@ -8,7 +8,7 @@ using MetaBrainz.ListenBrainz.Interfaces;
 namespace MetaBrainz.ListenBrainz.Objects {
 
   [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-  internal sealed class TrackMetadata : JsonBasedObject, ITrackMetaData {
+  internal sealed class TrackInfo : JsonBasedObject, ITrackInfo {
 
     [JsonPropertyName("additional_info")]
     public IAdditionalInfo? AdditionalInfo { get; set; }
