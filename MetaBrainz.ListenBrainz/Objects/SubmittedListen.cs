@@ -25,7 +25,7 @@ namespace MetaBrainz.ListenBrainz.Objects {
     /// <param name="track">The listened track's name.</param>
     /// <param name="artist">The listened track's artist.</param>
     /// <param name="timestamp">
-    /// The date and time at which the track was listened to, specified as the number of seconds since
+    /// The date and time at which the track was listened to, expressed as the number of seconds since
     /// <see cref="UnixTime.Epoch">the Unix time epoch</see>.
     /// </param>
     public SubmittedListen(string track, string artist, long timestamp) : base(track, artist) {

@@ -207,7 +207,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <param name="timestamp">
-    /// The timestamp to set, specified as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+    /// The timestamp to set, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
     /// </param>
     /// <remarks>
     /// This will access the <c>POST /1/latest-import</c> endpoint and requires <see cref="UserToken"/> to be set to the token
@@ -233,7 +233,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <param name="timestamp">
-    /// The timestamp to set, specified as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+    /// The timestamp to set, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
     /// </param>
     /// <return>A task that will perform the operation.</return>
     /// <remarks>
@@ -505,7 +505,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <param name="track">The name of the track being listened to.</param>
     /// <param name="artist">The name of the artist performing the track being listened to.</param>
     /// <param name="timestamp">
-    /// The date and time at which the track was listened to, specified as the number of seconds since
+    /// The date and time at which the track was listened to, expressed as the number of seconds since
     /// <see cref="UnixTime.Epoch">the Unix time epoch</see>.
     /// </param>
     /// <param name="release">The name of the release containing the track being listened to.</param>
@@ -565,7 +565,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <param name="track">The name of the track being listened to.</param>
     /// <param name="artist">The name of the artist performing the track being listened to.</param>
     /// <param name="timestamp">
-    /// The date and time at which the track was listened to, specified as the number of seconds since
+    /// The date and time at which the track was listened to, expressed as the number of seconds since
     /// <see cref="UnixTime.Epoch">the Unix time epoch</see>.
     /// </param>
     /// <param name="release">The name of the release containing the track being listened to.</param>
@@ -611,11 +611,11 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>Gets the most recent listens for a user.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <param name="after">
-    /// The timestamp to start from, specified as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+    /// The timestamp to start from, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
     /// Returned listens will have a timestamp greater than, but not including, this value.
     /// </param>
     /// <param name="before">
-    /// The timestamp to end at, specified as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+    /// The timestamp to end at, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
     /// Returned listens will have a timestamp less than, but not including, this value.
     /// </param>
     /// <param name="count">
@@ -658,11 +658,11 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>Gets the most recent listens for a user.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <param name="after">
-    /// The timestamp to start from, specified as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+    /// The timestamp to start from, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
     /// Returned listens will have a timestamp greater than, but not including, this value.
     /// </param>
     /// <param name="before">
-    /// The timestamp to end at, specified as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+    /// The timestamp to end at, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
     /// Returned listens will have a timestamp less than, but not including, this value.
     /// </param>
     /// <param name="count">

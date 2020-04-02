@@ -21,6 +21,8 @@ namespace MetaBrainz.ListenBrainz.Objects {
     [JsonPropertyName("track_metadata")]
     public ITrackInfo? Track  { get; set; }
 
+    public long? UnixTimestamp => UnixTime.Convert(this.Timestamp);
+
     [JsonPropertyName("user_name")]
     public string? User { get; set; }
 

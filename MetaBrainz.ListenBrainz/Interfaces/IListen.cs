@@ -16,6 +16,11 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     /// <summary>The timestamp for the listen.</summary>
     DateTimeOffset? Timestamp { get; }
 
+    /// <summary>
+    /// The timestamp for the listen, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+    /// </summary>
+    long? UnixTimestamp { get; }
+
     /// <summary>Information about the track that was listened to.</summary>
     ITrackInfo? Track { get; }
 

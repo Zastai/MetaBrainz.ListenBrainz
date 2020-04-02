@@ -13,6 +13,12 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     /// <summary>The timestamp of the newest listen submitted in previous imports.</summary>
     DateTimeOffset? Timestamp { get; }
 
+    /// <summary>
+    /// The timestamp of the newest listen submitted in previous imports, expressed as the number of seconds since
+    /// <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+    /// </summary>
+    long? UnixTimestamp { get; }
+
     /// <summary>The MusicBrainz ID of the user.</summary>
     string? User { get; }
 

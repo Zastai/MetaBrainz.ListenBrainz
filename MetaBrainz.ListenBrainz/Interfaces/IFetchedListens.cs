@@ -16,8 +16,8 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
   /// When <see cref="ListenBrainz.GetRecentListens(string[])"/> is used, only <see cref="UserList"/> will be set, to the
   /// specified list of user, separated by commas.<br/>
   /// In the most common case, using <see cref="ListenBrainz.GetListens(string,int?)"/>, <see cref="User"/> will be set to the
-  /// specified user name, and <see cref="Timestamp"/> will be set to the timestamp of the most recent listen included in
-  /// <see cref="Listens"/> (or <see cref="UnixTime.Epoch"/> if no listens were returned).
+  /// specified user name, and <see cref="Timestamp"/>/<see cref="UnixTimestamp"/> will be set to the timestamp of the most recent
+  /// listen included in <see cref="Listens"/> (or <see cref="UnixTime.Epoch"/> if no listens were returned).
   /// </remarks>
   [PublicAPI]
   public interface IFetchedListens : IJsonBasedObject {
@@ -33,6 +33,12 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
 
     /// <summary>The timestamp of the newest listen included in <see cref="Listens"/>.</summary>
     DateTimeOffset? Timestamp { get; }
+
+    /// <summary>
+    /// The timestamp of the newest listen included in <see cref="Listens"/>, expressed as the number of seconds since
+    /// <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+    /// </summary>
+    long? UnixTimestamp { get; }
 
     /// <summary>The MusicBrainz ID of the user for which the listens were fetched.</summary>
     string? User { get; }
