@@ -14,7 +14,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     Guid? MessyRecordingId { get; }
 
     /// <summary>The timestamp for the listen.</summary>
-    DateTime? Timestamp { get; }
+    DateTimeOffset? Timestamp { get; }
 
     /// <summary>Information about the track that was listened to.</summary>
     ITrackInfo? Track { get; }

@@ -15,23 +15,23 @@ namespace MetaBrainz.ListenBrainz {
     /// <remarks>Corresponds to the value of the <code>X-RateLimit-Limit</code> header.</remarks>
     public int AllowedRequests { get; private set; }
 
-    /// <summary>The date and time (UTC) at which the last request was made.</summary>
+    /// <summary>The date and time at which the last request was made.</summary>
     /// <remarks>
     /// This is the (client-side) timestamp to which <see cref="ResetIn"/> can be added to determine the end of the window.
     /// </remarks>
-    public DateTime LastRequest { get; private set; }
+    public DateTimeOffset LastRequest { get; private set; }
 
     /// <summary>The number of requests remaining in the current time window.</summary>
     /// <remarks>Corresponds to the value of the <code>X-RateLimit-Remaining</code> header.</remarks>
     public int RemainingRequests { get; private set; }
 
-    /// <summary>The date and time (UTC) at which the current time window expires.</summary>
+    /// <summary>The date and time at which the current time window expires.</summary>
     /// <remarks>
     /// Corresponds to the value of the <code>X-RateLimit-Reset</code> header.<br/>
     /// Provided for compatibility only; use of <see cref="ResetIn"/> is recommended to avoid issues with clients with clocks that
     /// are not correctly set.
     /// </remarks>
-    public DateTime ResetAt { get; private set; }
+    public DateTimeOffset ResetAt { get; private set; }
 
     /// <summary>The number of seconds remaining until the current time window expires.</summary>
     /// <remarks>Corresponds to the value of the <code>X-RateLimit-Reset-In</code> header.</remarks>
@@ -46,7 +46,7 @@ namespace MetaBrainz.ListenBrainz {
     /// available; <see cref="ResetAt"/> will be set to <see cref="LastRequest"/> when not available.
     /// </returns>
     public static RateLimitInfo From(WebHeaderCollection? headers) {
-      var now = DateTime.UtcNow;
+      var now = DateTimeOffset.UtcNow;
       if (headers == null) {
         return new RateLimitInfo {
           // @formatter:off

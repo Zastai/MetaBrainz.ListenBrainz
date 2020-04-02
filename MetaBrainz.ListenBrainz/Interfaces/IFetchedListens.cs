@@ -32,7 +32,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     bool? PlayingNow { get; }
 
     /// <summary>The timestamp of the newest listen included in <see cref="Listens"/>.</summary>
-    DateTime? Timestamp { get; }
+    DateTimeOffset? Timestamp { get; }
 
     /// <summary>The MusicBrainz ID of the user for which the listens were fetched.</summary>
     string? User { get; }

@@ -200,7 +200,7 @@ namespace MetaBrainz.ListenBrainz {
     /// This will access the <c>POST /1/latest-import</c> endpoint and requires <see cref="UserToken"/> to be set to the token
     /// for <paramref name="user"/>.
     /// </remarks>
-    public void SetLatestImport(string user, DateTime timestamp) {
+    public void SetLatestImport(string user, DateTimeOffset timestamp) {
       this.SetLatestImport(user, UnixTime.Convert(timestamp));
     }
 
@@ -226,7 +226,7 @@ namespace MetaBrainz.ListenBrainz {
     /// Users can find their token on their profile page:
     /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
     /// </remarks>
-    public Task SetLatestImportAsync(string user, DateTime timestamp) {
+    public Task SetLatestImportAsync(string user, DateTimeOffset timestamp) {
       return this.SetLatestImportAsync(user, UnixTime.Convert(timestamp));
     }
 
@@ -478,12 +478,14 @@ namespace MetaBrainz.ListenBrainz {
       this.PerformRequest("submit-listens", Method.Post, json);
     }
 
-    /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <summary>
+    /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
+    /// </summary>
     /// <param name="track">The name of the track being listened to.</param>
     /// <param name="artist">The name of the artist performing the track being listened to.</param>
     /// <param name="timestamp">
-    /// The date and time when the track was listened to.
-    /// If not specified or <see langword="null"/>, the current date and time will be used.
+    /// The date and time at which the track was listened to; when not specified or <see langword="null"/>, the current UTC date and
+    /// time is used.
     /// </param>
     /// <param name="release">The name of the release containing the track being listened to.</param>
     /// <remarks>
@@ -491,13 +493,36 @@ namespace MetaBrainz.ListenBrainz {
     /// Users can find their token on their profile page:
     /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
     /// </remarks>
-    public void SubmitSingleListen(string track, string artist, DateTime? timestamp = null, string? release = null) {
+    public void SubmitSingleListen(string track, string artist, DateTimeOffset? timestamp = null, string? release = null) {
       var listen = new SubmittedListen(track, artist, timestamp);
       listen.Track.Release = release;
       this.SubmitSingleListen(listen);
     }
 
-    /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <summary>
+    /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
+    /// </summary>
+    /// <param name="track">The name of the track being listened to.</param>
+    /// <param name="artist">The name of the artist performing the track being listened to.</param>
+    /// <param name="timestamp">
+    /// The date and time at which the track was listened to, specified as the number of seconds since
+    /// <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+    /// </param>
+    /// <param name="release">The name of the release containing the track being listened to.</param>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
+    /// </remarks>
+    public void SubmitSingleListen(string track, string artist, long timestamp, string? release = null) {
+      var listen = new SubmittedListen(track, artist, timestamp);
+      listen.Track.Release = release;
+      this.SubmitSingleListen(listen);
+    }
+
+    /// <summary>
+    /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
+    /// </summary>
     /// <param name="listen">The listen data to send.</param>
     /// <return>A task that will perform the operation.</return>
     /// <remarks>
@@ -512,12 +537,14 @@ namespace MetaBrainz.ListenBrainz {
       await task.ConfigureAwait(false);
     }
 
-    /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
+    /// <summary>
+    /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
+    /// </summary>
     /// <param name="track">The name of the track being listened to.</param>
     /// <param name="artist">The name of the artist performing the track being listened to.</param>
     /// <param name="timestamp">
-    /// The date and time when the track was listened to.
-    /// If not specified or <see langword="null"/>, the current date and time will be used.
+    /// The date and time at which the track was listened to; when not specified or <see langword="null"/>, the current UTC date and
+    /// time is used.
     /// </param>
     /// <param name="release">The name of the release containing the track being listened to.</param>
     /// <return>A task that will perform the operation.</return>
@@ -526,7 +553,29 @@ namespace MetaBrainz.ListenBrainz {
     /// Users can find their token on their profile page:
     /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
     /// </remarks>
-    public async Task SubmitSingleListenAsync(string track, string artist, DateTime? timestamp = null, string? release = null) {
+    public async Task SubmitSingleListenAsync(string track, string artist, DateTimeOffset? timestamp = null, string? release = null) {
+      var listen = new SubmittedListen(track, artist, timestamp);
+      listen.Track.Release = release;
+      await this.SubmitSingleListenAsync(listen);
+    }
+
+    /// <summary>
+    /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
+    /// </summary>
+    /// <param name="track">The name of the track being listened to.</param>
+    /// <param name="artist">The name of the artist performing the track being listened to.</param>
+    /// <param name="timestamp">
+    /// The date and time at which the track was listened to, specified as the number of seconds since
+    /// <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+    /// </param>
+    /// <param name="release">The name of the release containing the track being listened to.</param>
+    /// <return>A task that will perform the operation.</return>
+    /// <remarks>
+    /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+    /// Users can find their token on their profile page:
+    /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
+    /// </remarks>
+    public async Task SubmitSingleListenAsync(string track, string artist, long timestamp, string? release = null) {
       var listen = new SubmittedListen(track, artist, timestamp);
       listen.Track.Release = release;
       await this.SubmitSingleListenAsync(listen);
@@ -593,7 +642,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
     /// </param>
     /// <returns>The requested listens.</returns>
-    public IFetchedListens? GetListens(string user, DateTime? after, DateTime? before, int? count = null)
+    public IFetchedListens? GetListens(string user, DateTimeOffset? after, DateTimeOffset? before, int? count = null)
       => this.GetListens(user, UnixTime.Convert(after), UnixTime.Convert(before), count);
 
     /// <summary>Gets the most recent listens for a user.</summary>
@@ -640,7 +689,7 @@ namespace MetaBrainz.ListenBrainz {
     ///   If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>A task returning the requested listens.</returns>
-    public Task<IFetchedListens?> GetListensAsync(string user, DateTime? after, DateTime? before, int? count = null)
+    public Task<IFetchedListens?> GetListensAsync(string user, DateTimeOffset? after, DateTimeOffset? before, int? count = null)
       => this.GetListensAsync(user, UnixTime.Convert(after), UnixTime.Convert(before), count);
 
     #endregion

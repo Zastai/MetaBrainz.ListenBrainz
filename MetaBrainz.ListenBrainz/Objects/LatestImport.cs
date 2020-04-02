@@ -13,7 +13,7 @@ namespace MetaBrainz.ListenBrainz.Objects {
 
     [JsonConverter(typeof(UnixTime.JsonConverter))]
     [JsonPropertyName("latest_import")]
-    public DateTime? Timestamp { get; set; }
+    public DateTimeOffset? Timestamp { get; set; }
 
     [JsonPropertyName("musicbrainz_id")]
     public string? User { get; set; }

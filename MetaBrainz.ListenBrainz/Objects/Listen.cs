@@ -16,7 +16,7 @@ namespace MetaBrainz.ListenBrainz.Objects {
 
     [JsonConverter(typeof(UnixTime.JsonConverter))]
     [JsonPropertyName("listened_at")]
-    public DateTime? Timestamp { get; set; }
+    public DateTimeOffset? Timestamp { get; set; }
 
     [JsonPropertyName("track_metadata")]
     public ITrackInfo? Track  { get; set; }

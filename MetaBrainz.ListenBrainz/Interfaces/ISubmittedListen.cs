@@ -9,7 +9,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
   public interface ISubmittedListen : ISubmittedListenData {
 
     /// <summary>The timestamp for the listen.</summary>
-    DateTime Timestamp { get; }
+    DateTimeOffset Timestamp { get; }
 
   }
 
