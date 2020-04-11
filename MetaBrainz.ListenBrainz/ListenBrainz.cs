@@ -912,6 +912,7 @@ namespace MetaBrainz.ListenBrainz {
 
     private WebClient PrepareRequest(NameValueCollection? options) {
       var wc = this.WebClient;
+      wc.Headers.Clear();
       wc.Headers.Set("Content-Type", "application/json");
       wc.Headers.Set("Accept",       "application/json");
       wc.Headers.Set("User-Agent",   this._fullUserAgent);
@@ -927,8 +928,21 @@ namespace MetaBrainz.ListenBrainz {
       return this.PerformRequest(address, method, null, options);
     }
 
+    private static string QueryString(NameValueCollection? options) {
+      if (options == null || !options.HasKeys())
+        return "";
+      var sb = new StringBuilder();
+      var separator = '?';
+      foreach (var option in options.AllKeys) {
+        // FIXME: Which parts (if any) need URL/Data escaping?
+        sb.Append(separator).Append(option).Append('=').Append(options.Get(option));
+        separator = '&';
+      }
+      return sb.ToString();
+    }
+
     private string PerformRequest(string address, Method method, string? body, NameValueCollection? options = null) {
-      Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method} {this.BaseUri}{address}");
+      Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method} {this.BaseUri}{address}{ListenBrainz.QueryString(options)}");
       this._clientLock.Wait();
       try {
         var wc = this.PrepareRequest(options);
@@ -964,7 +978,7 @@ namespace MetaBrainz.ListenBrainz {
     }
 
     private async Task<string> PerformRequestAsync(string address, Method method, string? body, NameValueCollection? options = null) {
-      Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method} {this.BaseUri}{address}");
+      Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method} {this.BaseUri}{address}{ListenBrainz.QueryString(options)}");
       await this._clientLock.WaitAsync();
       try {
         var wc = this.PrepareRequest(options);
