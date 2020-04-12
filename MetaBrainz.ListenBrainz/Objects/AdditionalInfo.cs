@@ -31,6 +31,10 @@ namespace MetaBrainz.ListenBrainz.Objects {
       }
     }
 
+    public Guid? ImportedArtistId => this.GetValueTypedField<Guid>("lastfm_artist_mbid");
+
+    public Guid? ImportedReleaseId => this.GetValueTypedField<Guid>("lastfm_release_mbid");
+
     public string? Isrc => this.GetTypedField<string>("isrc");
 
     public string? ListeningFrom => this.GetTypedField<string>("listening_from");

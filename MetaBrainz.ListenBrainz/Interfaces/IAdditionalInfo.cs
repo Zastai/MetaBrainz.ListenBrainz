@@ -17,7 +17,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     /// <remarks>Please file a ticket if there's a common field for which you want an explicit property to be added.</remarks>
     IReadOnlyDictionary<string, object>? AllFields { get; }
 
-    /// <summary>The MusicBrainz IDs of the track's artists.</summary>
+    /// <summary>The MusicBrainz IDs for the track's artists.</summary>
     IReadOnlyList<Guid>? ArtistIds { get; }
 
     /// <summary>The names of the track's artists.</summary>
@@ -28,6 +28,14 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
 
     /// <summary>The track's duration.</summary>
     TimeSpan? Duration { get; }
+
+    /// <summary>The MusicBrainz ID for the track's artist, as determined from a Last.fm import (may not be accurate).</summary>
+    Guid? ImportedArtistId { get; }
+
+    /// <summary>
+    /// The MusicBrainz ID for the release containing the track, as determined from a Last.fm import (may not be accurate).
+    /// </summary>
+    Guid? ImportedReleaseId { get; }
 
     /// <summary>The ISRC for the track.</summary>
     string? Isrc { get; }
