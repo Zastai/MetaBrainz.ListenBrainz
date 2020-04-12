@@ -10,6 +10,10 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
   /// All fields are stored in <see cref="AllFields"/>, but an attempt has been made to capture a number of the more common fields
   /// (like the ones set by the last.fm import or the Spotify extension) as separate properties.
   /// </summary>
+  /// <remarks>
+  /// All the information is provided by client applications and stored as submitted. As such there is no real guarantee that any
+  /// of it is correct.
+  /// </remarks>
   [PublicAPI]
   public interface IAdditionalInfo {
 
