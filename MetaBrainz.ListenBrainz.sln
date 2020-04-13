@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support Files", "Support Fi
 		README.md = README.md
 		build\TargetFrameworkVersionDefineConstants.targets = build\TargetFrameworkVersionDefineConstants.targets
 		build\Versioning.targets = build\Versioning.targets
+		appveyor.yml = appveyor.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaBrainz.ListenBrainz", "MetaBrainz.ListenBrainz\MetaBrainz.ListenBrainz.csproj", "{7432E8B5-BAEF-4B24-ABE0-3410853F3273}"
