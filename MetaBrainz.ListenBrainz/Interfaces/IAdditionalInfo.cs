@@ -11,21 +11,21 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
   /// (like the ones set by the last.fm import or the Spotify extension) as separate properties.
   /// </summary>
   /// <remarks>
-  /// All the information is provided by client applications and stored as submitted. As such there is no real guarantee that any
-  /// of it is correct.
+  /// Most of this information is provided by client applications and stored as submitted. As such there is no real guarantee that
+  /// any of it is correct.
   /// </remarks>
   [PublicAPI]
   public interface IAdditionalInfo {
 
     /// <summary>All additional information fields.</summary>
     /// <remarks>Please file a ticket if there's a common field for which you want an explicit property to be added.</remarks>
-    IReadOnlyDictionary<string, object>? AllFields { get; }
+    IReadOnlyDictionary<string, object?> AllFields { get; }
 
     /// <summary>The MusicBrainz IDs for the track's artists.</summary>
-    IReadOnlyList<Guid>? ArtistIds { get; }
+    IReadOnlyList<Guid?>? ArtistIds { get; }
 
     /// <summary>The names of the track's artists.</summary>
-    IReadOnlyList<string>? ArtistNames { get; }
+    IReadOnlyList<string?>? ArtistNames { get; }
 
     /// <summary>The track's disc number.</summary>
     int? DiscNumber { get; }
@@ -63,7 +63,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     string? ReleaseArtistName { get; }
 
     /// <summary>The artist names for the track's release.</summary>
-    IReadOnlyList<string>? ReleaseArtistNames { get; }
+    IReadOnlyList<string?>? ReleaseArtistNames { get; }
 
     /// <summary>The MusicBrainz ID for the track's release group.</summary>
     Guid? ReleaseGroupId { get; }
@@ -72,19 +72,19 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     Guid? ReleaseId { get; }
 
     /// <summary>The Spotify IDs for the track's album artists.</summary>
-    IReadOnlyList<Uri>? SpotifyAlbumArtistIds { get; }
+    IReadOnlyList<Uri?>? SpotifyAlbumArtistIds { get; }
 
     /// <summary>The Spotify ID for the track's album.</summary>
     Uri? SpotifyAlbumId { get; }
 
     /// <summary>The Spotify IDs for the track's artists.</summary>
-    IReadOnlyList<Uri>? SpotifyArtistIds { get; }
+    IReadOnlyList<Uri?>? SpotifyArtistIds { get; }
 
     /// <summary>The track's Spotify ID.</summary>
     Uri? SpotifyId { get; }
 
     /// <summary>The track's tags.</summary>
-    IReadOnlyList<string>? Tags { get; }
+    IReadOnlyList<string?>? Tags { get; }
 
     /// <summary>The MusicBrainz ID for the track.</summary>
     Guid? TrackId { get; }
@@ -93,7 +93,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     int? TrackNumber { get; }
 
     /// <summary>The MusicBrainz IDs of the track's associated works.</summary>
-    IReadOnlyList<Guid>? WorkIds { get; }
+    IReadOnlyList<Guid?>? WorkIds { get; }
 
   }
 

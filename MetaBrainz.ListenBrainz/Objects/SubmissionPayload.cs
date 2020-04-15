@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 using JetBrains.Annotations;
 
@@ -14,7 +13,6 @@ namespace MetaBrainz.ListenBrainz.Objects {
       this.Type = type;
     }
 
-    [JsonPropertyName("listen_type")]
     public string Type { get; }
 
     public static SubmissionPayload<ISubmittedListen> CreateImport() => new SubmissionPayload<ISubmittedListen>("import");
@@ -39,7 +37,6 @@ namespace MetaBrainz.ListenBrainz.Objects {
     public SubmissionPayload(string type) : base(type) {
     }
 
-    [JsonPropertyName("payload")]
     public List<T> Listens { get; } = new List<T>();
 
   }

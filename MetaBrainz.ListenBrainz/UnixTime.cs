@@ -65,30 +65,6 @@ namespace MetaBrainz.ListenBrainz {
 
 #endif
 
-    /// <summary>
-    /// A JSON converter for serializing Unix time values to/from .NET <see cref="DateTimeOffset"/> values (always UTC).
-    /// </summary>
-    public sealed class JsonConverter : JsonConverter<DateTimeOffset?> {
-
-      /// <inheritdoc />
-      public override DateTimeOffset? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-        if (reader.TokenType == JsonTokenType.Null)
-          return null;
-        if (reader.TokenType == JsonTokenType.Number && reader.TryGetInt64(out var unixTime))
-          return UnixTime.Convert(unixTime);
-        throw new JsonException("The value for a Unix time field must be a valid 64-bit integer.");
-      }
-
-      /// <inheritdoc />
-      public override void Write(Utf8JsonWriter writer, DateTimeOffset? value, JsonSerializerOptions options) {
-        if (value.HasValue)
-          writer.WriteNumberValue(UnixTime.Convert(value.Value));
-        else
-          writer.WriteNullValue();
-      }
-
-    }
-
   }
 
 }

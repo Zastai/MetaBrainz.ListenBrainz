@@ -9,13 +9,13 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
   public interface ITrackInfo : IJsonBasedObject {
 
     /// <summary>Additional information about the track.</summary>
-    IAdditionalInfo? AdditionalInfo { get; }
+    IAdditionalInfo AdditionalInfo { get; }
 
     /// <summary>The name of the track's artist.</summary>
-    string? Artist { get; }
+    string Artist { get; }
 
     /// <summary>The name of the track.</summary>
-    string? Name { get; }
+    string Name { get; }
 
     /// <summary>The name of the release the track was taken from (if any).</summary>
     string? Release { get; }

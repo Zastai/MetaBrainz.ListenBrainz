@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 using JetBrains.Annotations;
 
@@ -11,83 +10,132 @@ namespace MetaBrainz.ListenBrainz.Objects {
   [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
   internal sealed class AdditionalInfo : IAdditionalInfo {
 
-    IReadOnlyDictionary<string, object>? IAdditionalInfo.AllFields => this.AllFields;
-
-    [JsonExtensionData]
-    public Dictionary<string, object>? AllFields { get; set; }
-
-    public IReadOnlyList<Guid>? ArtistIds => this.GetListField<Guid>("artist_mbids");
-
-    public IReadOnlyList<string>? ArtistNames => this.GetListField<string>("artist_names");
-
-    public int? DiscNumber => (int?) this.GetValueTypedField<long>("discnumber");
-
-    public TimeSpan? Duration {
-      get {
-        var duration = this.GetValueTypedField<long>("duration_ms");
+    public AdditionalInfo(Dictionary<string, object?> fields) {
+      // Store the full set of fields
+      this.AllFields = fields;
+      // Extract "simple" well-known fields
+      this.ArtistNames = AdditionalInfo.GetObjectList<string>(fields, "artist_names");
+      this.ArtistIds = AdditionalInfo.GetValueList<Guid>(fields, "artist_mbids");
+      this.DiscNumber = AdditionalInfo.GetValue<int>(fields, "discnumber");
+      this.ImportedArtistId = AdditionalInfo.GetValue<Guid>(fields, "lastfm_artist_mbid");
+      this.Isrc = AdditionalInfo.GetObject<string>(fields, "isrc");
+      this.ImportedReleaseId = AdditionalInfo.GetValue<Guid>(fields, "lastfm_release_mbid");
+      this.ListeningFrom = AdditionalInfo.GetObject<string>(fields, "listening_from");
+      this.MessyArtistId = AdditionalInfo.GetValue<Guid>(fields, "artist_msid");
+      this.MessyRecordingId = AdditionalInfo.GetValue<Guid>(fields, "recording_msid");
+      this.MessyReleaseId = AdditionalInfo.GetValue<Guid>(fields, "release_msid");
+      this.RecordingId = AdditionalInfo.GetValue<Guid>(fields, "recording_mbid");
+      this.ReleaseArtistName = AdditionalInfo.GetObject<string>(fields, "release_artist_name");
+      this.ReleaseArtistNames = AdditionalInfo.GetObjectList<string>(fields, "release_artist_names");
+      this.ReleaseGroupId = AdditionalInfo.GetValue<Guid>(fields, "release_group_mbid");
+      this.ReleaseId = AdditionalInfo.GetValue<Guid>(fields, "release_mbid");
+      this.SpotifyAlbumId = AdditionalInfo.GetObject<Uri>(fields, "spotify_album_id");
+      this.SpotifyAlbumArtistIds = AdditionalInfo.GetObjectList<Uri>(fields, "spotify_album_artist_ids");
+      this.SpotifyArtistIds = AdditionalInfo.GetObjectList<Uri>(fields, "spotify_artist_ids");
+      this.SpotifyId = AdditionalInfo.GetObject<Uri>(fields, "spotify_album_id");
+      this.Tags = AdditionalInfo.GetObjectList<string>(fields, "tags");
+      this.TrackId = AdditionalInfo.GetValue<Guid>(fields, "track_mbid");
+      this.TrackNumber = AdditionalInfo.GetValue<int>(fields, "tracknumber");
+      this.WorkIds = AdditionalInfo.GetValueList<Guid>(fields, "work_mbids");
+      // Extract well-known fields requiring a bit more work
+      {
+        var duration = AdditionalInfo.GetValue<int>(fields, "duration_ms");
         if (duration.HasValue)
-          return TimeSpan.FromMilliseconds(duration.Value);
-        return null;
+          this.Duration = TimeSpan.FromMilliseconds(duration.Value);
       }
     }
 
-    public Guid? ImportedArtistId => this.GetValueTypedField<Guid>("lastfm_artist_mbid");
+    public IReadOnlyDictionary<string, object?> AllFields { get; }
 
-    public Guid? ImportedReleaseId => this.GetValueTypedField<Guid>("lastfm_release_mbid");
+    public IReadOnlyList<Guid?>? ArtistIds { get; }
 
-    public string? Isrc => this.GetTypedField<string>("isrc");
+    public IReadOnlyList<string?>? ArtistNames { get; }
 
-    public string? ListeningFrom => this.GetTypedField<string>("listening_from");
+    public int? DiscNumber { get; }
 
-    public Guid? MessyArtistId => this.GetValueTypedField<Guid>("artist_msid");
+    public TimeSpan? Duration { get; }
 
-    public Guid? MessyRecordingId => this.GetValueTypedField<Guid>("recording_msid");
+    public Guid? ImportedArtistId { get; }
 
-    public Guid? MessyReleaseId => this.GetValueTypedField<Guid>("release_msid");
+    public Guid? ImportedReleaseId { get; }
 
-    public Guid? RecordingId => this.GetValueTypedField<Guid>("recording_mbid");
+    public string? Isrc { get; }
 
-    public string? ReleaseArtistName => this.GetTypedField<string>("release_artist_name");
+    public string? ListeningFrom { get; }
 
-    public IReadOnlyList<string>? ReleaseArtistNames => this.GetListField<string>("release_artist_names");
+    public Guid? MessyArtistId { get; }
 
-    public Guid? ReleaseGroupId => this.GetValueTypedField<Guid>("release_group_mbid");
+    public Guid? MessyRecordingId { get; }
 
-    public Guid? ReleaseId => this.GetValueTypedField<Guid>("release_mbid");
+    public Guid? MessyReleaseId { get; }
 
-    public IReadOnlyList<Uri>? SpotifyAlbumArtistIds => this.GetListField<Uri>("spotify_album_artist_ids");
+    public Guid? RecordingId { get; }
 
-    public Uri? SpotifyAlbumId => this.GetTypedField<Uri>("spotify_album_id");
+    public string? ReleaseArtistName { get; }
 
-    public IReadOnlyList<Uri>? SpotifyArtistIds => this.GetListField<Uri>("spotify_artist_ids");
+    public IReadOnlyList<string?>? ReleaseArtistNames { get; }
 
-    public Uri? SpotifyId => this.GetTypedField<Uri>("spotify_id");
+    public Guid? ReleaseGroupId { get; }
 
-    public IReadOnlyList<string>? Tags => this.GetListField<string>("tags");
+    public Guid? ReleaseId { get; }
 
-    public Guid? TrackId => this.GetValueTypedField<Guid>("track_mbid");
+    public IReadOnlyList<Uri?>? SpotifyAlbumArtistIds { get; }
 
-    public int? TrackNumber => (int?) this.GetValueTypedField<long>("tracknumber");
+    public Uri? SpotifyAlbumId { get; }
 
-    public IReadOnlyList<Guid>? WorkIds => this.GetListField<Guid>("work_mbids");
+    public IReadOnlyList<Uri?>? SpotifyArtistIds { get; }
 
-    private IReadOnlyList<T>? GetListField<T>(string name) {
-      if (this.AllFields != null && this.AllFields.TryGetValue(name, out var value) && value is T[] array)
-        return array;
-      return null;
-    }
+    public Uri? SpotifyId { get; }
 
-    private T? GetTypedField<T>(string name) where T : class {
-      if (this.AllFields != null && this.AllFields.TryGetValue(name, out var value) && value is T typedValue)
+    public IReadOnlyList<string?>? Tags { get; }
+
+    public Guid? TrackId { get; }
+
+    public int? TrackNumber { get; }
+
+    public IReadOnlyList<Guid?>? WorkIds { get; }
+
+    #region Helper Methods
+
+    private static T? GetObject<T>(Dictionary<string, object?> fields, string name) where T : class {
+      if (fields.TryGetValue(name, out var value) && value != null && value is T typedValue)
         return typedValue;
       return null;
     }
 
-    private T? GetValueTypedField<T>(string name) where T : struct {
-      if (this.AllFields != null && this.AllFields.TryGetValue(name, out var value) && value is T typedValue)
+    private static IReadOnlyList<T?>? GetObjectList<T>(Dictionary<string, object?> fields, string name) where T : class {
+      if (fields.TryGetValue(name, out var value) && value != null) {
+        if (value is IReadOnlyList<T?> list)
+          return list;
+        if (value is object[] array && array.Length == 0)
+          return Array.Empty<T?>();
+      }
+      return null;
+    }
+
+    private static T? GetValue<T>(Dictionary<string, object?> fields, string name) where T : struct {
+      if (fields.TryGetValue(name, out var value) && value != null && value is T typedValue)
         return typedValue;
       return null;
     }
+
+    private static IReadOnlyList<T?>? GetValueList<T>(Dictionary<string, object?> fields, string name) where T : struct {
+      if (fields.TryGetValue(name, out var value) && value != null) {
+        if (value is IReadOnlyList<T?> list)
+          return list;
+        if (value is IReadOnlyList<T> nonNullableList) { // convert to array of nullable
+          var nullableList = new T?[nonNullableList.Count];
+          for (var i = 0; i < nullableList.Length; ++i)
+            nullableList[i] = nonNullableList[i];
+          return nullableList;
+        }
+        if (value is object[] array && array.Length == 0)
+          return Array.Empty<T?>();
+      }
+      return null;
+    }
+
+    #endregion
 
   }
 

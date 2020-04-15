@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 using JetBrains.Annotations;
 
 using MetaBrainz.Common.Json;
@@ -10,16 +8,18 @@ namespace MetaBrainz.ListenBrainz.Objects {
   [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
   internal sealed class TrackInfo : JsonBasedObject, ITrackInfo {
 
-    [JsonPropertyName("additional_info")]
-    public IAdditionalInfo? AdditionalInfo { get; set; }
+    public TrackInfo(string name, string artist, IAdditionalInfo info) {
+      this.Artist = artist;
+      this.Name = name;
+      this.AdditionalInfo = info;
+    }
 
-    [JsonPropertyName("artist_name")]
-    public string? Artist { get; set; }
+    public IAdditionalInfo AdditionalInfo { get; }
 
-    [JsonPropertyName("track_name")]
-    public string? Name { get; set; }
+    public string Artist { get; }
 
-    [JsonPropertyName("release_name")]
+    public string Name { get; }
+
     public string? Release { get; set; }
 
   }

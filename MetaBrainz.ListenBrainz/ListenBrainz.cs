@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 using MetaBrainz.Common.Json;
-using MetaBrainz.Common.Json.Converters;
+using MetaBrainz.ListenBrainz.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
 
@@ -603,13 +603,13 @@ namespace MetaBrainz.ListenBrainz {
     private IFetchedListens? PerformGetListens(string user, long? after, long? before, int? count = null) {
       var options = ListenBrainz.OptionsForGetListens(count, after, before);
       var json = this.PerformRequest($"user/{user}/listens", Method.Get, options);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
+      return JsonUtils.Deserialize<FetchedListens>(json, ListenBrainz.JsonOptionsForRead);
     }
 
     private async Task<IFetchedListens?> PerformGetListensAsync(string user, long? after, long? before, int? count = null) {
       var options = ListenBrainz.OptionsForGetListens(count, after, before);
       var json = await this.PerformRequestAsync($"user/{user}/listens", Method.Get, options);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
+      return JsonUtils.Deserialize<FetchedListens>(json, ListenBrainz.JsonOptionsForRead);
     }
 
     #endregion
@@ -845,17 +845,17 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>Gets a user's currently-playing listen(s).</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <returns>The requested listens (typically 0 or 1).</returns>
-    public IFetchedListens? GetPlayingNow(string user) {
+    public IPlayingNow? GetPlayingNow(string user) {
       var json = this.PerformRequest($"user/{user}/playing-now", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
+      return JsonUtils.Deserialize<PlayingNow>(json, ListenBrainz.JsonOptionsForRead);
     }
 
     /// <summary>Gets a user's currently-playing listen(s).</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <returns>A task returning the requested listens (typically 0 or 1).</returns>
-    public async Task<IFetchedListens?> GetPlayingNowAsync(string user) {
+    public async Task<IPlayingNow?> GetPlayingNowAsync(string user) {
       var json = await this.PerformRequestAsync($"user/{user}/playing-now", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
+      return JsonUtils.Deserialize<PlayingNow>(json, ListenBrainz.JsonOptionsForRead);
     }
 
     #endregion
@@ -865,39 +865,39 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>Gets recent listen(s) for a set of users.</summary>
     /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
     /// <returns>The requested listens.</returns>
-    public IFetchedListens? GetRecentListens(params string[] users) {
+    public IRecentListens? GetRecentListens(params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
       var json = this.PerformRequest($"users/{userList}/recent-listens", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
+      return JsonUtils.Deserialize<RecentListens>(json, ListenBrainz.JsonOptionsForRead);
     }
 
     /// <summary>Gets recent listen(s) for a set of users.</summary>
     /// <param name="limit">The maximum number of listens to return.</param>
     /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
     /// <returns>The requested listens.</returns>
-    public IFetchedListens? GetRecentListens(int limit, params string[] users) {
+    public IRecentListens? GetRecentListens(int limit, params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
       var json = this.PerformRequest($"users/{userList}/recent-listens", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
+      return JsonUtils.Deserialize<RecentListens>(json, ListenBrainz.JsonOptionsForRead);
     }
 
     /// <summary>Gets recent listen(s) for a set of users.</summary>
     /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
     /// <returns>A task returning the requested listens.</returns>
-    public async Task<IFetchedListens?> GetRecentListensAsync(params string[] users) {
+    public async Task<IRecentListens?> GetRecentListensAsync(params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
       var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
+      return JsonUtils.Deserialize<RecentListens>(json, ListenBrainz.JsonOptionsForRead);
     }
 
     /// <summary>Gets recent listen(s) for a set of users.</summary>
     /// <param name="limit">The maximum number of listens to return.</param>
     /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
     /// <returns>A task returning the requested listens.</returns>
-    public async Task<IFetchedListens?> GetRecentListensAsync(int limit, params string[] users) {
+    public async Task<IRecentListens?> GetRecentListensAsync(int limit, params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
       var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.Get);
-      return JsonUtils.Deserialize<Payload<FetchedListens>>(json, ListenBrainz.JsonOptionsForRead).Contents;
+      return JsonUtils.Deserialize<RecentListens>(json, ListenBrainz.JsonOptionsForRead);
     }
 
     #endregion
@@ -961,25 +961,14 @@ namespace MetaBrainz.ListenBrainz {
 
     #region Internals
 
+    #region JSON Options (Read and Write)
+
     private static readonly JsonSerializerOptions JsonOptionsForRead = new JsonSerializerOptions {
       // @formatter:off
       AllowTrailingCommas         = false,
       IgnoreNullValues            = false,
       PropertyNameCaseInsensitive = false,
       // @formatter:on
-      Converters = {
-        // Mappers for interfaces that appear in scalar properties.
-        // @formatter:off
-        new InterfaceConverter<IAdditionalInfo, AdditionalInfo>(),
-        new InterfaceConverter<ITrackInfo,      TrackInfo     >(),
-        // @formatter:on
-        // Mappers for interfaces that appear in array properties.
-        // @formatter:off
-        new ReadOnlyListOfInterfaceConverter<IListen, Listen>(),
-        // @formatter:on
-        // This one is for UnhandledProperties - it tries to create useful types for a field of type 'object'
-        new AnyObjectConverter(),
-      }
     };
 
     private static readonly JsonSerializerOptions JsonOptionsForWrite = new JsonSerializerOptions() {
@@ -992,8 +981,16 @@ namespace MetaBrainz.ListenBrainz {
 #else
       WriteIndented = false,
 #endif
-      Converters = { new SubmissionSerializer() }
     };
+
+    static ListenBrainz() {
+      foreach (var reader in Converters.Readers())
+        ListenBrainz.JsonOptionsForRead.Converters.Add(reader);
+      foreach (var writer in Converters.Writers())
+        ListenBrainz.JsonOptionsForWrite.Converters.Add(writer);
+    }
+
+    #endregion
 
     #region Web Client / IDisposable
 

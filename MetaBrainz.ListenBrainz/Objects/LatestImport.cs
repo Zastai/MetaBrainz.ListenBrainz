@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.Json.Serialization;
 
 using JetBrains.Annotations;
 
@@ -11,14 +10,17 @@ namespace MetaBrainz.ListenBrainz.Objects {
   [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
   internal sealed class LatestImport : JsonBasedObject, ILatestImport {
 
-    [JsonConverter(typeof(UnixTime.JsonConverter))]
-    [JsonPropertyName("latest_import")]
-    public DateTimeOffset? Timestamp { get; set; }
+    public LatestImport(long ts, string user) {
+      this.Timestamp = UnixTime.Convert(ts);
+      this.UnixTimestamp = ts;
+      this.User = user;
+    }
 
-    public long? UnixTimestamp => UnixTime.Convert(this.Timestamp);
+    public DateTimeOffset? Timestamp { get; }
 
-    [JsonPropertyName("musicbrainz_id")]
-    public string? User { get; set; }
+    public long? UnixTimestamp { get; }
+
+    public string? User { get; }
 
   }
 
