@@ -984,9 +984,9 @@ namespace MetaBrainz.ListenBrainz {
     };
 
     static ListenBrainz() {
-      foreach (var reader in Converters.Readers())
+      foreach (var reader in Converters.Readers)
         ListenBrainz.JsonOptionsForRead.Converters.Add(reader);
-      foreach (var writer in Converters.Writers())
+      foreach (var writer in Converters.Writers)
         ListenBrainz.JsonOptionsForWrite.Converters.Add(writer);
     }
 
