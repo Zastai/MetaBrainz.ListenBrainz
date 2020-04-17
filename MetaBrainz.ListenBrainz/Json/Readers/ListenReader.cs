@@ -52,7 +52,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         throw new JsonException("Expected track metadata not found or null.");
       if (user == null)
         throw new JsonException("Expected user name not found or null.");
-      if (ts == null)
+      if (!ts.HasValue)
         throw new JsonException("Expected listened-at timestamp not found or null.");
       return new Listen(msid.Value, ts.Value, track, user) {
         UnhandledProperties = rest

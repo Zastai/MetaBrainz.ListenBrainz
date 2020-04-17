@@ -58,7 +58,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         }
         reader.Read();
       }
-      if (count == null)
+      if (!count.HasValue)
         throw new JsonException("Expected listen count not found or null.");
       if (count > 1)
         throw new JsonException($"Too many listens reported (expected at most one; got {count}).");

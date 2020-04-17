@@ -7,24 +7,24 @@ using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers {
 
-  internal sealed class LatestImportReader : ObjectReader<LatestImport> {
+  internal sealed class ErrorInfoReader : ObjectReader<ErrorInfo> {
 
-    public static readonly LatestImportReader Instance = new LatestImportReader();
+    public static readonly ErrorInfoReader Instance = new ErrorInfoReader();
 
-    protected override LatestImport ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-      long? ts = null;
-      string? user = null;
+    protected override ErrorInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+      int? code = null;
+      string? error = null;
       Dictionary<string, object?>? rest = null;
       while (reader.TokenType == JsonTokenType.PropertyName) {
         var prop = reader.GetString();
         try {
           reader.Read();
           switch (prop) {
-            case "latest_import":
-              ts = reader.GetInt64();
+            case "code":
+              code = reader.GetInt32();
               break;
-            case "musicbrainz_id":
-              user = reader.GetString();
+            case "error":
+              error = reader.GetString();
               break;
             default:
               rest ??= new Dictionary<string, object?>();
@@ -37,11 +37,11 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         }
         reader.Read();
       }
-      if (!ts.HasValue)
-        throw new JsonException("Expected latest-import timestamp not found or null.");
-      if (user == null)
-        throw new JsonException("Expected user id not found or null.");
-      return new LatestImport(ts.Value, user) {
+      if (!code.HasValue)
+        throw new JsonException("Expected error code not found or null.");
+      if (error == null)
+        throw new JsonException("Expected error message not found or null.");
+      return new ErrorInfo(code.Value, error) {
         UnhandledProperties = rest
       };
     }

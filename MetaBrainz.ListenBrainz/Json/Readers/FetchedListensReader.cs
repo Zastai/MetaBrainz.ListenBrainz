@@ -50,7 +50,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
       listens = this.VerifyListens(count, listens);
       if (user == null)
         throw new JsonException("Expected user id not found or null.");
-      if (ts == null)
+      if (!ts.HasValue)
         throw new JsonException("Expected latest-listen timestamp not found or null.");
       return new FetchedListens(listens, ts.Value, user) {
         UnhandledProperties = rest

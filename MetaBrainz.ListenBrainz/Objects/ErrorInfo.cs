@@ -16,11 +16,14 @@ namespace MetaBrainz.ListenBrainz.Objects {
   [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
   internal sealed class ErrorInfo : JsonBasedObject {
 
-    [JsonPropertyName("code")]
+    public ErrorInfo(int code, string error) {
+      this.Code = code;
+      this.Error = error;
+    }
+
     public int Code { get; set; }
 
-    [JsonPropertyName("error")]
-    public string? Error { get; set; }
+    public string Error { get; set; }
 
     public static ErrorInfo? ExtractFrom(HttpWebResponse? response) {
       if (response == null || response.ContentLength == 0)
