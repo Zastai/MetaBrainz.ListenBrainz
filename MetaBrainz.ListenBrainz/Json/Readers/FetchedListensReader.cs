@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 
 using MetaBrainz.Common.Json;
+using MetaBrainz.Common.Json.Converters;
 using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
 
@@ -37,7 +38,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
               break;
             default:
               rest ??= new Dictionary<string, object?>();
-              rest[prop] = JsonSerializer.Deserialize<object>(ref reader, options);
+              rest[prop] = AnyObjectReader.Instance.Read(ref reader, typeof(object), options);
               break;
           }
         }

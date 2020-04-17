@@ -18,7 +18,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         try {
           reader.Read();
           // There are no guaranteed contents, and no required property types, so nothing specific to do here (yet).
-          fields[prop] = JsonSerializer.Deserialize<object>(ref reader, options);
+          fields[prop] = AnyObjectReader.Instance.Read(ref reader, typeof(object), options);
         }
         catch (Exception e) {
           throw new JsonException($"Failed to deserialize the '{prop}' property.", e);

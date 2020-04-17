@@ -37,7 +37,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
               break;
             default:
               rest ??= new Dictionary<string, object?>();
-              rest[prop] = JsonSerializer.Deserialize<object>(ref reader, options);
+              rest[prop] = AnyObjectReader.Instance.Read(ref reader, typeof(object), options);
               break;
           }
         }
