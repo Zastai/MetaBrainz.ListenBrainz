@@ -27,14 +27,14 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
               count = reader.GetUInt16();
               break;
             case "listens":
-              listens = JsonUtils.ReadList<IListen, Listen>(ref reader, options, ListenReader.Instance);
+              listens = reader.ReadList(ListenReader.Instance, options);
               break;
             case "user_list":
               userList = reader.GetString();
               break;
             default:
               rest ??= new Dictionary<string, object?>();
-              rest[prop] = AnyObjectReader.Instance.Read(ref reader, typeof(object), options);
+              rest[prop] = reader.GetOptionalObject(options);
               break;
           }
         }

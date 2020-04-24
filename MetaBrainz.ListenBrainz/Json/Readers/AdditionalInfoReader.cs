@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
+using MetaBrainz.Common.Json;
 using MetaBrainz.Common.Json.Converters;
 using MetaBrainz.ListenBrainz.Objects;
 
@@ -18,7 +19,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         try {
           reader.Read();
           // There are no guaranteed contents, and no required property types, so nothing specific to do here (yet).
-          fields[prop] = AnyObjectReader.Instance.Read(ref reader, typeof(object), options);
+          fields[prop] = reader.GetOptionalObject(options);
         }
         catch (Exception e) {
           throw new JsonException($"Failed to deserialize the '{prop}' property.", e);

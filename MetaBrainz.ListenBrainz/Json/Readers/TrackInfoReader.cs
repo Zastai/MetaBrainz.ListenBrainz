@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
+using MetaBrainz.Common.Json;
 using MetaBrainz.Common.Json.Converters;
 using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
@@ -24,7 +25,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
           reader.Read();
           switch (prop) {
             case "additional_info":
-              info = AdditionalInfoReader.Instance.Read(ref reader, typeof(AdditionalInfo), options);
+              info = reader.GetObject(AdditionalInfoReader.Instance, options);
               break;
             case "artist_name":
               artist = reader.GetString();
@@ -37,7 +38,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
               break;
             default:
               rest ??= new Dictionary<string, object?>();
-              rest[prop] = AnyObjectReader.Instance.Read(ref reader, typeof(object), options);
+              rest[prop] = reader.GetOptionalObject(options);
               break;
           }
         }

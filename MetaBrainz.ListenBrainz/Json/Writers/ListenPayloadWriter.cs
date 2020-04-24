@@ -16,7 +16,7 @@ namespace MetaBrainz.ListenBrainz.Json.Writers {
       switch (value.Type) {
         case "import": case "single": {
           writer.WritePropertyName("payload");
-          JsonUtils.WriteList(writer, value.Listens, options, ListenWriter.Instance);
+          writer.WriteList(value.Listens, ListenWriter.Instance, options);
           break;
         }
         default:

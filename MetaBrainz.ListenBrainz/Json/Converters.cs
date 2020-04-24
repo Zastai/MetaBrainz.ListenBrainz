@@ -13,14 +13,11 @@ namespace MetaBrainz.ListenBrainz.Json {
 
     public static IEnumerable<JsonConverter> Readers {
       get {
-        // Readers for specific (top-level) types
         yield return ErrorInfoReader.Instance;
         yield return FetchedListensReader.Instance;
         yield return LatestImportReader.Instance;
         yield return PlayingNowReader.Instance;
         yield return RecentListensReader.Instance;
-        // This one tries to create useful types for a field of type 'object' (used for all unknown properties)
-        yield return AnyObjectReader.Instance;
       }
     }
 

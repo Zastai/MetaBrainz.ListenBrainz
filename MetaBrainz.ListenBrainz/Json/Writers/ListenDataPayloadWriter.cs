@@ -16,7 +16,7 @@ namespace MetaBrainz.ListenBrainz.Json.Writers {
       switch (value.Type) {
         case "playing_now": {
           writer.WritePropertyName("payload");
-          JsonUtils.WriteList(writer, value.Listens, options, ListenDataWriter.Instance);
+          writer.WriteList(value.Listens, ListenDataWriter.Instance, options);
           break;
         }
         default:

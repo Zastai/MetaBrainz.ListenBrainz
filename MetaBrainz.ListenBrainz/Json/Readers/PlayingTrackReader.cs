@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
+using MetaBrainz.Common.Json;
 using MetaBrainz.Common.Json.Converters;
 using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
@@ -21,11 +22,11 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
           reader.Read();
           switch (prop) {
             case "track_metadata":
-              track = TrackInfoReader.Instance.Read(ref reader, typeof(TrackInfo), options);
+              track = reader.GetObject(TrackInfoReader.Instance, options);
               break;
             default:
               rest ??= new Dictionary<string, object?>();
-              rest[prop] = AnyObjectReader.Instance.Read(ref reader, typeof(object), options);
+              rest[prop] = reader.GetOptionalObject(options);
               break;
           }
         }
