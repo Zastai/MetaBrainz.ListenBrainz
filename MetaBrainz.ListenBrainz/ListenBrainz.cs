@@ -87,7 +87,7 @@ namespace MetaBrainz.ListenBrainz {
       this.UserAgent = userAgent;
       { // Set full user agent, including this library's information
         var an = typeof(ListenBrainz).Assembly.GetName();
-        this._fullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({ListenBrainz.UserAgentUrl})";
+        this.FullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({ListenBrainz.UserAgentUrl})";
       }
       this.UserToken = ListenBrainz.DefaultUserToken;
     }
@@ -122,7 +122,7 @@ namespace MetaBrainz.ListenBrainz {
       this.UserAgent = $"{application}/{version} ({contact})";
       { // Set full user agent, including this library's information
         var an = typeof(ListenBrainz).Assembly.GetName();
-        this._fullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({ListenBrainz.UserAgentUrl})";
+        this.FullUserAgent = $"{this.UserAgent} {an.Name}/{an.Version} ({ListenBrainz.UserAgentUrl})";
       }
       this.UserToken = ListenBrainz.DefaultUserToken;
     }
@@ -179,7 +179,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>An object providing the user's ID and latest import timestamp.</returns>
     /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
     public ILatestImport GetLatestImport(string user) {
-      var json = this.PerformRequest("latest-import", Method.Get, ListenBrainz.OptionsForLatestImport(user));
+      var json = this.PerformRequest("latest-import", Method.GET, ListenBrainz.OptionsForLatestImport(user));
       return JsonUtils.Deserialize<LatestImport>(json, ListenBrainz.JsonReaderOptions);
     }
 
@@ -188,7 +188,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>A task returning an object providing the user's ID and latest import timestamp.</returns>
     /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
     public async ValueTask<ILatestImport> GetLatestImportAsync(string user) {
-      var task = this.PerformRequestAsync("latest-import", Method.Get, ListenBrainz.OptionsForLatestImport(user));
+      var task = this.PerformRequestAsync("latest-import", Method.GET, ListenBrainz.OptionsForLatestImport(user));
       var json = await task.ConfigureAwait(false);
       return JsonUtils.Deserialize<LatestImport>(json, ListenBrainz.JsonReaderOptions);
     }
@@ -214,7 +214,7 @@ namespace MetaBrainz.ListenBrainz {
     /// for <paramref name="user"/>.
     /// </remarks>
     public void SetLatestImport(string user, long timestamp) {
-      this.PerformRequest("latest-import", Method.Post, $"{{ ts: {timestamp} }}", ListenBrainz.OptionsForLatestImport(user));
+      this.PerformRequest("latest-import", Method.POST, $"{{ ts: {timestamp} }}", ListenBrainz.OptionsForLatestImport(user));
     }
 
     /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
@@ -242,7 +242,7 @@ namespace MetaBrainz.ListenBrainz {
     /// </remarks>
     public async Task SetLatestImportAsync(string user, long timestamp) {
       var options = ListenBrainz.OptionsForLatestImport(user);
-      var task = this.PerformRequestAsync("latest-import", Method.Post, $"{{ ts: {timestamp} }}", options);
+      var task = this.PerformRequestAsync("latest-import", Method.POST, $"{{ ts: {timestamp} }}", options);
       await task.ConfigureAwait(false);
     }
 
@@ -286,7 +286,7 @@ namespace MetaBrainz.ListenBrainz {
       // FIXME: That way, it could support a huge range of listens coming from the enumerable in a streaming fashion.
       payload.Listens.AddRange(listens);
       foreach (var json in this.SerializeImport(payload))
-        this.PerformRequest("submit-listens", Method.Post, json);
+        this.PerformRequest("submit-listens", Method.POST, json);
     }
 
     /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
@@ -303,7 +303,7 @@ namespace MetaBrainz.ListenBrainz {
       var payload = SubmissionPayload.CreateImport();
       payload.Listens.AddRange(listens);
       foreach (var json in this.SerializeImport(payload))
-        this.PerformRequest("submit-listens", Method.Post, json);
+        this.PerformRequest("submit-listens", Method.POST, json);
     }
 
     /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
@@ -324,7 +324,7 @@ namespace MetaBrainz.ListenBrainz {
       await foreach(var listen in listens)
         payload.Listens.Add(listen);
       foreach (var json in this.SerializeImport(payload)) {
-        var task = this.PerformRequestAsync("submit-listens", Method.Post, json);
+        var task = this.PerformRequestAsync("submit-listens", Method.POST, json);
         await task.ConfigureAwait(false);
       }
     }
@@ -346,7 +346,7 @@ namespace MetaBrainz.ListenBrainz {
       // FIXME: That way, it could support a huge range of listens coming from the enumerable in a streaming fashion.
       payload.Listens.AddRange(listens);
       foreach (var json in this.SerializeImport(payload)) {
-        var task = this.PerformRequestAsync("submit-listens", Method.Post, json);
+        var task = this.PerformRequestAsync("submit-listens", Method.POST, json);
         await task.ConfigureAwait(false);
       }
     }
@@ -366,7 +366,7 @@ namespace MetaBrainz.ListenBrainz {
       var payload = SubmissionPayload.CreateImport();
       payload.Listens.AddRange(listens);
       foreach (var json in this.SerializeImport(payload)) {
-        var task = this.PerformRequestAsync("submit-listens", Method.Post, json);
+        var task = this.PerformRequestAsync("submit-listens", Method.POST, json);
         await task.ConfigureAwait(false);
       }
     }
@@ -409,7 +409,7 @@ namespace MetaBrainz.ListenBrainz {
     public void SetNowPlaying(ISubmittedListenData listen) {
       var payload = SubmissionPayload.CreatePlayingNow(listen);
       var json = JsonSerializer.Serialize(payload, ListenBrainz.JsonWriterOptions);
-      this.PerformRequest("submit-listens", Method.Post, json);
+      this.PerformRequest("submit-listens", Method.POST, json);
     }
 
     /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
@@ -438,7 +438,7 @@ namespace MetaBrainz.ListenBrainz {
     public async Task SetNowPlayingAsync(ISubmittedListenData listen) {
       var payload = SubmissionPayload.CreatePlayingNow(listen);
       var json = JsonSerializer.Serialize(payload, ListenBrainz.JsonWriterOptions);
-      var task = this.PerformRequestAsync("submit-listens", Method.Post, json);
+      var task = this.PerformRequestAsync("submit-listens", Method.POST, json);
       await task.ConfigureAwait(false);
     }
 
@@ -474,7 +474,7 @@ namespace MetaBrainz.ListenBrainz {
     public void SubmitSingleListen(ISubmittedListen listen) {
       var payload = SubmissionPayload.CreateSingle(listen);
       var json = JsonSerializer.Serialize(payload, ListenBrainz.JsonWriterOptions);
-      this.PerformRequest("submit-listens", Method.Post, json);
+      this.PerformRequest("submit-listens", Method.POST, json);
     }
 
     /// <summary>
@@ -532,7 +532,7 @@ namespace MetaBrainz.ListenBrainz {
     public async Task SubmitSingleListenAsync(ISubmittedListen listen) {
       var payload = SubmissionPayload.CreateSingle(listen);
       var json = JsonSerializer.Serialize(payload, ListenBrainz.JsonWriterOptions);
-      var task = this.PerformRequestAsync("submit-listens", Method.Post, json);
+      var task = this.PerformRequestAsync("submit-listens", Method.POST, json);
       await task.ConfigureAwait(false);
     }
 
@@ -601,13 +601,13 @@ namespace MetaBrainz.ListenBrainz {
 
     private IFetchedListens? PerformGetListens(string user, long? after, long? before, int? count = null) {
       var options = ListenBrainz.OptionsForGetListens(count, after, before);
-      var json = this.PerformRequest($"user/{user}/listens", Method.Get, options);
+      var json = this.PerformRequest($"user/{user}/listens", Method.GET, options);
       return JsonUtils.Deserialize<FetchedListens>(json, ListenBrainz.JsonReaderOptions);
     }
 
     private async ValueTask<IFetchedListens?> PerformGetListensAsync(string user, long? after, long? before, int? count = null) {
       var options = ListenBrainz.OptionsForGetListens(count, after, before);
-      var json = await this.PerformRequestAsync($"user/{user}/listens", Method.Get, options);
+      var json = await this.PerformRequestAsync($"user/{user}/listens", Method.GET, options);
       return JsonUtils.Deserialize<FetchedListens>(json, ListenBrainz.JsonReaderOptions);
     }
 
@@ -845,7 +845,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <returns>The requested listens (typically 0 or 1).</returns>
     public IPlayingNow? GetPlayingNow(string user) {
-      var json = this.PerformRequest($"user/{user}/playing-now", Method.Get);
+      var json = this.PerformRequest($"user/{user}/playing-now", Method.GET);
       return JsonUtils.Deserialize<PlayingNow>(json, ListenBrainz.JsonReaderOptions);
     }
 
@@ -853,7 +853,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <returns>A task returning the requested listens (typically 0 or 1).</returns>
     public async ValueTask<IPlayingNow?> GetPlayingNowAsync(string user) {
-      var json = await this.PerformRequestAsync($"user/{user}/playing-now", Method.Get);
+      var json = await this.PerformRequestAsync($"user/{user}/playing-now", Method.GET);
       return JsonUtils.Deserialize<PlayingNow>(json, ListenBrainz.JsonReaderOptions);
     }
 
@@ -866,7 +866,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>The requested listens.</returns>
     public IRecentListens? GetRecentListens(params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
-      var json = this.PerformRequest($"users/{userList}/recent-listens", Method.Get);
+      var json = this.PerformRequest($"users/{userList}/recent-listens", Method.GET);
       return JsonUtils.Deserialize<RecentListens>(json, ListenBrainz.JsonReaderOptions);
     }
 
@@ -876,7 +876,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>The requested listens.</returns>
     public IRecentListens? GetRecentListens(int limit, params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
-      var json = this.PerformRequest($"users/{userList}/recent-listens", Method.Get);
+      var json = this.PerformRequest($"users/{userList}/recent-listens", Method.GET);
       return JsonUtils.Deserialize<RecentListens>(json, ListenBrainz.JsonReaderOptions);
     }
 
@@ -885,7 +885,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>A task returning the requested listens.</returns>
     public async ValueTask<IRecentListens?> GetRecentListensAsync(params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
-      var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.Get);
+      var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.GET);
       return JsonUtils.Deserialize<RecentListens>(json, ListenBrainz.JsonReaderOptions);
     }
 
@@ -895,7 +895,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <returns>A task returning the requested listens.</returns>
     public async ValueTask<IRecentListens?> GetRecentListensAsync(int limit, params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
-      var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.Get);
+      var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.GET);
       return JsonUtils.Deserialize<RecentListens>(json, ListenBrainz.JsonReaderOptions);
     }
 
@@ -930,7 +930,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <param name="user">The name of the user associated with the user token, if available.</param>
     /// <returns><see langword="true"/> when <paramref name="token"/> is valid; <see langword="false"/> otherwise.</returns>
     public bool ValidateToken(string token, out string? user) {
-      var json = this.PerformRequest($"validate-token?token={token}", Method.Get);
+      var json = this.PerformRequest($"validate-token?token={token}", Method.GET);
       var tvr = JsonUtils.Deserialize<TokenValidationResult>(json);
       user = tvr.User;
       if (tvr.Valid.HasValue)
@@ -946,7 +946,7 @@ namespace MetaBrainz.ListenBrainz {
     /// it is valid; <see langword="false"/> otherwise) and the name of the user associated with the user token, if available.
     /// </returns>
     public async ValueTask<(bool, string?)> ValidateTokenAsync(string token) {
-      var json = await this.PerformRequestAsync($"validate-token?token={token}", Method.Get).ConfigureAwait(false);
+      var json = await this.PerformRequestAsync($"validate-token?token={token}", Method.GET).ConfigureAwait(false);
       var tvr = JsonUtils.Deserialize<TokenValidationResult>(json);
       if (tvr.Valid.HasValue)
         return (tvr.Valid.Value, tvr.User);
@@ -966,19 +966,19 @@ namespace MetaBrainz.ListenBrainz {
 
     #region Web Client / IDisposable
 
-    private readonly SemaphoreSlim _clientLock = new SemaphoreSlim(1);
+    private readonly SemaphoreSlim ClientLock = new SemaphoreSlim(1);
 
-    private bool _disposed;
+    private bool Disposed;
 
-    private readonly string _fullUserAgent;
+    private readonly string FullUserAgent;
 
-    private WebClient? _webClient;
+    private WebClient? TheWebClient;
 
     private WebClient WebClient {
       get {
-        if (this._disposed)
+        if (this.Disposed)
           throw new ObjectDisposedException(nameof(ListenBrainz));
-        var wc = this._webClient ??= new WebClient { Encoding = Encoding.UTF8 };
+        var wc = this.TheWebClient ??= new WebClient { Encoding = Encoding.UTF8 };
         wc.BaseAddress = this.BaseUri.ToString();
         return wc;
       }
@@ -987,13 +987,13 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>Closes the web client in use by this query, if there is one.</summary>
     /// <remarks>The next web service request will create a new client.</remarks>
     public void Close() {
-      this._clientLock.Wait();
+      this.ClientLock.Wait();
       try {
-        this._webClient?.Dispose();
-        this._webClient = null;
+        this.TheWebClient?.Dispose();
+        this.TheWebClient = null;
       }
       finally {
-        this._clientLock.Release();
+        this.ClientLock.Release();
       }
     }
 
@@ -1009,10 +1009,10 @@ namespace MetaBrainz.ListenBrainz {
         return;
       try {
         this.Close();
-        this._clientLock.Dispose();
+        this.ClientLock.Dispose();
       }
       finally {
-        this._disposed = true;
+        this.Disposed = true;
       }
     }
 
@@ -1030,7 +1030,7 @@ namespace MetaBrainz.ListenBrainz {
       wc.Headers.Clear();
       wc.Headers.Set("Content-Type", "application/json");
       wc.Headers.Set("Accept",       "application/json");
-      wc.Headers.Set("User-Agent",   this._fullUserAgent);
+      wc.Headers.Set("User-Agent",   this.FullUserAgent);
       if (this.UserToken != null)
         wc.Headers.Set("Authorization", "Token " + this.UserToken);
       wc.QueryString.Clear();
@@ -1057,12 +1057,12 @@ namespace MetaBrainz.ListenBrainz {
 
     private string PerformRequest(string address, Method method, string? body, NameValueCollection? options = null) {
       Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method} {this.BaseUri}{address}{ListenBrainz.QueryString(options)}");
-      this._clientLock.Wait();
+      this.ClientLock.Wait();
       try {
         var wc = this.PrepareRequest(options);
         string? response = null;
         try {
-          if (method == Method.Get)
+          if (method == Method.GET)
             return response = wc.DownloadString(address);
           else {
             if (body != null)
@@ -1083,7 +1083,7 @@ namespace MetaBrainz.ListenBrainz {
         }
       }
       finally {
-        this._clientLock.Release();
+        this.ClientLock.Release();
       }
     }
 
@@ -1092,12 +1092,12 @@ namespace MetaBrainz.ListenBrainz {
 
     private async ValueTask<string> PerformRequestAsync(string address, Method method, string? body, NameValueCollection? options = null) {
       Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method} {this.BaseUri}{address}{ListenBrainz.QueryString(options)}");
-      await this._clientLock.WaitAsync();
+      await this.ClientLock.WaitAsync();
       try {
         var wc = this.PrepareRequest(options);
         string? response = null;
         try {
-          if (method == Method.Get)
+          if (method == Method.GET)
             return response = await wc.DownloadStringTaskAsync(address).ConfigureAwait(false);
           else {
             if (body != null)
@@ -1118,7 +1118,7 @@ namespace MetaBrainz.ListenBrainz {
         }
       }
       finally {
-        this._clientLock.Release();
+        this.ClientLock.Release();
       }
     }
 
