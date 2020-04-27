@@ -187,7 +187,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <param name="user">The MusicBrainz ID of the user whose data is requested.</param>
     /// <returns>A task returning an object providing the user's ID and latest import timestamp.</returns>
     /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
-    public async ValueTask<ILatestImport> GetLatestImportAsync(string user) {
+    public async Task<ILatestImport> GetLatestImportAsync(string user) {
       var task = this.PerformRequestAsync("latest-import", Method.GET, ListenBrainz.OptionsForLatestImport(user));
       var json = await task.ConfigureAwait(false);
       return JsonUtils.Deserialize<LatestImport>(json, ListenBrainz.JsonReaderOptions);
@@ -605,7 +605,7 @@ namespace MetaBrainz.ListenBrainz {
       return JsonUtils.Deserialize<FetchedListens>(json, ListenBrainz.JsonReaderOptions);
     }
 
-    private async ValueTask<IFetchedListens?> PerformGetListensAsync(string user, long? after, long? before, int? count = null) {
+    private async Task<IFetchedListens?> PerformGetListensAsync(string user, long? after, long? before, int? count = null) {
       var options = ListenBrainz.OptionsForGetListens(count, after, before);
       var json = await this.PerformRequestAsync($"user/{user}/listens", Method.GET, options);
       return JsonUtils.Deserialize<FetchedListens>(json, ListenBrainz.JsonReaderOptions);
@@ -632,7 +632,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>A task returning the requested listens, in descending timestamp order.</returns>
-    public ValueTask<IFetchedListens?> GetListensAsync(string user, int? count = null)
+    public Task<IFetchedListens?> GetListensAsync(string user, int? count = null)
       => this.PerformGetListensAsync(user, null, null, count);
 
     #endregion
@@ -678,7 +678,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>A task returning the requested listens, in ascending timestamp order.</returns>
-    public ValueTask<IFetchedListens?> GetListensAfterAsync(string user, long after, int? count = null)
+    public Task<IFetchedListens?> GetListensAfterAsync(string user, long after, int? count = null)
       => this.PerformGetListensAsync(user, after, null, count);
 
     /// <summary>Gets the most recent listens for a user, starting from a particular timestamp.</summary>
@@ -692,7 +692,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>A task returning the requested listens, in ascending timestamp order.</returns>
-    public ValueTask<IFetchedListens?> GetListensAfterAsync(string user, DateTimeOffset after, int? count = null)
+    public Task<IFetchedListens?> GetListensAfterAsync(string user, DateTimeOffset after, int? count = null)
       => this.PerformGetListensAsync(user, UnixTime.Convert(after), null, count);
 
     #endregion
@@ -738,7 +738,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>A task returning the requested listens, in descending timestamp order.</returns>
-    public ValueTask<IFetchedListens?> GetListensBeforeAsync(string user, long before, int? count = null)
+    public Task<IFetchedListens?> GetListensBeforeAsync(string user, long before, int? count = null)
       => this.PerformGetListensAsync(user, null, before, count);
 
     /// <summary>Gets historical listens for a user, starting from a particular timestamp.</summary>
@@ -752,7 +752,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>A task returning the requested listens, in descending timestamp order.</returns>
-    public ValueTask<IFetchedListens?> GetListensBeforeAsync(string user, DateTimeOffset before, int? count = null)
+    public Task<IFetchedListens?> GetListensBeforeAsync(string user, DateTimeOffset before, int? count = null)
       => this.PerformGetListensAsync(user, null, UnixTime.Convert(before), count);
 
     #endregion
@@ -812,7 +812,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>A task returning the requested listens, in ??? timestamp order.</returns>
-    public ValueTask<IFetchedListens?> GetListensBetweenAsync(string user, long after, long before, int? count = null)
+    public Task<IFetchedListens?> GetListensBetweenAsync(string user, long after, long before, int? count = null)
       => this.PerformGetListensAsync(user, after, before, count);
 
     /// <summary>Gets the listens for a user in a specific timespan.</summary>
@@ -830,7 +830,7 @@ namespace MetaBrainz.ListenBrainz {
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>A task returning the requested listens, in ??? timestamp order.</returns>
-    public ValueTask<IFetchedListens?> GetListensBetweenAsync(string user, DateTimeOffset after, DateTimeOffset before, int? count = null)
+    public Task<IFetchedListens?> GetListensBetweenAsync(string user, DateTimeOffset after, DateTimeOffset before, int? count = null)
       => this.PerformGetListensAsync(user, UnixTime.Convert(after), UnixTime.Convert(before), count);
 
     #endif
@@ -852,7 +852,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>Gets a user's currently-playing listen(s).</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <returns>A task returning the requested listens (typically 0 or 1).</returns>
-    public async ValueTask<IPlayingNow?> GetPlayingNowAsync(string user) {
+    public async Task<IPlayingNow?> GetPlayingNowAsync(string user) {
       var json = await this.PerformRequestAsync($"user/{user}/playing-now", Method.GET);
       return JsonUtils.Deserialize<PlayingNow>(json, ListenBrainz.JsonReaderOptions);
     }
@@ -883,7 +883,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>Gets recent listen(s) for a set of users.</summary>
     /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
     /// <returns>A task returning the requested listens.</returns>
-    public async ValueTask<IRecentListens?> GetRecentListensAsync(params string[] users) {
+    public async Task<IRecentListens?> GetRecentListensAsync(params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
       var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.GET);
       return JsonUtils.Deserialize<RecentListens>(json, ListenBrainz.JsonReaderOptions);
@@ -893,7 +893,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <param name="limit">The maximum number of listens to return.</param>
     /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
     /// <returns>A task returning the requested listens.</returns>
-    public async ValueTask<IRecentListens?> GetRecentListensAsync(int limit, params string[] users) {
+    public async Task<IRecentListens?> GetRecentListensAsync(int limit, params string[] users) {
       var userList = string.Join(",", users.Select(Uri.EscapeDataString));
       var json = await this.PerformRequestAsync($"users/{userList}/recent-listens", Method.GET);
       return JsonUtils.Deserialize<RecentListens>(json, ListenBrainz.JsonReaderOptions);
@@ -945,7 +945,7 @@ namespace MetaBrainz.ListenBrainz {
     /// A task returning a tuple containing a flag indicating the validity of <paramref name="token"/> (<see langword="true"/> when
     /// it is valid; <see langword="false"/> otherwise) and the name of the user associated with the user token, if available.
     /// </returns>
-    public async ValueTask<(bool, string?)> ValidateTokenAsync(string token) {
+    public async Task<(bool, string?)> ValidateTokenAsync(string token) {
       var json = await this.PerformRequestAsync($"validate-token?token={token}", Method.GET).ConfigureAwait(false);
       var tvr = JsonUtils.Deserialize<TokenValidationResult>(json);
       if (tvr.Valid.HasValue)
@@ -1087,10 +1087,10 @@ namespace MetaBrainz.ListenBrainz {
       }
     }
 
-    private ValueTask<string> PerformRequestAsync(string address, Method method, NameValueCollection? options = null)
+    private Task<string> PerformRequestAsync(string address, Method method, NameValueCollection? options = null)
       => this.PerformRequestAsync(address, method, null, options);
 
-    private async ValueTask<string> PerformRequestAsync(string address, Method method, string? body, NameValueCollection? options = null) {
+    private async Task<string> PerformRequestAsync(string address, Method method, string? body, NameValueCollection? options = null) {
       Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method} {this.BaseUri}{address}{ListenBrainz.QueryString(options)}");
       await this.ClientLock.WaitAsync();
       try {
