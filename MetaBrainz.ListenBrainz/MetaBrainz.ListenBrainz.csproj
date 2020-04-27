@@ -5,7 +5,7 @@
     <Title>ListenBrainz Web Service Client Library</Title>
     <Description>This package provides classes for accessing the ListenBrainz API (v1).</Description>
     <PackageTags>ListenBrainz music metadata listens audioscrobbler last.fm</PackageTags>
-    <Version>2.0.0-pre</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup>
