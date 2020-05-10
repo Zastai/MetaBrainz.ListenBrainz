@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Text.Json;
 
 using MetaBrainz.Common.Json;
-using MetaBrainz.Common.Json.Converters;
 using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers {
 
-  internal sealed class FetchedListensReader : ListenPayloadReader<FetchedListens> {
+  internal sealed class FetchedListensReader : PayloadReader<FetchedListens> {
 
     public static readonly FetchedListensReader Instance = new FetchedListensReader();
 
@@ -47,7 +46,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         }
         reader.Read();
       }
-      listens = this.VerifyListens(count, listens);
+      listens = this.VerifyPayloadContents(count, listens);
       if (user == null)
         throw new JsonException("Expected user id not found or null.");
       if (!ts.HasValue)

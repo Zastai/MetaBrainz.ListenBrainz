@@ -16,6 +16,7 @@ namespace MetaBrainz.ListenBrainz.Json {
         yield return PlayingNowReader.Instance;
         yield return RecentListensReader.Instance;
         yield return TokenValidationResultReader.Instance;
+        yield return UserArtistStatisticsReader.Instance;
       }
     }
 
