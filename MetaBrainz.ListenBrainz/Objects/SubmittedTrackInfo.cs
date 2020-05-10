@@ -13,9 +13,11 @@ namespace MetaBrainz.ListenBrainz.Objects {
     /// <summary>Creates new track information.</summary>
     /// <param name="name">The track's name.</param>
     /// <param name="artist">The track's artist.</param>
-    public SubmittedTrackInfo(string name, string artist) {
+    /// <param name="release">The track's release.</param>
+    public SubmittedTrackInfo(string name, string artist, string? release = null) {
       this.Artist = artist;
       this.Name = name;
+      this.Release = release;
     }
 
     /// <inheritdoc cref="ISubmittedTrackInfo.AdditionalInfo"/>

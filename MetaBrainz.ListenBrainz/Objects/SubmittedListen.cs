@@ -11,25 +11,31 @@ namespace MetaBrainz.ListenBrainz.Objects {
   public class SubmittedListen : SubmittedListenData, ISubmittedListen {
 
     /// <summary>Creates a new listen.</summary>
+    /// <param name="timestamp">The date and time at which the track was listened to.</param>
     /// <param name="track">The listened track's name.</param>
     /// <param name="artist">The listened track's artist.</param>
-    /// <param name="timestamp">
-    /// The date and time at which the track was listened to; when not specified or <see langword="null"/>, the current UTC date and
-    /// time is used.
-    /// </param>
-    public SubmittedListen(string track, string artist, DateTimeOffset? timestamp = null) : base(track, artist) {
-      this.Timestamp = timestamp ?? DateTimeOffset.UtcNow;
+    /// <param name="release">The listened track's release.</param>
+    public SubmittedListen(DateTimeOffset timestamp, string track, string artist, string? release = null) : base(track, artist, release) {
+      this.Timestamp = timestamp;
     }
 
     /// <summary>Creates a new listen.</summary>
-    /// <param name="track">The listened track's name.</param>
-    /// <param name="artist">The listened track's artist.</param>
     /// <param name="timestamp">
     /// The date and time at which the track was listened to, expressed as the number of seconds since
     /// <see cref="UnixTime.Epoch">the Unix time epoch</see>.
     /// </param>
-    public SubmittedListen(string track, string artist, long timestamp) : base(track, artist) {
+    /// <param name="track">The listened track's name.</param>
+    /// <param name="artist">The listened track's artist.</param>
+    /// <param name="release">The listened track's release.</param>
+    public SubmittedListen(long timestamp, string track, string artist, string? release = null) : base(track, artist, release) {
       this.Timestamp = UnixTime.Convert(timestamp);
+    }
+
+    /// <summary>Creates a new listen, using the current (UTC) date and time as timestamp.</summary>
+    /// <param name="track">The listened track's name.</param>
+    /// <param name="artist">The listened track's artist.</param>
+    /// <param name="release">The listened track's release.</param>
+    public SubmittedListen(string track, string artist, string? release = null) : this(DateTimeOffset.UtcNow, track, artist, release) {
     }
 
     /// <inheritdoc/>

@@ -5,7 +5,7 @@
     <Title>ListenBrainz Web Service Client Library</Title>
     <Description>This package provides classes for accessing the ListenBrainz API (v1).</Description>
     <PackageTags>ListenBrainz music metadata listens audioscrobbler last.fm</PackageTags>
-    <Version>2.0.1-pre</Version>
+    <Version>3.0.0-pre</Version>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -14,7 +14,8 @@
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" IncludeAssets="compile" PrivateAssets="all" />
-    <PackageReference Include="MetaBrainz.Common.Json" Version="3.0.0" />
+    <PackageReference Include="MetaBrainz.Common.Json" Version="3.0.1" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.Text.Json" Version="4.7.1" />
   </ItemGroup>
 

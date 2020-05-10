@@ -1,12 +1,20 @@
+using System.Net;
+
 using MetaBrainz.Common.Json;
+using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects {
 
-  internal sealed class TokenValidationResult : JsonBasedObject {
+  internal sealed class TokenValidationResult : JsonBasedObject, ITokenValidationResult {
 
-    public int? Code { get; set; }
+    public TokenValidationResult(HttpStatusCode code, string message) {
+      this.Code = code;
+      this.Message = message;
+    }
 
-    public string? Message { get; set; }
+    public HttpStatusCode Code { get; }
+
+    public string Message { get; }
 
     public string? User { get; set; }
 

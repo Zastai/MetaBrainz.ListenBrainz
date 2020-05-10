@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text.Json;
 
 using MetaBrainz.Common.Json;
@@ -46,9 +47,11 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         }
         reader.Read();
       }
-      return new TokenValidationResult {
-        Code = code,
-        Message = message,
+      if (code == null)
+        throw new JsonException("Expected status code not found or null.");
+      if (message == null)
+        throw new JsonException("Expected message not found or null.");
+      return new TokenValidationResult((HttpStatusCode) code.Value, message) {
         UnhandledProperties = rest,
         User = user,
         Valid = valid,

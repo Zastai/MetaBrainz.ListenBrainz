@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-using JetBrains.Annotations;
-
-using MetaBrainz.Common.Json.Converters;
 using MetaBrainz.ListenBrainz.Json.Readers;
 using MetaBrainz.ListenBrainz.Json.Writers;
 

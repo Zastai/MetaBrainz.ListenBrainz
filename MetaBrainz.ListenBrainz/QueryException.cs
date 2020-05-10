@@ -1,4 +1,6 @@
 using System;
+using System.Net;
+using System.Net.Http;
 using System.Runtime.Serialization;
 
 namespace MetaBrainz.ListenBrainz {
@@ -7,28 +9,35 @@ namespace MetaBrainz.ListenBrainz {
   [Serializable]
   public sealed class QueryException : Exception {
 
-    /// <summary>The HTTP message code for the error.</summary>
-    public readonly int Code;
+    /// <summary>The HTTP status code for the exception.</summary>
+    public readonly HttpStatusCode Code;
+
+    /// <summary>The reason phrase for the exception.</summary>
+    public readonly string Reason;
 
     /// <summary>Creates a new <see cref="QueryException"/> instance.</summary>
     /// <param name="code">The HTTP message code for the error.</param>
-    /// <param name="message">The message for the error.</param>
+    /// <param name="reason">The reason phrase for the error.</param>
+    /// <param name="message">A further error message.</param>
     /// <param name="cause">The exception that caused the error (if any).</param>
-    public QueryException(int code, string? message, Exception? cause = null) : base(message, cause) {
+    public QueryException(HttpStatusCode code, string reason, string? message = null, Exception? cause = null) : base(message ?? reason, cause) {
       this.Code = code;
+      this.Reason = reason;
     }
 
     #region ISerializable
 
     /// <inheritdoc />
     public QueryException(SerializationInfo info, StreamingContext context) : base(info, context) {
-      this.Code = info.GetInt32("query:code");
+      this.Code = (HttpStatusCode) info.GetInt32("query:code");
+      this.Reason = info.GetString("query:reason") ?? "???";
     }
 
     /// <inheritdoc />
     public override void GetObjectData(SerializationInfo info, StreamingContext context) {
       base.GetObjectData(info, context);
-      info.AddValue("query:code", this.Code);
+      info.AddValue("query:code", (int) this.Code);
+      info.AddValue("query:reason", this.Reason);
     }
 
     #endregion
