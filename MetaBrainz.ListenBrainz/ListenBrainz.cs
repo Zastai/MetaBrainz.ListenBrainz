@@ -903,23 +903,6 @@ namespace MetaBrainz.ListenBrainz {
 
     #region /1/validate-token
 
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    private sealed class TokenValidationResult {
-
-      [JsonPropertyName("code")]
-      public int? Code { get; set; }
-
-      [JsonPropertyName("message")]
-      public string? Message { get; set; }
-
-      [JsonPropertyName("user_name")]
-      public string? User { get; set; }
-
-      [JsonPropertyName("valid")]
-      public bool? Valid { get; set; }
-
-    }
-
     /// <summary>Validates a given user token.</summary>
     /// <param name="token">The user token to validate.</param>
     /// <returns><see langword="true"/> when <paramref name="token"/> is valid; <see langword="false"/> otherwise.</returns>
