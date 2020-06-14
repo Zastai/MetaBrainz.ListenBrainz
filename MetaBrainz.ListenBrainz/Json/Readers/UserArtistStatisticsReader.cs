@@ -16,8 +16,11 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
       IReadOnlyList<IArtistInfo>? artists = null;
       int? count = null;
       DateTimeOffset? lastUpdated = null;
+      DateTimeOffset? newestListen = null;
       int? offset = null;
+      DateTimeOffset? oldestListen = null;
       StatisticsRange? range = null;
+      int? totalArtistCount = null;
       string? user = null;
       Dictionary<string, object?>? rest = null;
       while (reader.TokenType == JsonTokenType.PropertyName) {
@@ -31,6 +34,9 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
             case "count":
               count = reader.GetInt32();
               break;
+            case "from_ts":
+              oldestListen = UnixTime.Convert(reader.GetOptionalInt64());
+              break;
             case "last_updated":
               lastUpdated = UnixTime.Convert(reader.GetInt64());
               break;
@@ -41,6 +47,12 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
               range = EnumHelper.ParseStatisticsRange(reader.GetString());
               if (range == StatisticsRange.Unknown)
                 goto default; // also register it as an unhandled property
+              break;
+            case "to_ts":
+              newestListen = UnixTime.Convert(reader.GetOptionalInt64());
+              break;
+            case "total_artist_count":
+              totalArtistCount = reader.GetInt32();
               break;
             case "user_id":
               user = reader.GetString();
@@ -67,6 +79,9 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         throw new JsonException("Expected user id not found or null.");
       return new UserArtistStatistics(lastUpdated.Value, offset.Value, range.Value, user) {
         Artists = artists,
+        NewestListen = newestListen,
+        OldestListen = oldestListen,
+        TotalArtistCount = totalArtistCount,
         UnhandledProperties = rest,
       };
     }
