@@ -211,16 +211,28 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>The contact information portion of the user agent to use for requests.</summary>
     public Uri ContactInfo { get; }
 
-    /// <summary>The port number to use for requests (-1 to not specify any explicit port).</summary>
+    /// <summary>
+    /// The port number to use for requests (-1 to not specify any explicit port).<br/>
+    /// Changes to this property only take effect when creating the underlying web service client. If this property is set after
+    /// requests have been issued, <see cref="Close()"/> must be called for the changes to take effect.
+    /// </summary>
     public int Port { get; set; } = ListenBrainz.DefaultPort;
 
     /// <summary>The product information portion of the user agent to use for requests.</summary>
     public ProductHeaderValue ProductInfo { get; }
 
-    /// <summary>The server to use for requests.</summary>
+    /// <summary>
+    /// The server to use for requests.<br/>
+    /// Changes to this property only take effect when creating the underlying web service client. If this property is set after
+    /// requests have been issued, <see cref="Close()"/> must be called for the changes to take effect.
+    /// </summary>
     public string Server { get; set; } = ListenBrainz.DefaultServer;
 
-    /// <summary>The internet access protocol to use for requests.</summary>
+    /// <summary>
+    /// The internet access protocol to use for requests.<br/>
+    /// Changes to this property only take effect when creating the underlying web service client. If this property is set after
+    /// requests have been issued, <see cref="Close()"/> must be called for the changes to take effect.
+    /// </summary>
     public string UrlScheme { get; set; } = ListenBrainz.DefaultUrlScheme;
 
     /// <summary>
@@ -1070,6 +1082,7 @@ namespace MetaBrainz.ListenBrainz {
         if (this.TheClient == null) { // Set up the instance with the invariant settings
           var an = typeof(ListenBrainz).Assembly.GetName();
           this.TheClient = new HttpClient {
+            BaseAddress = this.BaseUri,
             DefaultRequestHeaders = {
               Accept = {
                 new MediaTypeWithQualityHeaderValue("application/json")
@@ -1083,14 +1096,11 @@ namespace MetaBrainz.ListenBrainz {
             }
           };
         }
-        // Update the non-invariant settings
-        this.TheClient.BaseAddress = this.BaseUri;
-        this.TheClient.DefaultRequestHeaders.Authorization = this.Authentication;
         return this.TheClient;
       }
     }
 
-    /// <summary>Closes the web client in use by this ListenBrainz client, if there is one.</summary>
+    /// <summary>Closes the underlying web service client in use by this ListenBrainz client, if there is one.</summary>
     /// <remarks>The next web service request will create a new client.</remarks>
     public void Close() {
       this.ClientLock.Wait();
@@ -1163,14 +1173,19 @@ namespace MetaBrainz.ListenBrainz {
         var client = this.Client;
         HttpResponseMessage response;
         switch (method.Method) {
-          case "GET":
-            response = await client.GetAsync(requestUri);
+          case "GET": {
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            request.Headers.Authorization = this.Authentication;
+            response = await client.SendAsync(request);
             break;
+          }
           case "POST": {
             if (body != null)
               Debug.Print($"[{DateTime.UtcNow}] => BODY: {body}");
-            using var content = new StringContent(body ?? "", Encoding.UTF8, "application/json");
-            response = await client.PostAsync(requestUri, content);
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+            request.Headers.Authorization = this.Authentication;
+            request.Content = new StringContent(body ?? "", Encoding.UTF8, "application/json");
+            response = await client.SendAsync(request);
             break;
           }
           default:
