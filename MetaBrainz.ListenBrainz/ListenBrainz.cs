@@ -1265,7 +1265,7 @@ namespace MetaBrainz.ListenBrainz {
     }
 
     private static async Task<T> GetJsonContentAsync<T>(HttpResponseMessage response) {
-#if NETSTD_GE_2_1 || NETCORE_GE_3_0 // || NET_GE_5_0
+#if NETSTANDARD2_1 || NETCOREAPP3_1 // || NET5_0
       var stream = await response.Content.ReadAsStreamAsync();
       await using var _ = stream.ConfigureAwait(false);
 #else
@@ -1290,7 +1290,7 @@ namespace MetaBrainz.ListenBrainz {
     }
 
     private static async Task<string> GetStringContentAsync(HttpResponseMessage response) {
-#if NETSTD_GE_2_1 || NETCORE_GE_3_0 // || NET_GE_5_0
+#if NETSTANDARD2_1 || NETCOREAPP3_1 // || NET5_0
       var stream = await response.Content.ReadAsStreamAsync();
       await using var _ = stream.ConfigureAwait(false);
 #else

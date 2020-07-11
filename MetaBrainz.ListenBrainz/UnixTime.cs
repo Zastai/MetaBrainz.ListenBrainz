@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz {
   [PublicAPI]
   public static class UnixTime {
 
-#if NETSTD_GE_2_1 || NETCORE_GE_2_1 // These have Unix Time support built in
+#if NETSTANDARD2_1 || NETCOREAPP2_1 || NETCOREAPP3_1 // These have Unix Time support built in
 
     /// <summary>The epoch for Unix time values (1970-01-01T00:00:00Z).</summary>
     public static readonly DateTimeOffset Epoch = DateTimeOffset.UnixEpoch;

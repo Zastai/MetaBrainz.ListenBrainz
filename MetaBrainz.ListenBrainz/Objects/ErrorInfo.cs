@@ -59,7 +59,7 @@ namespace MetaBrainz.ListenBrainz.Objects {
       if (response == null || response.ContentLength == 0)
         return null;
       try {
-#if NETSTD_GE_2_1 || NETCORE_GE_3_0
+#if NETSTANDARD2_1 || NETCOREAPP3_1 // || NET5_0
         var stream = response.GetResponseStream();
         await using var _ = stream.ConfigureAwait(false);
 #else
@@ -74,7 +74,7 @@ namespace MetaBrainz.ListenBrainz.Objects {
         var characterSet = response.CharacterSet;
         if (string.IsNullOrWhiteSpace(characterSet))
           characterSet = "utf-8";
-#if !DEBUG && (NETSTD_GE_2_1 || NETCORE_GE_3_0)
+#if !DEBUG
         if (characterSet == "utf-8") // Directly use the stream
           return await JsonSerializer.DeserializeAsync<ErrorInfo>(stream);
 #endif
