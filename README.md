@@ -7,6 +7,24 @@ This is a library providing access to the [ListenBrainz API v1](https://listenbr
 
 ## Release Notes
 
+### v2.1.0 (not yet released)
+
+#### API Additions
+
+- Method: `ListenBrainz.GetListensBetween()` and `ListenBrainz.GetListensBetweenAsync()` 
+
+#### API Removals
+
+#### API Changes
+
+#### Other Changes
+
+#### Dependency Updates
+
+- MetaBrainz.Common.Json → 3.0.1
+- System.Text.Json → 4.7.2
+
+
 ### v2.0.0 (2020-04-27)
 
 This release contains a completely rewritten JSON backend, using custom converters.

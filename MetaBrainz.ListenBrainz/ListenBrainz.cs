@@ -778,7 +778,7 @@ namespace MetaBrainz.ListenBrainz {
     /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
     /// </param>
-    /// <returns>The requested listens, in ascending timestamp order.</returns>
+    /// <returns>The requested listens, in descending timestamp order.</returns>
     public IFetchedListens GetListensAfter(string user, long after, int? count = null)
       => this.PerformGetListens(user, after, null, count);
 
@@ -792,7 +792,7 @@ namespace MetaBrainz.ListenBrainz {
     /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
     /// </param>
-    /// <returns>The requested listens, in ascending timestamp order.</returns>
+    /// <returns>The requested listens, in descending timestamp order.</returns>
     public IFetchedListens GetListensAfter(string user, DateTimeOffset after, int? count = null)
       => this.PerformGetListens(user, UnixTime.Convert(after), null, count);
 
@@ -806,7 +806,7 @@ namespace MetaBrainz.ListenBrainz {
     /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
-    /// <returns>The requested listens, in ascending timestamp order.</returns>
+    /// <returns>The requested listens, in descending timestamp order.</returns>
     public async Task<IFetchedListens> GetListensAfterAsync(string user, long after, int? count = null)
       => await this.PerformGetListensAsync(user, after, null, count);
 
@@ -820,7 +820,7 @@ namespace MetaBrainz.ListenBrainz {
     /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
-    /// <returns>The requested listens, in ascending timestamp order.</returns>
+    /// <returns>The requested listens, in descending timestamp order.</returns>
     public async Task<IFetchedListens> GetListensAfterAsync(string user, DateTimeOffset after, int? count = null)
       => await this.PerformGetListensAsync(user, UnixTime.Convert(after), null, count);
 
@@ -888,8 +888,6 @@ namespace MetaBrainz.ListenBrainz {
 
     #region Both Timestamps
 
-    #if LB_518_IMPLEMENTED
-
     /// <summary>Gets the listens for a user in a specific timespan.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <param name="after">
@@ -904,7 +902,7 @@ namespace MetaBrainz.ListenBrainz {
     /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
     /// </param>
-    /// <returns>The requested listens, in ??? timestamp order.</returns>
+    /// <returns>The requested listens, in descending timestamp order.</returns>
     public IFetchedListens GetListensBetween(string user, long after, long before, int? count = null)
       => this.PerformGetListens(user, after, before, count);
 
@@ -922,7 +920,7 @@ namespace MetaBrainz.ListenBrainz {
     /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
     /// </param>
-    /// <returns>The requested listens, in ??? timestamp order.</returns>
+    /// <returns>The requested listens, in descending timestamp order.</returns>
     public IFetchedListens GetListensBetween(string user, DateTimeOffset after, DateTimeOffset before, int? count = null)
       => this.PerformGetListens(user, UnixTime.Convert(after), UnixTime.Convert(before), count);
 
@@ -940,7 +938,7 @@ namespace MetaBrainz.ListenBrainz {
     /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
-    /// <returns>The requested listens, in ??? timestamp order.</returns>
+    /// <returns>The requested listens, in descending timestamp order.</returns>
     public async Task<IFetchedListens> GetListensBetweenAsync(string user, long after, long before, int? count = null)
       => await this.PerformGetListensAsync(user, after, before, count);
 
@@ -958,11 +956,9 @@ namespace MetaBrainz.ListenBrainz {
     /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
     /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
-    /// <returns>The requested listens, in ??? timestamp order.</returns>
+    /// <returns>The requested listens, in descending timestamp order.</returns>
     public async Task<IFetchedListens> GetListensBetweenAsync(string user, DateTimeOffset after, DateTimeOffset before, int? count = null)
       => await this.PerformGetListensAsync(user, UnixTime.Convert(after), UnixTime.Convert(before), count);
-
-    #endif
 
     #endregion
 
