@@ -737,7 +737,7 @@ namespace MetaBrainz.ListenBrainz {
 
     private Task<IFetchedListens> PerformGetListensAsync(string user, long? after, long? before, int? count = null) {
       var options = ListenBrainz.OptionsForGetListens(count, after, before);
-      return this.GetAsync<IFetchedListens, FetchedListens>("user/{user}/listens", options);
+      return this.GetAsync<IFetchedListens, FetchedListens>($"user/{user}/listens", options);
     }
 
     #endregion
