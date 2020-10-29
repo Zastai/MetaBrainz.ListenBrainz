@@ -14,6 +14,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
     public static readonly ListenReader Instance = new ListenReader();
 
     protected override Listen ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+      string? inserted = null;
       Guid? msid = null;
       ITrackInfo? track = null;
       string? user = null;
@@ -24,6 +25,9 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         try {
           reader.Read();
           switch (prop) {
+            case "inserted_at":
+              inserted = reader.GetString();
+              break;
             case "listened_at":
               ts = reader.GetInt64();
               break;
@@ -47,6 +51,8 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         }
         reader.Read();
       }
+      if (inserted == null)
+        throw new JsonException("Expected inserted-at timestamp not found or null.");
       if (msid == null)
         throw new JsonException("Expected MessyBrainz recording id not found or null.");
       if (track == null)
@@ -55,7 +61,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         throw new JsonException("Expected user name not found or null.");
       if (!ts.HasValue)
         throw new JsonException("Expected listened-at timestamp not found or null.");
-      return new Listen(msid.Value, ts.Value, track, user) {
+      return new Listen(inserted, msid.Value, ts.Value, track, user) {
         UnhandledProperties = rest
       };
     }

@@ -10,13 +10,16 @@ namespace MetaBrainz.ListenBrainz.Objects {
   [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
   internal sealed class Listen : JsonBasedObject, IListen {
 
-    public Listen(Guid msid, long timestamp, ITrackInfo track, string user) {
+    public Listen(string inserted, Guid msid, long timestamp, ITrackInfo track, string user) {
+      this.InsertedAt = inserted;
       this.MessyRecordingId = msid;
       this.Timestamp = UnixTime.Convert(timestamp);
       this.Track = track;
       this.UnixTimestamp = timestamp;
       this.User = user;
     }
+
+    public string InsertedAt { get; }
 
     public Guid MessyRecordingId { get; }
 
