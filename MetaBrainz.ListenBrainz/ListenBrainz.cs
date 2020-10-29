@@ -717,6 +717,24 @@ namespace MetaBrainz.ListenBrainz {
 
     #endregion
 
+    #region /1/user/xxx/listen-count
+
+    /// <summary>Gets the number of listens submitted to ListenBrainz by a particular user.</summary>
+    /// <param name="user">The MusicBrainz ID of the user whose listen count is requested.</param>
+    /// <returns>An object providing the number of listens submitted by <paramref name="user"/>.</returns>
+    /// <remarks>This will access the <c>GET /1/user/USER/listen-count</c> endpoint.</remarks>
+    public IListenCount GetListenCount(string user)
+      => ListenBrainz.ResultOf(this.GetListenCountAsync(user));
+
+    /// <summary>Gets the number of listens submitted to ListenBrainz by a particular user.</summary>
+    /// <param name="user">The MusicBrainz ID of the user whose listen count is requested.</param>
+    /// <returns>An object providing the number of listens submitted by <paramref name="user"/>.</returns>
+    /// <remarks>This will access the <c>GET /1/user/USER/listen-count</c> endpoint.</remarks>
+    public async Task<IListenCount> GetListenCountAsync(string user)
+      => await this.GetAsync<IListenCount, ListenCount>($"user/{user}/listen-count");
+
+    #endregion
+
     #region /1/user/xxx/listens
 
     #region Internal Helpers

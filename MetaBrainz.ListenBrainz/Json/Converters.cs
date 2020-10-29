@@ -13,6 +13,7 @@ namespace MetaBrainz.ListenBrainz.Json {
         yield return ErrorInfoReader.Instance;
         yield return FetchedListensReader.Instance;
         yield return LatestImportReader.Instance;
+        yield return ListenCountReader.Instance;
         yield return PlayingNowReader.Instance;
         yield return RecentListensReader.Instance;
         yield return TokenValidationResultReader.Instance;
