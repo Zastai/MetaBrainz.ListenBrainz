@@ -31,6 +31,9 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>The default number of listens returned in a single GET request.</summary>
     public const int DefaultItemsPerGet = 25;
 
+    /// <summary>The default time range for a request for listen data, in sets of 5 days.</summary>
+    public const int DefaultTimeRange = 3;
+
     /// <summary>The maximum number of listens returned in a single GET request.</summary>
     public const int MaxItemsPerGet = 100;
 
@@ -42,6 +45,9 @@ namespace MetaBrainz.ListenBrainz {
 
     /// <summary>The maximum number of tags per listen.</summary>
     public const int MaxTagsPerListen = 50;
+
+    /// <summary>The maximum time range for a request for listen data, in sets of 5 days.</summary>
+    public const int MaxTimeRange = 73;
 
     /// <summary>The URL included in the user agent for requests as part of this library's information.</summary>
     public const string UserAgentUrl = "https://github.com/Zastai/ListenBrainz";
@@ -739,7 +745,7 @@ namespace MetaBrainz.ListenBrainz {
 
     #region Internal Helpers
 
-    private static IDictionary<string, string> OptionsForGetListens(int? count, long? after, long? before) {
+    private static IDictionary<string, string> OptionsForGetListens(int? count, long? after, long? before, int? timeRange) {
       var options = new Dictionary<string, string>(3);
       if (count.HasValue)
         options.Add("count", count.Value.ToString(CultureInfo.InvariantCulture));
@@ -747,14 +753,16 @@ namespace MetaBrainz.ListenBrainz {
         options.Add("max_ts", before.Value.ToString(CultureInfo.InvariantCulture));
       if (after.HasValue)
         options.Add("min_ts", after.Value.ToString(CultureInfo.InvariantCulture));
+      if (timeRange.HasValue)
+        options.Add("time_range", timeRange.Value.ToString(CultureInfo.InvariantCulture));
       return options;
     }
 
-    private IFetchedListens PerformGetListens(string user, long? after, long? before, int? count = null)
-      => ListenBrainz.ResultOf(this.PerformGetListensAsync(user, after, before, count));
+    private IFetchedListens PerformGetListens(string user, long? after, long? before, int? count = null, int? timeRange = null)
+      => ListenBrainz.ResultOf(this.PerformGetListensAsync(user, after, before, count, timeRange));
 
-    private Task<IFetchedListens> PerformGetListensAsync(string user, long? after, long? before, int? count = null) {
-      var options = ListenBrainz.OptionsForGetListens(count, after, before);
+    private Task<IFetchedListens> PerformGetListensAsync(string user, long? after, long? before, int? count = null, int? timeRange = null) {
+      var options = ListenBrainz.OptionsForGetListens(count, after, before, timeRange);
       return this.GetAsync<IFetchedListens, FetchedListens>($"user/{user}/listens", options);
     }
 
@@ -765,22 +773,30 @@ namespace MetaBrainz.ListenBrainz {
     /// <summary>Gets the most recent listens for a user.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
     /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
+    /// <param name="timeRange">
+    /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
+    /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
+    /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
-    public IFetchedListens GetListens(string user, int? count = null)
-      => this.PerformGetListens(user, null, null, count);
+    public IFetchedListens GetListens(string user, int? count = null, int? timeRange = null)
+      => this.PerformGetListens(user, null, null, count, timeRange);
 
     /// <summary>Gets the most recent listens for a user.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
     /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
+    /// <param name="timeRange">
+    /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
+    /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
+    /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
-    public async Task<IFetchedListens> GetListensAsync(string user, int? count = null)
-      => await this.PerformGetListensAsync(user, null, null, count);
+    public async Task<IFetchedListens> GetListensAsync(string user, int? count = null, int? timeRange = null)
+      => await this.PerformGetListensAsync(user, null, null, count, timeRange);
 
     #endregion
 
@@ -793,12 +809,16 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp greater than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
+    /// </param>
+    /// <param name="timeRange">
+    /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
+    /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
-    public IFetchedListens GetListensAfter(string user, long after, int? count = null)
-      => this.PerformGetListens(user, after, null, count);
+    public IFetchedListens GetListensAfter(string user, long after, int? count = null, int? timeRange = null)
+      => this.PerformGetListens(user, after, null, count, timeRange);
 
     /// <summary>Gets the most recent listens for a user, starting from a particular timestamp.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -807,12 +827,16 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp greater than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
+    /// </param>
+    /// <param name="timeRange">
+    /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
+    /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
-    public IFetchedListens GetListensAfter(string user, DateTimeOffset after, int? count = null)
-      => this.PerformGetListens(user, UnixTime.Convert(after), null, count);
+    public IFetchedListens GetListensAfter(string user, DateTimeOffset after, int? count = null, int? timeRange = null)
+      => this.PerformGetListens(user, UnixTime.Convert(after), null, count, timeRange);
 
     /// <summary>Gets the most recent listens for a user, starting from a particular timestamp.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -821,12 +845,16 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp greater than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
+    /// </param>
+    /// <param name="timeRange">
+    /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
+    /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
-    public async Task<IFetchedListens> GetListensAfterAsync(string user, long after, int? count = null)
-      => await this.PerformGetListensAsync(user, after, null, count);
+    public async Task<IFetchedListens> GetListensAfterAsync(string user, long after, int? count = null, int? timeRange = null)
+      => await this.PerformGetListensAsync(user, after, null, count, timeRange);
 
     /// <summary>Gets the most recent listens for a user, starting from a particular timestamp.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -835,12 +863,16 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp greater than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
+    /// </param>
+    /// <param name="timeRange">
+    /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
+    /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
-    public async Task<IFetchedListens> GetListensAfterAsync(string user, DateTimeOffset after, int? count = null)
-      => await this.PerformGetListensAsync(user, UnixTime.Convert(after), null, count);
+    public async Task<IFetchedListens> GetListensAfterAsync(string user, DateTimeOffset after, int? count = null, int? timeRange = null)
+      => await this.PerformGetListensAsync(user, UnixTime.Convert(after), null, count, timeRange);
 
     #endregion
 
@@ -853,12 +885,16 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp less than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
+    /// </param>
+    /// <param name="timeRange">
+    /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
+    /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
-    public IFetchedListens GetListensBefore(string user, long before, int? count = null)
-      => this.PerformGetListens(user, null, before, count);
+    public IFetchedListens GetListensBefore(string user, long before, int? count = null, int? timeRange = null)
+      => this.PerformGetListens(user, null, before, count, timeRange);
 
     /// <summary>Gets historical listens for a user, starting from a particular timestamp.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -867,12 +903,16 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp less than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
+    /// </param>
+    /// <param name="timeRange">
+    /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
+    /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
-    public IFetchedListens GetListensBefore(string user, DateTimeOffset before, int? count = null)
-      => this.PerformGetListens(user, null, UnixTime.Convert(before), count);
+    public IFetchedListens GetListensBefore(string user, DateTimeOffset before, int? count = null, int? timeRange = null)
+      => this.PerformGetListens(user, null, UnixTime.Convert(before), count, timeRange);
 
     /// <summary>Gets historical listens for a user, starting from a particular timestamp.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -881,12 +921,16 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp less than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
+    /// </param>
+    /// <param name="timeRange">
+    /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
+    /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
-    public async Task<IFetchedListens> GetListensBeforeAsync(string user, long before, int? count = null)
-      => await this.PerformGetListensAsync(user, null, before, count);
+    public async Task<IFetchedListens> GetListensBeforeAsync(string user, long before, int? count = null, int? timeRange = null)
+      => await this.PerformGetListensAsync(user, null, before, count, timeRange);
 
     /// <summary>Gets historical listens for a user, starting from a particular timestamp.</summary>
     /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -895,12 +939,16 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp less than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
+    /// </param>
+    /// <param name="timeRange">
+    /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
+    /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
-    public async Task<IFetchedListens> GetListensBeforeAsync(string user, DateTimeOffset before, int? count = null)
-      => await this.PerformGetListensAsync(user, null, UnixTime.Convert(before), count);
+    public async Task<IFetchedListens> GetListensBeforeAsync(string user, DateTimeOffset before, int? count = null, int? timeRange = null)
+      => await this.PerformGetListensAsync(user, null, UnixTime.Convert(before), count, timeRange);
 
     #endregion
 
@@ -917,8 +965,8 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp less than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
     public IFetchedListens GetListensBetween(string user, long after, long before, int? count = null)
@@ -935,8 +983,8 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp less than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
     public IFetchedListens GetListensBetween(string user, DateTimeOffset after, DateTimeOffset before, int? count = null)
@@ -953,8 +1001,8 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp less than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
     public async Task<IFetchedListens> GetListensBetweenAsync(string user, long after, long before, int? count = null)
@@ -971,8 +1019,8 @@ namespace MetaBrainz.ListenBrainz {
     /// Returned listens will have a timestamp less than, but not including, this value.
     /// </param>
     /// <param name="count">
-    /// The number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-    /// If not specified, this will return <see cref="DefaultItemsPerGet"/> listens.
+    /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
+    /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
     /// </param>
     /// <returns>The requested listens, in descending timestamp order.</returns>
     public async Task<IFetchedListens> GetListensBetweenAsync(string user, DateTimeOffset after, DateTimeOffset before, int? count = null)
