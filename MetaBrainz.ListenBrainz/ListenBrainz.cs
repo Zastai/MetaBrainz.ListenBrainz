@@ -336,32 +336,34 @@ namespace MetaBrainz.ListenBrainz {
 
     #endregion
 
-    #region /1/stats/user/xxx/artists
+    #region /1/stats
 
-    private static IDictionary<string, string> OptionsForGetStatistics(int? count, int? offset) {
+    private static IDictionary<string, string> OptionsForGetStatistics(int? count, int? offset, StatisticsRange? range) {
       var options = new Dictionary<string, string>(2);
       if (count.HasValue)
         options.Add("count", count.Value.ToString(CultureInfo.InvariantCulture));
       if (offset.HasValue)
         options.Add("offset", offset.Value.ToString(CultureInfo.InvariantCulture));
+      if (range.HasValue)
+        options.Add("range", range.Value.ToJson());
       return options;
     }
 
-    /// <summary>Gets statistics about a user's most listened-to artists.</summary>
-    /// <param name="user">The user for whom the statistics are requested.</param>
-    /// <param name="count">
-    /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
-    /// returned.
-    /// </param>
-    /// <param name="offset">
-    /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
-    /// <see langword="null"/>), the top most listened-to artists will be returned.
-    /// </param>
-    /// <returns>
-    /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
-    /// </returns>
-    public IUserArtistStatistics? GetArtistStatistics(string user, int? count = null, int? offset = null)
-      => ListenBrainz.ResultOf(this.GetArtistStatisticsAsync(user, count, offset));
+    #region /1/stats/sitewide
+
+    #region /1/stats/sitewide/artists
+
+    #endregion
+
+    #endregion
+
+    #region /1/stats/user/xxx
+
+    #region /1/stats/user/xxx/artist-map
+
+    #endregion
+
+    #region /1/stats/user/xxx/artists
 
     /// <summary>Gets statistics about a user's most listened-to artists.</summary>
     /// <param name="user">The user for whom the statistics are requested.</param>
@@ -373,14 +375,52 @@ namespace MetaBrainz.ListenBrainz {
     /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
     /// <see langword="null"/>), the top most listened-to artists will be returned.
     /// </param>
+    /// <param name="range">The range of data to include in the statistics.</param>
     /// <returns>
     /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
     /// </returns>
-    public async Task<IUserArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = null, int? offset = null) {
-      var options = ListenBrainz.OptionsForGetStatistics(count, offset);
+    public IUserArtistStatistics? GetArtistStatistics(string user, int? count = null, int? offset = null, StatisticsRange? range = null)
+      => ListenBrainz.ResultOf(this.GetArtistStatisticsAsync(user, count, offset, range));
+
+    /// <summary>Gets statistics about a user's most listened-to artists.</summary>
+    /// <param name="user">The user for whom the statistics are requested.</param>
+    /// <param name="count">
+    /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
+    /// returned.
+    /// </param>
+    /// <param name="offset">
+    /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
+    /// <see langword="null"/>), the top most listened-to artists will be returned.
+    /// </param>
+    /// <param name="range">The range of data to include in the statistics.</param>
+    /// <returns>
+    /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
+    /// </returns>
+    public async Task<IUserArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = null, int? offset = null, StatisticsRange? range = null) {
+      var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
       var task = this.GetOptionalAsync<IUserArtistStatistics, UserArtistStatistics>($"stats/user/{user}/artists", options);
       return await task.ConfigureAwait(false);
     }
+
+    #endregion
+
+    #region /1/stats/user/xxx/daily-activity
+
+    #endregion
+
+    #region /1/stats/user/xxx/listening-activity
+
+    #endregion
+
+    #region /1/stats/user/xxx/recordings
+
+    #endregion
+
+    #region /1/stats/user/xxx/releases
+
+    #endregion
+
+    #endregion
 
     #endregion
 
