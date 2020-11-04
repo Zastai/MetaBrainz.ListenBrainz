@@ -414,9 +414,83 @@ namespace MetaBrainz.ListenBrainz {
 
     #region /1/stats/user/xxx/recordings
 
+    /// <summary>Gets statistics about a user's most listened-to recordings ("tracks").</summary>
+    /// <param name="user">The user for whom the statistics are requested.</param>
+    /// <param name="count">
+    /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
+    /// returned.
+    /// </param>
+    /// <param name="offset">
+    /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
+    /// <see langword="null"/>), the top most listened-to recordings will be returned.
+    /// </param>
+    /// <param name="range">The range of data to include in the statistics.</param>
+    /// <returns>
+    /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
+    /// </returns>
+    public IUserRecordingStatistics? GetRecordingStatistics(string user, int? count = null, int? offset = null, StatisticsRange? range = null)
+      => ListenBrainz.ResultOf(this.GetRecordingStatisticsAsync(user, count, offset, range));
+
+    /// <summary>Gets statistics about a user's most listened-to recordings ("tracks").</summary>
+    /// <param name="user">The user for whom the statistics are requested.</param>
+    /// <param name="count">
+    /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
+    /// returned.
+    /// </param>
+    /// <param name="offset">
+    /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
+    /// <see langword="null"/>), the top most listened-to recordings will be returned.
+    /// </param>
+    /// <param name="range">The range of data to include in the statistics.</param>
+    /// <returns>
+    /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
+    /// </returns>
+    public async Task<IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = null, int? offset = null, StatisticsRange? range = null) {
+      var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
+      var task = this.GetOptionalAsync<IUserRecordingStatistics, UserRecordingStatistics>($"stats/user/{user}/recordings", options);
+      return await task.ConfigureAwait(false);
+    }
+
     #endregion
 
     #region /1/stats/user/xxx/releases
+
+    /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
+    /// <param name="user">The user for whom the statistics are requested.</param>
+    /// <param name="count">
+    /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
+    /// returned.
+    /// </param>
+    /// <param name="offset">
+    /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
+    /// <see langword="null"/>), the top most listened-to releases will be returned.
+    /// </param>
+    /// <param name="range">The range of data to include in the statistics.</param>
+    /// <returns>
+    /// The requested release statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
+    /// </returns>
+    public IUserReleaseStatistics? GetReleaseStatistics(string user, int? count = null, int? offset = null, StatisticsRange? range = null)
+      => ListenBrainz.ResultOf(this.GetReleaseStatisticsAsync(user, count, offset, range));
+
+    /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
+    /// <param name="user">The user for whom the statistics are requested.</param>
+    /// <param name="count">
+    /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
+    /// returned.
+    /// </param>
+    /// <param name="offset">
+    /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
+    /// <see langword="null"/>), the top most listened-to releases will be returned.
+    /// </param>
+    /// <param name="range">The range of data to include in the statistics.</param>
+    /// <returns>
+    /// The requested releases statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
+    /// </returns>
+    public async Task<IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = null, int? offset = null, StatisticsRange? range = null) {
+      var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
+      var task = this.GetOptionalAsync<IUserReleaseStatistics, UserReleaseStatistics>($"stats/user/{user}/releases", options);
+      return await task.ConfigureAwait(false);
+    }
 
     #endregion
 

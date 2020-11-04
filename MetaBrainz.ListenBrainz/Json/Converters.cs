@@ -18,6 +18,8 @@ namespace MetaBrainz.ListenBrainz.Json {
         yield return RecentListensReader.Instance;
         yield return TokenValidationResultReader.Instance;
         yield return UserArtistStatisticsReader.Instance;
+        yield return UserRecordingStatisticsReader.Instance;
+        yield return UserReleaseStatisticsReader.Instance;
       }
     }
 

@@ -9,13 +9,16 @@ using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers {
 
-  internal class ArtistInfoReader : ObjectReader<ArtistInfo> {
+  internal class ReleaseInfoReader : ObjectReader<ReleaseInfo> {
 
-    public static readonly ArtistInfoReader Instance = new ArtistInfoReader();
+    public static readonly ReleaseInfoReader Instance = new ReleaseInfoReader();
 
-    protected override ArtistInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+    protected override ReleaseInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+      IReadOnlyList<Guid>? artistMbids = null;
+      Guid? artistMsid = null;
+      string? artistName = null;
       int? listenCount = null;
-      IReadOnlyList<Guid>? mbids = null;
+      Guid? mbid = null;
       Guid? msid = null;
       string? name = null;
       Dictionary<string, object?>? rest = null;
@@ -25,16 +28,25 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
           reader.Read();
           switch (prop) {
             case "artist_mbids":
-              mbids = reader.ReadList<Guid>(options);
+              artistMbids = reader.ReadList<Guid>(options);
               break;
             case "artist_msid":
-              msid = reader.GetOptionalGuid();
+              artistMsid = reader.GetOptionalGuid();
               break;
             case "artist_name":
-              name = reader.GetString();
+              artistName = reader.GetString();
               break;
             case "listen_count":
               listenCount = reader.GetInt32();
+              break;
+            case "release_mbid":
+              mbid = reader.GetOptionalGuid();
+              break;
+            case "release_msid":
+              msid = reader.GetOptionalGuid();
+              break;
+            case "release_name":
+              name = reader.GetString();
               break;
             default:
               rest ??= new Dictionary<string, object?>();
@@ -50,9 +62,12 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
       if (listenCount == null)
         throw new JsonException("Expected listen count not found or null.");
       if (name == null)
-        throw new JsonException("Expected artist name not found or null.");
-      return new ArtistInfo(name, listenCount.Value) {
-        Ids = mbids,
+        throw new JsonException("Expected release name not found or null.");
+      return new ReleaseInfo(name, listenCount.Value) {
+        ArtistIds = artistMbids,
+        ArtistMessyId = artistMsid,
+        ArtistName = artistName,
+        Id = mbid,
         MessyId = msid,
         UnhandledProperties = rest,
       };

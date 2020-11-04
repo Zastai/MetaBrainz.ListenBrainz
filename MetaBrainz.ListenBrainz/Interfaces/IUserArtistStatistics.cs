@@ -11,8 +11,11 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     /// <summary>Information about the artists.</summary>
     IReadOnlyList<IArtistInfo>? Artists { get; }
 
+    /// <summary>The offset of these statistics from the start of the full set.</summary>
+    int? Offset { get; }
+
     /// <summary>The total number of (distinct) artists listened to, if available.</summary>
-    public int? TotalArtistCount { get; }
+    int? TotalCount { get; }
 
   }
 

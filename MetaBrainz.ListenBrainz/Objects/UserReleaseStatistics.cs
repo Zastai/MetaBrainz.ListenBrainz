@@ -5,13 +5,13 @@ using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects {
 
-  internal sealed class UserArtistStatistics : UserStatistics, IUserArtistStatistics {
+  internal sealed class UserReleaseStatistics : UserStatistics, IUserReleaseStatistics {
 
-    public UserArtistStatistics(DateTimeOffset lastUpdated, StatisticsRange range, string user)
+    public UserReleaseStatistics(DateTimeOffset lastUpdated, StatisticsRange range, string user)
     : base(lastUpdated, range, user)
     { }
 
-    public IReadOnlyList<IArtistInfo>? Artists { get; set; }
+    public IReadOnlyList<IReleaseInfo>? Releases { get; set; }
 
     public int? Offset { get; set; }
 

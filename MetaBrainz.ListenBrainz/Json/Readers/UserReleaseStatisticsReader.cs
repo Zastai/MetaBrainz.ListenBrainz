@@ -8,12 +8,12 @@ using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers {
 
-  internal sealed class UserArtistStatisticsReader : PayloadReader<UserArtistStatistics> {
+  internal sealed class UserReleaseStatisticsReader : PayloadReader<UserReleaseStatistics> {
 
-    public static readonly UserArtistStatisticsReader Instance = new UserArtistStatisticsReader();
+    public static readonly UserReleaseStatisticsReader Instance = new UserReleaseStatisticsReader();
 
-    protected override UserArtistStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-      IReadOnlyList<IArtistInfo>? artists = null;
+    protected override UserReleaseStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+      IReadOnlyList<IReleaseInfo>? releases = null;
       int? count = null;
       DateTimeOffset? lastUpdated = null;
       DateTimeOffset? newestListen = null;
@@ -28,8 +28,8 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         try {
           reader.Read();
           switch (prop) {
-            case "artists":
-              artists = reader.ReadList(ArtistInfoReader.Instance, options);
+            case "releases":
+              releases = reader.ReadList(ReleaseInfoReader.Instance, options);
               break;
             case "count":
               count = reader.GetInt32();
@@ -51,7 +51,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
             case "to_ts":
               newestListen = UnixTime.Convert(reader.GetOptionalInt64());
               break;
-            case "total_artist_count":
+            case "total_release_count":
               totalCount = reader.GetInt32();
               break;
             case "user_id":
@@ -68,18 +68,18 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         }
         reader.Read();
       }
-      artists = this.VerifyPayloadContents(count, artists);
+      releases = this.VerifyPayloadContents(count, releases);
       if (lastUpdated == null)
         throw new JsonException("Expected last-updated timestamp not found or null.");
       if (range == null)
         throw new JsonException("Expected range not found or null.");
       if (user == null)
         throw new JsonException("Expected user id not found or null.");
-      return new UserArtistStatistics(lastUpdated.Value, range.Value, user) {
-        Artists = artists,
+      return new UserReleaseStatistics(lastUpdated.Value, range.Value, user) {
         NewestListen = newestListen,
         Offset = offset,
         OldestListen = oldestListen,
+        Releases = releases,
         TotalCount = totalCount,
         UnhandledProperties = rest,
       };
