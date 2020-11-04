@@ -15,7 +15,11 @@ namespace MetaBrainz.ListenBrainz.Objects {
 
     public DateTimeOffset LastUpdated { get; }
 
+    public DateTimeOffset? NewestListen { get; set; }
+
     public int Offset { get; }
+
+    public DateTimeOffset? OldestListen { get; set; }
 
     public StatisticsRange Range { get; }
 

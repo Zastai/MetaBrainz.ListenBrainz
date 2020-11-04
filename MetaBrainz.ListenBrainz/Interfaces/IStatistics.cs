@@ -13,8 +13,14 @@ namespace MetaBrainz.ListenBrainz.Interfaces {
     /// <summary>The timestamp at which the statistics were last updated.</summary>
     DateTimeOffset LastUpdated { get; }
 
+    /// <summary>The most recent listen timestamp used for these statistics, if available.</summary>
+    DateTimeOffset? NewestListen { get; }
+
     /// <summary>The offset of these statistics from the start of the full set.</summary>
     int Offset { get; }
+
+    /// <summary>The oldest listen timestamp used for these statistics, if available.</summary>
+    DateTimeOffset? OldestListen { get; }
 
     /// <summary>The range of data used when computing the statistics.</summary>
     /// <remarks>
