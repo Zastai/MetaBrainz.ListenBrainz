@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 
+using JetBrains.Annotations;
+
 using MetaBrainz.Common.Json;
 
 namespace MetaBrainz.ListenBrainz.Interfaces {
 
   /// <summary>Statistical information about an artist.</summary>
+  [PublicAPI]
   public interface IArtistInfo : IJsonBasedObject {
 
     /// <summary>The MusicBrainz IDs for the artist, if available.</summary>
