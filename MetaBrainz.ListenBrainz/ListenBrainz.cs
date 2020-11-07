@@ -339,7 +339,7 @@ namespace MetaBrainz.ListenBrainz {
     #region /1/stats
 
     private static IDictionary<string, string> OptionsForGetStatistics(int? count, int? offset, StatisticsRange? range) {
-      var options = new Dictionary<string, string>(2);
+      var options = new Dictionary<string, string>(3);
       if (count.HasValue)
         options.Add("count", count.Value.ToString(CultureInfo.InvariantCulture));
       if (offset.HasValue)
@@ -360,6 +360,29 @@ namespace MetaBrainz.ListenBrainz {
     #region /1/stats/user/xxx
 
     #region /1/stats/user/xxx/artist-map
+
+    /// <summary>Gets information about the number of artists a user has listened to, grouped by their country.</summary>
+    /// <param name="user">The user for whom the information is requested.</param>
+    /// <param name="range">The range of data to include in the statistics.</param>
+    /// <param name="forceRecalculation">Indicates whether recalculation of the data should be requested.</param>
+    /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+    public IUserArtistMap? GetArtistMap(string user, StatisticsRange? range = null, bool forceRecalculation = false)
+      => ListenBrainz.ResultOf(this.GetArtistMapAsync(user, range, forceRecalculation));
+
+    /// <summary>Gets information about the number of artists a user has listened to, grouped by their country.</summary>
+    /// <param name="user">The user for whom the information is requested.</param>
+    /// <param name="range">The range of data to include in the statistics.</param>
+    /// <param name="forceRecalculation">Indicates whether recalculation of the data should be requested.</param>
+    /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+    public async Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null, bool forceRecalculation = false) {
+      var options = new Dictionary<string, string>(2);
+      if (range.HasValue)
+        options.Add("range", range.Value.ToJson());
+      if (forceRecalculation)
+        options.Add("force_recalculate", "true");
+      var task = this.GetOptionalAsync<IUserArtistMap, UserArtistMap>($"stats/user/{user}/artist-map", options);
+      return await task.ConfigureAwait(false);
+    }
 
     #endregion
 
@@ -860,7 +883,7 @@ namespace MetaBrainz.ListenBrainz {
     #region Internal Helpers
 
     private static IDictionary<string, string> OptionsForGetListens(int? count, long? after, long? before, int? timeRange) {
-      var options = new Dictionary<string, string>(3);
+      var options = new Dictionary<string, string>(4);
       if (count.HasValue)
         options.Add("count", count.Value.ToString(CultureInfo.InvariantCulture));
       if (before.HasValue)
