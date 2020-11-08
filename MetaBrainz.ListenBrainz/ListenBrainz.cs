@@ -353,6 +353,47 @@ namespace MetaBrainz.ListenBrainz {
 
     #region /1/stats/sitewide/artists
 
+    /// <summary>Gets statistics about the most listened-to artists.</summary>
+    /// <param name="count">
+    /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
+    /// returned.
+    /// </param>
+    /// <param name="offset">
+    /// The offset (from the start of the results) of the statistics to return for each time range. If not specified (or specified
+    /// as zero or <see langword="null"/>), the top most listened-to artists will be returned. Note that at most 1000 artists will
+    /// be included in the statistics for each time range.
+    /// </param>
+    /// <param name="range">
+    /// The range of data to include in the statistics.<br/>
+    /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
+    /// recorded listen. Otherwise, information is returned about both the current and the previous range.
+    /// </param>
+    /// <returns>The requested artist statistics.</returns>
+    public ISiteArtistStatistics? GetArtistStatistics(int? count = null, int? offset = null, StatisticsRange? range = null)
+      => ListenBrainz.ResultOf(this.GetArtistStatisticsAsync(count, offset, range));
+
+    /// <summary>Gets statistics about the most listened-to artists.</summary>
+    /// <param name="count">
+    /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
+    /// returned.
+    /// </param>
+    /// <param name="offset">
+    /// The offset (from the start of the results) of the statistics to return for each time range. If not specified (or specified
+    /// as zero or <see langword="null"/>), the top most listened-to artists will be returned. Note that at most 1000 artists will
+    /// be included in the statistics for each time range.
+    /// </param>
+    /// <param name="range">
+    /// The range of data to include in the statistics.<br/>
+    /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
+    /// recorded listen. Otherwise, information is returned about both the current and the previous range.
+    /// </param>
+    /// <returns>The requested artist statistics.</returns>
+    public async Task<ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = null, int? offset = null, StatisticsRange? range = null) {
+      var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
+      var task = this.GetOptionalAsync<ISiteArtistStatistics, SiteArtistStatistics>($"stats/sitewide/artists", options);
+      return await task.ConfigureAwait(false);
+    }
+
     #endregion
 
     #endregion
@@ -455,7 +496,7 @@ namespace MetaBrainz.ListenBrainz {
     /// <param name="range">
     /// The range of data to include in the information.<br/>
     /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
-    /// recorded listen. Otherwise, information is returned about both the previous and current range.
+    /// recorded listen. Otherwise, information is returned about both the current and the previous range.
     /// </param>
     /// <returns>The requested listening activity.</returns>
     public IUserListeningActivity? GetListeningActivity(string user, StatisticsRange? range = null)
@@ -463,7 +504,11 @@ namespace MetaBrainz.ListenBrainz {
 
     /// <summary>Gets information about how many listens a user has submitted over a period of time.</summary>
     /// <param name="user">The user for whom the information is requested.</param>
-    /// <param name="range">The range of data to include in the information.</param>
+    /// <param name="range">
+    /// The range of data to include in the information.<br/>
+    /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
+    /// recorded listen. Otherwise, information is returned about both the current and the previous range.
+    /// </param>
     /// <returns>The requested listening activity.</returns>
     public async Task<IUserListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = null) {
       var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
