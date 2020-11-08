@@ -429,6 +429,23 @@ namespace MetaBrainz.ListenBrainz {
 
     #region /1/stats/user/xxx/daily-activity
 
+    /// <summary>Gets information about how a user's listens are spread across the days of the week.</summary>
+    /// <param name="user">The user for whom the information is requested.</param>
+    /// <param name="range">The range of data to include in the information.</param>
+    /// <returns>The requested daily activity.</returns>
+    public IUserDailyActivity? GetDailyActivity(string user, StatisticsRange? range = null)
+      => ListenBrainz.ResultOf(this.GetDailyActivityAsync(user, range));
+
+    /// <summary>Gets information about how a user's listens are spread across the days of the week.</summary>
+    /// <param name="user">The user for whom the information is requested.</param>
+    /// <param name="range">The range of data to include in the information.</param>
+    /// <returns>The requested daily activity.</returns>
+    public async Task<IUserDailyActivity?> GetDailyActivityAsync(string user, StatisticsRange? range = null) {
+      var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
+      var task = this.GetOptionalAsync<IUserDailyActivity, UserDailyActivity>($"stats/user/{user}/daily-activity", options);
+      return await task.ConfigureAwait(false);
+    }
+
     #endregion
 
     #region /1/stats/user/xxx/listening-activity

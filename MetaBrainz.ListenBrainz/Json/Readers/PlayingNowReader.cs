@@ -70,7 +70,9 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
         throw new JsonException("Expected user id not found or null.");
       if (!playingNow.HasValue || playingNow.Value != true)
         throw new JsonException("Expected 'playing now' flag not found or set incorrectly.");
-      return new PlayingNow(track, user) {UnhandledProperties = rest};
+      return new PlayingNow(track, user) {
+        UnhandledProperties = rest
+      };
     }
 
   }
