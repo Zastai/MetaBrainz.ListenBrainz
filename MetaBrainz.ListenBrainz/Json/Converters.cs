@@ -20,6 +20,7 @@ namespace MetaBrainz.ListenBrainz.Json {
         yield return UserArtistMapReader.Instance;
         yield return UserArtistStatisticsReader.Instance;
         yield return UserDailyActivityReader.Instance;
+        yield return UserListeningActivityReader.Instance;
         yield return UserRecordingStatisticsReader.Instance;
         yield return UserReleaseStatisticsReader.Instance;
       }

@@ -450,6 +450,27 @@ namespace MetaBrainz.ListenBrainz {
 
     #region /1/stats/user/xxx/listening-activity
 
+    /// <summary>Gets information about how many listens a user has submitted over a period of time.</summary>
+    /// <param name="user">The user for whom the information is requested.</param>
+    /// <param name="range">
+    /// The range of data to include in the information.<br/>
+    /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
+    /// recorded listen. Otherwise, information is returned about both the previous and current range.
+    /// </param>
+    /// <returns>The requested listening activity.</returns>
+    public IUserListeningActivity? GetListeningActivity(string user, StatisticsRange? range = null)
+      => ListenBrainz.ResultOf(this.GetListeningActivityAsync(user, range));
+
+    /// <summary>Gets information about how many listens a user has submitted over a period of time.</summary>
+    /// <param name="user">The user for whom the information is requested.</param>
+    /// <param name="range">The range of data to include in the information.</param>
+    /// <returns>The requested listening activity.</returns>
+    public async Task<IUserListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = null) {
+      var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
+      var task = this.GetOptionalAsync<IUserListeningActivity, UserListeningActivity>($"stats/user/{user}/listening-activity", options);
+      return await task.ConfigureAwait(false);
+    }
+
     #endregion
 
     #region /1/stats/user/xxx/recordings
