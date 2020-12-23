@@ -1372,7 +1372,7 @@ namespace MetaBrainz.ListenBrainz {
               UserAgent = {
                 this.UserAgentProduct,
                 this.UserAgentContact,
-                new ProductInfoHeaderValue(an.Name, an.Version?.ToString()),
+                new ProductInfoHeaderValue(an.Name ?? "*Unknown Assembly*", an.Version?.ToString()),
                 new ProductInfoHeaderValue($"({ListenBrainz.UserAgentUrl})"),
               },
             }
@@ -1517,6 +1517,8 @@ namespace MetaBrainz.ListenBrainz {
       if (errorInfo != null) {
         try {
           var ei = JsonSerializer.Deserialize<ErrorInfo>(errorInfo, ListenBrainz.JsonReaderOptions);
+          if (ei is null)
+            throw new JsonException("Error info was null.");
           errorInfo = ei.Error;
           if (ei.Code != (int) response.StatusCode)
             Debug.Print($"[{DateTime.UtcNow}] => ERROR CODE ({ei.Code}) DOES NOT MATCH HTTP STATUS CODE!");
@@ -1547,11 +1549,11 @@ namespace MetaBrainz.ListenBrainz {
     }
 
     private static async Task<T> GetJsonContentAsync<T>(HttpResponseMessage response) {
-#if NETSTANDARD2_1 || NETCOREAPP3_1 // || NET5_0
+#if NETFRAMEWORK || NETCOREAPP2_1
+      using var stream = await response.Content.ReadAsStreamAsync();
+#else
       var stream = await response.Content.ReadAsStreamAsync();
       await using var _ = stream.ConfigureAwait(false);
-#else
-      using var stream = await response.Content.ReadAsStreamAsync();
 #endif
       if (stream == null)
         throw new QueryException(HttpStatusCode.NoContent, "Response contained no data.");
@@ -1568,18 +1570,19 @@ namespace MetaBrainz.ListenBrainz {
       using var sr = new StreamReader(stream, enc, false, 1024, true);
       var json = await sr.ReadToEndAsync().ConfigureAwait(false);
       Debug.Print($"[{DateTime.UtcNow}] => JSON: {JsonUtils.Prettify(json)}");
-      return JsonUtils.Deserialize<T>(json, ListenBrainz.JsonReaderOptions);
+      var content = JsonUtils.Deserialize<T>(json, ListenBrainz.JsonReaderOptions);
+      return content ?? throw new JsonException("The received content was null.");
     }
 
     private static async Task<string> GetStringContentAsync(HttpResponseMessage response) {
-#if NETSTANDARD2_1 || NETCOREAPP3_1 // || NET5_0
-      var stream = await response.Content.ReadAsStreamAsync();
-      await using var _ = stream.ConfigureAwait(false);
-#else
+#if NETFRAMEWORK || NETCOREAPP2_1
       using var stream = await response.Content.ReadAsStreamAsync();
-#endif
       if (stream == null)
         return "";
+#else
+      var stream = await response.Content.ReadAsStreamAsync();
+      await using var _ = stream.ConfigureAwait(false);
+#endif
       var characterSet = response.Content?.Headers?.ContentEncoding.FirstOrDefault();
       if (string.IsNullOrWhiteSpace(characterSet))
         characterSet = "utf-8";

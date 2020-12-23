@@ -58,14 +58,14 @@ namespace MetaBrainz.ListenBrainz.Objects {
       if (response == null || response.ContentLength == 0)
         return null;
       try {
-#if NETSTANDARD2_1 || NETCOREAPP3_1 // || NET5_0
         var stream = response.GetResponseStream();
-        await using var _ = stream.ConfigureAwait(false);
-#else
-        using var stream = response.GetResponseStream();
-#endif
         if (stream == null || !stream.CanRead)
           throw new WebException("No data received.", WebExceptionStatus.ReceiveFailure);
+#if NETFRAMEWORK || NETCOREAPP2_1
+        using var _ = response;
+#else
+        await using var _ = stream.ConfigureAwait(false);
+#endif
         if (!response.ContentType.StartsWith("application/json")) {
           Debug.Print($"[{DateTime.UtcNow}] => UNHANDLED ERROR RESPONSE ({response.ContentType}): {response.ContentLength} byte(s)");
           return null;
