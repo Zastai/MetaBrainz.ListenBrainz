@@ -15,7 +15,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers {
     protected override AdditionalInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
       var fields = new Dictionary<string, object?>();
       while (reader.TokenType == JsonTokenType.PropertyName) {
-        var prop = reader.GetString();
+        var prop = reader.GetPropertyName();
         try {
           reader.Read();
           // There are no guaranteed contents, and no required property types, so nothing specific to do here (yet).
