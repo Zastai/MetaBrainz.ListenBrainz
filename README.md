@@ -7,18 +7,12 @@ This is a library providing access to the [ListenBrainz API][LB-API].
 
 ## Release Notes
 
-### v2.1.0 (not yet released)
+### v2.1.0 (2021-11-06)
 
 #### API Additions
 
 - Method: `ListenBrainz.GetListensBetween()`
 - Method: `ListenBrainz.GetListensBetweenAsync()`
-
-#### API Removals
-
-#### API Changes
-
-#### Other Changes
 
 #### Dependency Updates
 
