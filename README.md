@@ -22,6 +22,7 @@ This is a library providing access to the [ListenBrainz API][LB-API].
 
 #### Dependency Updates
 
+- JetBrainz.Annotations → 2021.3.0
 - MetaBrainz.Build.Sdk → 1.0.1
   - This changes the target frameworks to `netstandard2.0`, `netstandard2.1`, and
     `net472`
