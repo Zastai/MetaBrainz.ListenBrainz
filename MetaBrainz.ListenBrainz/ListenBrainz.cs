@@ -1549,11 +1549,11 @@ namespace MetaBrainz.ListenBrainz {
     }
 
     private static async Task<T> GetJsonContentAsync<T>(HttpResponseMessage response) {
-#if NETFRAMEWORK || NETCOREAPP2_1
-      using var stream = await response.Content.ReadAsStreamAsync();
-#else
+#if NETSTANDARD2_1_OR_GREATER
       var stream = await response.Content.ReadAsStreamAsync();
       await using var _ = stream.ConfigureAwait(false);
+#else
+      using var stream = await response.Content.ReadAsStreamAsync();
 #endif
       if (stream == null)
         throw new QueryException(HttpStatusCode.NoContent, "Response contained no data.");
@@ -1562,26 +1562,30 @@ namespace MetaBrainz.ListenBrainz {
       var characterSet = contentType?.CharSet;
       if (string.IsNullOrWhiteSpace(characterSet))
         characterSet = "utf-8";
+      T? content;
 #if !DEBUG
-      if (characterSet == "utf-8") // Directly use the stream
-        return await JsonSerializer.DeserializeAsync<T>(stream, ListenBrainz.JsonReaderOptions);
+      if (characterSet == "utf-8") { // Directly use the stream
+        content = await JsonSerializer.DeserializeAsync<T>(stream, ListenBrainz.JsonReaderOptions);
+        return content ?? throw new JsonException("The received content was null.");
+      }
 #endif
       var enc = Encoding.GetEncoding(characterSet);
       using var sr = new StreamReader(stream, enc, false, 1024, true);
       var json = await sr.ReadToEndAsync().ConfigureAwait(false);
       Debug.Print($"[{DateTime.UtcNow}] => JSON: {JsonUtils.Prettify(json)}");
-      var content = JsonUtils.Deserialize<T>(json, ListenBrainz.JsonReaderOptions);
+      content = JsonUtils.Deserialize<T>(json, ListenBrainz.JsonReaderOptions);
       return content ?? throw new JsonException("The received content was null.");
     }
 
     private static async Task<string> GetStringContentAsync(HttpResponseMessage response) {
-#if NETFRAMEWORK || NETCOREAPP2_1
-      using var stream = await response.Content.ReadAsStreamAsync();
-      if (stream == null)
-        return "";
-#else
+#if NETSTANDARD2_1_OR_GREATER
       var stream = await response.Content.ReadAsStreamAsync();
       await using var _ = stream.ConfigureAwait(false);
+#else
+      using var stream = await response.Content.ReadAsStreamAsync();
+      if (stream == null) {
+        return "";
+      }
 #endif
       var characterSet = response.Content?.Headers?.ContentEncoding.FirstOrDefault();
       if (string.IsNullOrWhiteSpace(characterSet))

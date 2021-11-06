@@ -5,11 +5,12 @@ VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support Files", "Support Files", "{F997B31A-CF25-4C63-BEB5-172F7E13D9B3}"
 	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
 		appveyor.yml = appveyor.yml
 		Directory.Packages.props = Directory.Packages.props
-		global.json = global.json
 		.editorconfig = .editorconfig
+		global.json = global.json
+		LICENSE.md = LICENSE.md
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaBrainz.ListenBrainz", "MetaBrainz.ListenBrainz\MetaBrainz.ListenBrainz.csproj", "{7432E8B5-BAEF-4B24-ABE0-3410853F3273}"
