@@ -7,7 +7,7 @@
     <PackageCopyrightYears>2018-2021</PackageCopyrightYears>
     <PackageRepositoryName>MetaBrainz.ListenBrainz</PackageRepositoryName>
     <PackageTags>ListenBrainz music metadata listens audioscrobbler last.fm</PackageTags>
-    <Version>2.1.0</Version>
+    <Version>2.1.1-pre</Version>
   </PropertyGroup>
 
   <ItemGroup>

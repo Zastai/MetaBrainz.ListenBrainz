@@ -7,6 +7,10 @@ This is a library providing access to the [ListenBrainz API][LB-API].
 
 ## Release Notes
 
+### v2.1.1 (not yet released)
+
+#### Dependency Updates
+
 ### v2.1.0 (2021-11-06)
 
 #### API Additions
