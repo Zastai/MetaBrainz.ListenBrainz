@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Title>ListenBrainz Web Service Client Library</Title>
     <Description>This package provides classes for accessing the ListenBrainz API (v1).</Description>
-    <PackageCopyrightYears>2018-2020</PackageCopyrightYears>
+    <PackageCopyrightYears>2018-2021</PackageCopyrightYears>
     <PackageRepositoryName>MetaBrainz.ListenBrainz</PackageRepositoryName>
     <PackageTags>ListenBrainz music metadata listens audioscrobbler last.fm</PackageTags>
     <Version>3.0.0-pre</Version>

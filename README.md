@@ -22,7 +22,11 @@ This is a library providing access to the [ListenBrainz API][LB-API].
 
 #### Dependency Updates
 
-- MetaBrainz.Common.Json → 4.0.0
+- MetaBrainz.Build.Sdk → 1.0.1
+  - This changes the target frameworks to `netstandard2.0`, `netstandard2.1`, and
+    `net472`
+  - This include a change of the license to MIT (from MS-PL)
+- MetaBrainz.Common.Json → 4.0.1
 - System.Text.Json → 5.0.2
 
 ### v2.0.0 (2020-04-27)

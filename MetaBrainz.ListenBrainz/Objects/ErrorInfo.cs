@@ -57,14 +57,16 @@ namespace MetaBrainz.ListenBrainz.Objects {
     public static async Task<ErrorInfo?> ExtractFromAsync(HttpWebResponse? response) {
       if (response == null || response.ContentLength == 0)
         return null;
+      using var _ = response;
       try {
         var stream = response.GetResponseStream();
-        if (stream == null || !stream.CanRead)
+        if (stream == null || !stream.CanRead) {
           throw new WebException("No data received.", WebExceptionStatus.ReceiveFailure);
-#if NETFRAMEWORK || NETCOREAPP2_1
-        using var _ = response;
+        }
+ #if NETSTANDARD2_1_OR_GREATER
+        await using var rs = stream.ConfigureAwait(false);
 #else
-        await using var _ = stream.ConfigureAwait(false);
+        using var rs = stream;
 #endif
         if (!response.ContentType.StartsWith("application/json")) {
           Debug.Print($"[{DateTime.UtcNow}] => UNHANDLED ERROR RESPONSE ({response.ContentType}): {response.ContentLength} byte(s)");
