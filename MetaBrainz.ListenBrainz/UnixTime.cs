@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using JetBrains.Annotations;
 
@@ -8,7 +8,7 @@ namespace MetaBrainz.ListenBrainz {
   [PublicAPI]
   public static class UnixTime {
 
-#if NETSTANDARD2_1_OR_GREATER // Unix Time support available
+#if NET || NETSTANDARD2_1_OR_GREATER // Unix Time support available
 
     /// <summary>The epoch for Unix time values (1970-01-01T00:00:00Z).</summary>
     public static readonly DateTimeOffset Epoch = DateTimeOffset.UnixEpoch;
