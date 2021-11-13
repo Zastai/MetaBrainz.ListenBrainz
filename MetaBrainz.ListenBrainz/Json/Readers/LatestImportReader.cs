@@ -6,47 +6,47 @@ using MetaBrainz.Common.Json;
 using MetaBrainz.Common.Json.Converters;
 using MetaBrainz.ListenBrainz.Objects;
 
-namespace MetaBrainz.ListenBrainz.Json.Readers {
+namespace MetaBrainz.ListenBrainz.Json.Readers;
 
-  internal sealed class LatestImportReader : ObjectReader<LatestImport> {
+internal sealed class LatestImportReader : ObjectReader<LatestImport> {
 
-    public static readonly LatestImportReader Instance = new LatestImportReader();
+  public static readonly LatestImportReader Instance = new LatestImportReader();
 
-    protected override LatestImport ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-      long? ts = null;
-      string? user = null;
-      Dictionary<string, object?>? rest = null;
-      while (reader.TokenType == JsonTokenType.PropertyName) {
-        var prop = reader.GetPropertyName();
-        try {
-          reader.Read();
-          switch (prop) {
-            case "latest_import":
-              ts = reader.GetInt64();
-              break;
-            case "musicbrainz_id":
-              user = reader.GetString();
-              break;
-            default:
-              rest ??= new Dictionary<string, object?>();
-              rest[prop] = reader.GetOptionalObject(options);
-              break;
-          }
-        }
-        catch (Exception e) {
-          throw new JsonException($"Failed to deserialize the '{prop}' property.", e);
-        }
+  protected override LatestImport ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+    long? ts = null;
+    string? user = null;
+    Dictionary<string, object?>? rest = null;
+    while (reader.TokenType == JsonTokenType.PropertyName) {
+      var prop = reader.GetPropertyName();
+      try {
         reader.Read();
+        switch (prop) {
+          case "latest_import":
+            ts = reader.GetInt64();
+            break;
+          case "musicbrainz_id":
+            user = reader.GetString();
+            break;
+          default:
+            rest ??= new Dictionary<string, object?>();
+            rest[prop] = reader.GetOptionalObject(options);
+            break;
+        }
       }
-      if (!ts.HasValue)
-        throw new JsonException("Expected latest-import timestamp not found or null.");
-      if (user == null)
-        throw new JsonException("Expected user id not found or null.");
-      return new LatestImport(ts.Value, user) {
-        UnhandledProperties = rest
-      };
+      catch (Exception e) {
+        throw new JsonException($"Failed to deserialize the '{prop}' property.", e);
+      }
+      reader.Read();
     }
-
+    if (!ts.HasValue) {
+      throw new JsonException("Expected latest-import timestamp not found or null.");
+    }
+    if (user == null) {
+      throw new JsonException("Expected user id not found or null.");
+    }
+    return new LatestImport(ts.Value, user) {
+      UnhandledProperties = rest
+    };
   }
 
 }
