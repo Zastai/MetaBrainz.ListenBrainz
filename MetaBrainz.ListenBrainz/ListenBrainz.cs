@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -1549,7 +1549,7 @@ namespace MetaBrainz.ListenBrainz {
     }
 
     private static async Task<T> GetJsonContentAsync<T>(HttpResponseMessage response) {
-#if NETSTANDARD2_1_OR_GREATER
+#if NET || NETSTANDARD2_1_OR_GREATER
       var stream = await response.Content.ReadAsStreamAsync();
       await using var _ = stream.ConfigureAwait(false);
 #else
@@ -1578,7 +1578,7 @@ namespace MetaBrainz.ListenBrainz {
     }
 
     private static async Task<string> GetStringContentAsync(HttpResponseMessage response) {
-#if NETSTANDARD2_1_OR_GREATER
+#if NET || NETSTANDARD2_1_OR_GREATER
       var stream = await response.Content.ReadAsStreamAsync();
       await using var _ = stream.ConfigureAwait(false);
 #else

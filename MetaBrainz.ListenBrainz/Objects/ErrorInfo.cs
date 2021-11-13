@@ -63,7 +63,7 @@ namespace MetaBrainz.ListenBrainz.Objects {
         if (stream == null || !stream.CanRead) {
           throw new WebException("No data received.", WebExceptionStatus.ReceiveFailure);
         }
- #if NETSTANDARD2_1_OR_GREATER
+#if NET || NETSTANDARD2_1_OR_GREATER
         await using var rs = stream.ConfigureAwait(false);
 #else
         using var rs = stream;
