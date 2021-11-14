@@ -21,9 +21,14 @@ internal sealed class AdditionalInfo : IAdditionalInfo {
     this.Isrc = AdditionalInfo.GetObject<string>(fields, "isrc");
     this.ImportedReleaseId = AdditionalInfo.GetValue<Guid>(fields, "lastfm_release_mbid");
     this.ListeningFrom = AdditionalInfo.GetObject<string>(fields, "listening_from");
+    this.MediaPlayer = AdditionalInfo.GetObject<string>(fields, "media_player");
+    this.MediaPlayerVersion = AdditionalInfo.GetObject<string>(fields, "media_player_version");
     this.MessyArtistId = AdditionalInfo.GetValue<Guid>(fields, "artist_msid");
     this.MessyRecordingId = AdditionalInfo.GetValue<Guid>(fields, "recording_msid");
     this.MessyReleaseId = AdditionalInfo.GetValue<Guid>(fields, "release_msid");
+    this.MusicService = AdditionalInfo.GetObject<string>(fields, "music_service");
+    this.MusicServiceName = AdditionalInfo.GetObject<string>(fields, "music_service_name");
+    this.OriginUrl = AdditionalInfo.GetObject<Uri>(fields, "origin_url");
     this.RecordingId = AdditionalInfo.GetValue<Guid>(fields, "recording_mbid");
     this.ReleaseArtistName = AdditionalInfo.GetObject<string>(fields, "release_artist_name");
     this.ReleaseArtistNames = AdditionalInfo.GetObjectList<string>(fields, "release_artist_names");
@@ -32,7 +37,9 @@ internal sealed class AdditionalInfo : IAdditionalInfo {
     this.SpotifyAlbumId = AdditionalInfo.GetObject<Uri>(fields, "spotify_album_id");
     this.SpotifyAlbumArtistIds = AdditionalInfo.GetObjectList<Uri>(fields, "spotify_album_artist_ids");
     this.SpotifyArtistIds = AdditionalInfo.GetObjectList<Uri>(fields, "spotify_artist_ids");
-    this.SpotifyId = AdditionalInfo.GetObject<Uri>(fields, "spotify_album_id");
+    this.SpotifyId = AdditionalInfo.GetObject<Uri>(fields, "spotify_id");
+    this.SubmissionClient = AdditionalInfo.GetObject<string>(fields, "submission_client");
+    this.SubmissionClientVersion = AdditionalInfo.GetObject<string>(fields, "submission_client_version");
     this.Tags = AdditionalInfo.GetObjectList<string>(fields, "tags");
     this.TrackId = AdditionalInfo.GetValue<Guid>(fields, "track_mbid");
     this.TrackNumber = AdditionalInfo.GetValue<int>(fields, "tracknumber");
@@ -64,11 +71,21 @@ internal sealed class AdditionalInfo : IAdditionalInfo {
 
   public string? ListeningFrom { get; }
 
+  public string? MediaPlayer { get; }
+
+  public string? MediaPlayerVersion { get; }
+
   public Guid? MessyArtistId { get; }
 
   public Guid? MessyRecordingId { get; }
 
   public Guid? MessyReleaseId { get; }
+
+  public string? MusicService { get; }
+
+  public string? MusicServiceName { get; }
+
+  public Uri? OriginUrl { get; }
 
   public Guid? RecordingId { get; }
 
@@ -87,6 +104,10 @@ internal sealed class AdditionalInfo : IAdditionalInfo {
   public IReadOnlyList<Uri?>? SpotifyArtistIds { get; }
 
   public Uri? SpotifyId { get; }
+
+  public string? SubmissionClient { get; }
+
+  public string? SubmissionClientVersion { get; }
 
   public IReadOnlyList<string?>? Tags { get; }
 
