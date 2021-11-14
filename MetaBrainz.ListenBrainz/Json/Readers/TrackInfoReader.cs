@@ -18,6 +18,7 @@ internal sealed class TrackInfoReader : ObjectReader<TrackInfo> {
     string? artist = null;
     string? release = null;
     IAdditionalInfo? info = null;
+    IMusicBrainzIdMappings? mapping = null;
     Dictionary<string, object?>? rest = null;
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
@@ -29,6 +30,9 @@ internal sealed class TrackInfoReader : ObjectReader<TrackInfo> {
             break;
           case "artist_name":
             artist = reader.GetString();
+            break;
+          case "mbid_mapping":
+            mapping = reader.GetObject(MusicBrainzIdMappingsReader.Instance, options);
             break;
           case "release_name":
             release = reader.GetString();
@@ -57,6 +61,7 @@ internal sealed class TrackInfoReader : ObjectReader<TrackInfo> {
       throw new JsonException("Expected additional info not found or null.");
     }
     return new TrackInfo(name, artist, info) {
+      MusicBrainzIdMappings = mapping,
       Release = release,
       UnhandledProperties = rest
     };

@@ -14,6 +14,12 @@ public interface ITrackInfo : IJsonBasedObject {
   /// <summary>The name of the track's artist.</summary>
   string Artist { get; }
 
+  /// <summary>
+  /// Mappings to MusicBrainz IDs for this track, as determined by ListenBrainz.<br/>
+  /// There are similar fields in <see cref="AdditionalInfo"/>, but those are values supplied at submission time by the client.
+  /// </summary>
+  IMusicBrainzIdMappings? MusicBrainzIdMappings { get; }
+
   /// <summary>The name of the track.</summary>
   string Name { get; }
 
