@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class RecentListensReader : PayloadReader<RecentListens> {
 
-  public static readonly RecentListensReader Instance = new RecentListensReader();
+  public static readonly RecentListensReader Instance = new();
 
   protected override RecentListens ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     int? count = null;

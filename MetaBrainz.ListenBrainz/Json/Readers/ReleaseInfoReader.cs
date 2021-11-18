@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal class ReleaseInfoReader : ObjectReader<ReleaseInfo> {
 
-  public static readonly ReleaseInfoReader Instance = new ReleaseInfoReader();
+  public static readonly ReleaseInfoReader Instance = new();
 
   protected override ReleaseInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     IReadOnlyList<Guid>? artistMbids = null;

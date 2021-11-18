@@ -9,7 +9,7 @@ namespace MetaBrainz.ListenBrainz.Json.Writers;
 
 internal sealed class ListenPayloadWriter : ObjectWriter<SubmissionPayload<ISubmittedListen>> {
 
-  public static readonly ListenPayloadWriter Instance = new ListenPayloadWriter();
+  public static readonly ListenPayloadWriter Instance = new();
 
   protected override void WriteObjectContents(Utf8JsonWriter writer, SubmissionPayload<ISubmittedListen> value, JsonSerializerOptions options) {
     writer.WriteString("listen_type", value.Type);

@@ -7,7 +7,7 @@ namespace MetaBrainz.ListenBrainz.Json.Writers;
 
 internal sealed class ListenDataWriter : ObjectWriter<ISubmittedListenData> {
 
-  public static readonly ListenDataWriter Instance = new ListenDataWriter();
+  public static readonly ListenDataWriter Instance = new();
 
   protected override void WriteObjectContents(Utf8JsonWriter writer, ISubmittedListenData value, JsonSerializerOptions options) {
     writer.WritePropertyName("track_metadata");

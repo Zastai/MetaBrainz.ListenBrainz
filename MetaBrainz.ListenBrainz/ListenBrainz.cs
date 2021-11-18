@@ -1365,7 +1365,7 @@ public sealed class ListenBrainz : IDisposable {
 
   private AuthenticationHeaderValue? Authentication;
 
-  private readonly SemaphoreSlim ClientLock = new SemaphoreSlim(1);
+  private readonly SemaphoreSlim ClientLock = new(1);
 
   private bool Disposed;
 

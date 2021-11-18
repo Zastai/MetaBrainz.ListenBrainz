@@ -37,7 +37,7 @@ public static class UnixTime {
 #else
 
   /// <summary>The epoch for Unix time values (1970-01-01T00:00:00Z).</summary>
-  public static readonly DateTimeOffset Epoch = new DateTimeOffset(621355968000000000L, TimeSpan.Zero);
+  public static readonly DateTimeOffset Epoch = new(621355968000000000L, TimeSpan.Zero);
 
   /// <summary>Computes the Unix time value corresponding to the specified date/time.</summary>
   /// <param name="value">The date/time to convert to a Unix time value.</param>

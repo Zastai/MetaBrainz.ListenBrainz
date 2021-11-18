@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class UserArtistStatisticsReader : PayloadReader<UserArtistStatistics> {
 
-  public static readonly UserArtistStatisticsReader Instance = new UserArtistStatisticsReader();
+  public static readonly UserArtistStatisticsReader Instance = new();
 
   protected override UserArtistStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     IReadOnlyList<IArtistInfo>? artists = null;

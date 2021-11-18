@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal class ArtistCountryInfoReader : ObjectReader<ArtistCountryInfo> {
 
-  public static readonly ArtistCountryInfoReader Instance = new ArtistCountryInfoReader();
+  public static readonly ArtistCountryInfoReader Instance = new();
 
   protected override ArtistCountryInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     int? artistCount = null;

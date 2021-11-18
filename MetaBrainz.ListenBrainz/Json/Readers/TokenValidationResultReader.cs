@@ -11,7 +11,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class TokenValidationResultReader : ObjectReader<TokenValidationResult> {
 
-  public static readonly TokenValidationResultReader Instance = new TokenValidationResultReader();
+  public static readonly TokenValidationResultReader Instance = new();
 
   protected override TokenValidationResult ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     short? code = null;

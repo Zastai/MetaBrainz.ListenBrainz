@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class LatestImportReader : ObjectReader<LatestImport> {
 
-  public static readonly LatestImportReader Instance = new LatestImportReader();
+  public static readonly LatestImportReader Instance = new();
 
   protected override LatestImport ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     long? ts = null;

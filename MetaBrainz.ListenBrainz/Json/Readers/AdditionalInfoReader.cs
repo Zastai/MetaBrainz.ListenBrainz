@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class AdditionalInfoReader : ObjectReader<AdditionalInfo> {
 
-  public static readonly AdditionalInfoReader Instance = new AdditionalInfoReader();
+  public static readonly AdditionalInfoReader Instance = new();
 
   protected override AdditionalInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     var fields = new Dictionary<string, object?>();

@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal class RecordingInfoReader : ObjectReader<RecordingInfo> {
 
-  public static readonly RecordingInfoReader Instance = new RecordingInfoReader();
+  public static readonly RecordingInfoReader Instance = new();
 
   protected override RecordingInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     IReadOnlyList<Guid>? artistMbids = null;

@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class HourlyActivityReader : ObjectReader<HourlyActivity> {
 
-  public static readonly HourlyActivityReader Instance = new HourlyActivityReader();
+  public static readonly HourlyActivityReader Instance = new();
 
   protected override HourlyActivity ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     int? hour = null;
