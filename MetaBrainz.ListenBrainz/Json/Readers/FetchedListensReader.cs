@@ -46,7 +46,7 @@ internal sealed class FetchedListensReader : PayloadReader<FetchedListens> {
       }
       reader.Read();
     }
-    listens = this.VerifyPayloadContents(count, listens);
+    listens = PayloadReader<FetchedListens>.VerifyPayloadContents(count, listens);
     if (user == null) {
       throw new JsonException("Expected user id not found or null.");
     }

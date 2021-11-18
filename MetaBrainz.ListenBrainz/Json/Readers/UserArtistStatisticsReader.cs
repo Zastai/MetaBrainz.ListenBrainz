@@ -69,7 +69,7 @@ internal sealed class UserArtistStatisticsReader : PayloadReader<UserArtistStati
       }
       reader.Read();
     }
-    artists = this.VerifyPayloadContents(count, artists);
+    artists = PayloadReader<UserArtistStatistics>.VerifyPayloadContents(count, artists);
     if (lastUpdated == null) {
       throw new JsonException("Expected last-updated timestamp not found or null.");
     }
