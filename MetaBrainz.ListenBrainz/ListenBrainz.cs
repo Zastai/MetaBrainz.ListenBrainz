@@ -632,9 +632,9 @@ public sealed class ListenBrainz : IDisposable {
   /// </item>
   /// </list>
   /// The listens are comma-separated, so we need to add one to the listen size and subtract one from the fixed overhead.<br/>
-  /// So the maximum listens that can be submitted at once is ((<see cref="MaxListenSize"/> - 36) / 72) (currently 141).
+  /// So the maximum listens that can be submitted at once is <c>(<see cref="MaxListenSize"/> - 36) / 72</c> (currently 141).
   /// </remarks>
-  private const int MaxListensInOnePayload = ((ListenBrainz.MaxListenSize - 36) / 72);
+  private const int MaxListensInOnePayload = (ListenBrainz.MaxListenSize - 36) / 72;
 
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listens">The listens to import.</param>
