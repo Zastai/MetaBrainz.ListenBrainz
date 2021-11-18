@@ -13,7 +13,7 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
   public static readonly SiteArtistStatisticsReader Instance = new SiteArtistStatisticsReader();
 
   protected override SiteArtistStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-    IReadOnlyList<IArtistTimeRange>? timeRanges = null;
+    IReadOnlyList<IArtistInfo>? artists = null;
     int? count = null;
     DateTimeOffset? lastUpdated = null;
     DateTimeOffset? newestListen = null;
@@ -26,6 +26,9 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
       try {
         reader.Read();
         switch (prop) {
+          case "artists":
+            artists = reader.ReadList(ArtistInfoReader.Instance, options);
+            break;
           case "count":
             count = reader.GetInt32();
             break;
@@ -44,9 +47,6 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
               goto default; // also register it as an unhandled property
             }
             break;
-          case "time_ranges":
-            timeRanges = reader.ReadList(ArtistTimeRangeReader.Instance, options);
-            break;
           case "to_ts":
             newestListen = UnixTime.Convert(reader.GetOptionalInt64());
             break;
@@ -61,6 +61,9 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
       }
       reader.Read();
     }
+    // LB-1013: This ALWAYS reports 1000 as count, so we can't use VerifyPayloadContents().
+    // artists = this.VerifyPayloadContents(count, artists);
+    artists ??= Array.Empty<IArtistInfo>();
     if (count == null) {
       throw new JsonException("Expected count not found or null.");
     }
@@ -74,9 +77,9 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
       throw new JsonException("Expected range not found or null.");
     }
     return new SiteArtistStatistics(count.Value, lastUpdated.Value, offset.Value, range.Value) {
+      Artists = artists,
       NewestListen = newestListen,
       OldestListen = oldestListen,
-      TimeRanges = timeRanges,
       UnhandledProperties = rest,
     };
   }

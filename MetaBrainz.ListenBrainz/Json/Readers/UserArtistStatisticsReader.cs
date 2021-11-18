@@ -73,18 +73,22 @@ internal sealed class UserArtistStatisticsReader : PayloadReader<UserArtistStati
     if (lastUpdated == null) {
       throw new JsonException("Expected last-updated timestamp not found or null.");
     }
+    if (offset == null) {
+      throw new JsonException("Expected offset not found or null.");
+    }
     if (range == null) {
       throw new JsonException("Expected range not found or null.");
+    }
+    if (totalCount == null) {
+      throw new JsonException("Expected total count not found or null.");
     }
     if (user == null) {
       throw new JsonException("Expected user id not found or null.");
     }
-    return new UserArtistStatistics(lastUpdated.Value, range.Value, user) {
+    return new UserArtistStatistics(count ?? 0, totalCount.Value, lastUpdated.Value, offset.Value, range.Value, user) {
       Artists = artists,
       NewestListen = newestListen,
-      Offset = offset,
       OldestListen = oldestListen,
-      TotalCount = totalCount,
       UnhandledProperties = rest,
     };
   }
