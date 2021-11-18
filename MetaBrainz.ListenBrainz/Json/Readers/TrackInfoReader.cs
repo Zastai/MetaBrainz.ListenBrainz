@@ -11,7 +11,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class TrackInfoReader : ObjectReader<TrackInfo> {
 
-  public static readonly TrackInfoReader Instance = new TrackInfoReader();
+  public static readonly TrackInfoReader Instance = new();
 
   protected override TrackInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     string? name = null;

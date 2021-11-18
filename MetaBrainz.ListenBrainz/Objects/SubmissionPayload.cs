@@ -15,7 +15,7 @@ internal abstract class SubmissionPayload {
 
   public string Type { get; }
 
-  public static SubmissionPayload<ISubmittedListen> CreateImport() => new SubmissionPayload<ISubmittedListen>("import");
+  public static SubmissionPayload<ISubmittedListen> CreateImport() => new("import");
 
   public static SubmissionPayload<ISubmittedListenData> CreatePlayingNow(ISubmittedListenData listen) {
     var payload = new SubmissionPayload<ISubmittedListenData>("playing_now");

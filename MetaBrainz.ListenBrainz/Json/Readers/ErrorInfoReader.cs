@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class ErrorInfoReader : ObjectReader<ErrorInfo> {
 
-  public static readonly ErrorInfoReader Instance = new ErrorInfoReader();
+  public static readonly ErrorInfoReader Instance = new();
 
   protected override ErrorInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     int? code = null;

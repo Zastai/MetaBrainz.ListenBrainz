@@ -11,7 +11,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class DailyActivityReader : ObjectReader<DailyActivity> {
 
-  public static readonly DailyActivityReader Instance = new DailyActivityReader();
+  public static readonly DailyActivityReader Instance = new();
 
   protected override DailyActivity ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     IReadOnlyList<IHourlyActivity>? monday = null;

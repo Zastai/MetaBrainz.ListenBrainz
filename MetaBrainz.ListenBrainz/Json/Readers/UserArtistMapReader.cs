@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
 
-  public static readonly UserArtistMapReader Instance = new UserArtistMapReader();
+  public static readonly UserArtistMapReader Instance = new();
 
   protected override UserArtistMap ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     IReadOnlyList<IArtistCountryInfo>? countries = null;

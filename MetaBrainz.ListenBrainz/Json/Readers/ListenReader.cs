@@ -11,7 +11,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal class ListenReader : ObjectReader<Listen> {
 
-  public static readonly ListenReader Instance = new ListenReader();
+  public static readonly ListenReader Instance = new();
 
   protected override Listen ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     string? inserted = null;

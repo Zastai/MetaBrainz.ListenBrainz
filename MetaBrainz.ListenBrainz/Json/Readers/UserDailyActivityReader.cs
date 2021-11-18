@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class UserDailyActivityReader : PayloadReader<UserDailyActivity> {
 
-  public static readonly UserDailyActivityReader Instance = new UserDailyActivityReader();
+  public static readonly UserDailyActivityReader Instance = new();
 
   protected override UserDailyActivity ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     IDailyActivity? activity = null;

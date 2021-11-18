@@ -7,7 +7,7 @@ namespace MetaBrainz.ListenBrainz.Json.Writers;
 
 internal sealed class TrackInfoWriter : ObjectWriter<ISubmittedTrackInfo> {
 
-  public static readonly TrackInfoWriter Instance = new TrackInfoWriter();
+  public static readonly TrackInfoWriter Instance = new();
 
   protected override void WriteObjectContents(Utf8JsonWriter writer, ISubmittedTrackInfo value, JsonSerializerOptions options) {
     writer.WriteString("artist_name", value.Artist);

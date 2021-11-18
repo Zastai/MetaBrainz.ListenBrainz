@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class PlayingNowReader : PayloadReader<PlayingNow> {
 
-  public static readonly PlayingNowReader Instance = new PlayingNowReader();
+  public static readonly PlayingNowReader Instance = new();
 
   protected override PlayingNow ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     int? count = null;

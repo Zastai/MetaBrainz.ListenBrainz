@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class UserListeningActivityReader : PayloadReader<UserListeningActivity> {
 
-  public static readonly UserListeningActivityReader Instance = new UserListeningActivityReader();
+  public static readonly UserListeningActivityReader Instance = new();
 
   protected override UserListeningActivity ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     IReadOnlyList<IListenTimeRange>? activity = null;

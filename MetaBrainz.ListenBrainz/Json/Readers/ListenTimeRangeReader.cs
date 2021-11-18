@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class ListenTimeRangeReader : ObjectReader<ListenTimeRange> {
 
-  public static readonly ListenTimeRangeReader Instance = new ListenTimeRangeReader();
+  public static readonly ListenTimeRangeReader Instance = new();
 
   protected override ListenTimeRange ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     string? description = null;

@@ -11,7 +11,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class PlayingTrackReader : ObjectReader<PlayingTrack> {
 
-  public static readonly PlayingTrackReader Instance = new PlayingTrackReader();
+  public static readonly PlayingTrackReader Instance = new();
 
   protected override PlayingTrack ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     ITrackInfo? track = null;

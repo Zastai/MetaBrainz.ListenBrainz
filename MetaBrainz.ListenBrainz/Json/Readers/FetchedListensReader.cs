@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class FetchedListensReader : PayloadReader<FetchedListens> {
 
-  public static readonly FetchedListensReader Instance = new FetchedListensReader();
+  public static readonly FetchedListensReader Instance = new();
 
   protected override FetchedListens ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     ushort? count = null;

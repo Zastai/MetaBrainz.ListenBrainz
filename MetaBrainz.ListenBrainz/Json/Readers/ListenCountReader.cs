@@ -9,7 +9,7 @@ namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class ListenCountReader : PayloadReader<ListenCount> {
 
-  public static readonly ListenCountReader Instance = new ListenCountReader();
+  public static readonly ListenCountReader Instance = new();
 
   protected override ListenCount ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     long? count = null;
