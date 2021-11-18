@@ -13,10 +13,10 @@ internal sealed class SiteArtistStatistics : Statistics, ISiteArtistStatistics {
     this.Offset = offset;
   }
 
+  public IReadOnlyList<IArtistInfo>? Artists { get; set; }
+
   public int Count { get; }
 
   public int Offset { get; }
-
-  public IReadOnlyList<IArtistTimeRange>? TimeRanges { get; set; }
 
 }
