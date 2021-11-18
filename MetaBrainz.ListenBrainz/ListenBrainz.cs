@@ -610,7 +610,7 @@ public sealed class ListenBrainz : IDisposable {
 
   #region /1/submit-listens
 
-  private ConfiguredTaskAwaitable SubmitListensAsync(SubmissionPayload payload)
+  private ConfiguredTaskAwaitable SubmitListensAsync<T>(T payload)
     => this.PostAsync("submit-listens", payload).ConfigureAwait(false);
 
   private ConfiguredTaskAwaitable SubmitListensAsync(string payload)
