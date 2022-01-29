@@ -110,8 +110,8 @@ public sealed class ListenBrainz : IDisposable {
   public ListenBrainz(ProductHeaderValue product, Uri contact) {
     this.ContactInfo = contact;
     this.ProductInfo = product;
-    this.UserAgentContact = new ProductInfoHeaderValue($"({contact})");
-    this.UserAgentProduct = new ProductInfoHeaderValue(product);
+    this._userAgentContact = new ProductInfoHeaderValue($"({contact})");
+    this._userAgentProduct = new ProductInfoHeaderValue(product);
     this.UserToken = ListenBrainz.DefaultUserToken;
   }
 
@@ -252,8 +252,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
   public string? UserToken {
-    get => this.Authentication?.Parameter;
-    set => this.Authentication = new AuthenticationHeaderValue("Token", value);
+    get => this._authentication?.Parameter;
+    set => this._authentication = new AuthenticationHeaderValue("Token", value);
   }
 
   #endregion
@@ -1363,54 +1363,54 @@ public sealed class ListenBrainz : IDisposable {
 
   #region HTTP Client / IDisposable
 
-  private AuthenticationHeaderValue? Authentication;
+  private AuthenticationHeaderValue? _authentication;
 
-  private readonly SemaphoreSlim ClientLock = new(1);
+  private readonly SemaphoreSlim _clientLock = new(1);
 
-  private bool Disposed;
+  private bool _disposed;
 
-  private readonly ProductInfoHeaderValue UserAgentContact;
+  private readonly ProductInfoHeaderValue _userAgentContact;
 
-  private readonly ProductInfoHeaderValue UserAgentProduct;
+  private readonly ProductInfoHeaderValue _userAgentProduct;
 
-  private HttpClient? TheClient;
+  private HttpClient? _theClient;
 
   private HttpClient Client {
     get {
-      if (this.Disposed) {
+      if (this._disposed) {
         throw new ObjectDisposedException(nameof(ListenBrainz));
       }
-      if (this.TheClient == null) { // Set up the instance with the invariant settings
+      if (this._theClient == null) { // Set up the instance with the invariant settings
         var an = typeof(ListenBrainz).Assembly.GetName();
-        this.TheClient = new HttpClient {
+        this._theClient = new HttpClient {
           BaseAddress = this.BaseUri,
           DefaultRequestHeaders = {
               Accept = {
                 new MediaTypeWithQualityHeaderValue("application/json")
               },
               UserAgent = {
-                this.UserAgentProduct,
-                this.UserAgentContact,
+                this._userAgentProduct,
+                this._userAgentContact,
                 new ProductInfoHeaderValue(an.Name ?? "*Unknown Assembly*", an.Version?.ToString()),
                 new ProductInfoHeaderValue($"({ListenBrainz.UserAgentUrl})"),
               },
             }
         };
       }
-      return this.TheClient;
+      return this._theClient;
     }
   }
 
   /// <summary>Closes the underlying web service client in use by this ListenBrainz client, if there is one.</summary>
   /// <remarks>The next web service request will create a new client.</remarks>
   public void Close() {
-    this.ClientLock.Wait();
+    this._clientLock.Wait();
     try {
-      this.TheClient?.Dispose();
-      this.TheClient = null;
+      this._theClient?.Dispose();
+      this._theClient = null;
     }
     finally {
-      this.ClientLock.Release();
+      this._clientLock.Release();
     }
   }
 
@@ -1427,10 +1427,10 @@ public sealed class ListenBrainz : IDisposable {
     }
     try {
       this.Close();
-      this.ClientLock.Dispose();
+      this._clientLock.Dispose();
     }
     finally {
-      this.Disposed = true;
+      this._disposed = true;
     }
   }
 
@@ -1473,14 +1473,14 @@ public sealed class ListenBrainz : IDisposable {
   private async Task<HttpResponseMessage> PerformRequestAsync(string address, HttpMethod method, string? body, IDictionary<string, string>? options = null) {
     var requestUri = address + ListenBrainz.QueryString(options);
     Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method.Method} {this.BaseUri}{requestUri}");
-    await this.ClientLock.WaitAsync();
+    await this._clientLock.WaitAsync();
     try {
       var client = this.Client;
       HttpResponseMessage response;
       switch (method.Method) {
         case "GET": {
           var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-          request.Headers.Authorization = this.Authentication;
+          request.Headers.Authorization = this._authentication;
           response = await client.SendAsync(request);
           break;
         }
@@ -1489,7 +1489,7 @@ public sealed class ListenBrainz : IDisposable {
             Debug.Print($"[{DateTime.UtcNow}] => BODY: {body}");
           }
           var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
-          request.Headers.Authorization = this.Authentication;
+          request.Headers.Authorization = this._authentication;
           request.Content = new StringContent(body ?? "", Encoding.UTF8, "application/json");
           response = await client.SendAsync(request);
           break;
@@ -1504,7 +1504,7 @@ public sealed class ListenBrainz : IDisposable {
       return response;
     }
     finally {
-      this.ClientLock.Release();
+      this._clientLock.Release();
     }
   }
 
