@@ -1,5 +1,6 @@
 using System.Text.Json;
 
+using MetaBrainz.Common;
 using MetaBrainz.Common.Json.Converters;
 using MetaBrainz.ListenBrainz.Interfaces;
 

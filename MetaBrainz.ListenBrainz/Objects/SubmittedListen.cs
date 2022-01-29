@@ -2,6 +2,7 @@ using System;
 
 using JetBrains.Annotations;
 
+using MetaBrainz.Common;
 using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects;
