@@ -226,6 +226,23 @@ public sealed class ListenBrainz : IDisposable {
   /// <summary>The product information portion of the user agent to use for requests.</summary>
   public ProductHeaderValue ProductInfo { get; }
 
+  private RateLimitInfo _rateLimitInfo;
+
+  private readonly ReaderWriterLockSlim _rateLimitLock = new();
+
+  /// <summary>Information about the active rate limiting. Gets refreshed after every API call.</summary>
+  public RateLimitInfo RateLimitInfo {
+    get {
+      this._rateLimitLock.EnterReadLock();
+      try {
+        return this._rateLimitInfo;
+      }
+      finally {
+        this._rateLimitLock.ExitReadLock();
+      }
+    }
+  }
+
   /// <summary>
   /// The server to use for requests.<br/>
   /// Changes to this property only take effect when creating the underlying web service client. If this property is set after
@@ -259,9 +276,6 @@ public sealed class ListenBrainz : IDisposable {
   #endregion
 
   #region Public API
-
-  /// <summary>Information about the active rate limiting. Gets refreshed after every API call.</summary>
-  public RateLimitInfo RateLimitInfo { get; private set; }
 
   #region /1/latest-import
 
@@ -393,7 +407,7 @@ public sealed class ListenBrainz : IDisposable {
   public async Task<ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = null, int? offset = null,
                                                                      StatisticsRange? range = null) {
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    var task = this.GetOptionalAsync<ISiteArtistStatistics, SiteArtistStatistics>($"stats/sitewide/artists", options);
+    var task = this.GetOptionalAsync<ISiteArtistStatistics, SiteArtistStatistics>("stats/sitewide/artists", options);
     return await task.ConfigureAwait(false);
   }
 
@@ -1378,24 +1392,22 @@ public sealed class ListenBrainz : IDisposable {
 
   private AuthenticationHeaderValue? _authentication;
 
-  private readonly SemaphoreSlim _clientLock = new(1);
-
   private bool _disposed;
 
   private readonly ProductInfoHeaderValue _userAgentContact;
 
   private readonly ProductInfoHeaderValue _userAgentProduct;
 
-  private HttpClient? _theClient;
+  private HttpClient? _client;
 
   private HttpClient Client {
     get {
       if (this._disposed) {
         throw new ObjectDisposedException(nameof(ListenBrainz));
       }
-      if (this._theClient == null) { // Set up the instance with the invariant settings
+      if (this._client == null) { // Set up the instance with the invariant settings
         var an = typeof(ListenBrainz).Assembly.GetName();
-        this._theClient = new HttpClient {
+        this._client = new HttpClient {
           BaseAddress = this.BaseUri,
           DefaultRequestHeaders = {
               Accept = {
@@ -1410,21 +1422,14 @@ public sealed class ListenBrainz : IDisposable {
             }
         };
       }
-      return this._theClient;
+      return this._client;
     }
   }
 
   /// <summary>Closes the underlying web service client in use by this ListenBrainz client, if there is one.</summary>
   /// <remarks>The next web service request will create a new client.</remarks>
   public void Close() {
-    this._clientLock.Wait();
-    try {
-      this._theClient?.Dispose();
-      this._theClient = null;
-    }
-    finally {
-      this._clientLock.Release();
-    }
+    Interlocked.Exchange(ref this._client, null)?.Dispose();
   }
 
   /// <summary>Disposes the web client in use by this ListenBrainz client, if there is one.</summary>
@@ -1440,7 +1445,6 @@ public sealed class ListenBrainz : IDisposable {
     }
     try {
       this.Close();
-      this._clientLock.Dispose();
     }
     finally {
       this._disposed = true;
@@ -1487,41 +1491,47 @@ public sealed class ListenBrainz : IDisposable {
                                                               IDictionary<string, string>? options = null) {
     var requestUri = address + ListenBrainz.QueryString(options);
     Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method.Method} {this.BaseUri}{requestUri}");
-    await this._clientLock.WaitAsync();
-    try {
-      var client = this.Client;
-      HttpResponseMessage response;
-      switch (method.Method) {
-        case "GET": {
-          var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-          request.Headers.Authorization = this._authentication;
-          response = await client.SendAsync(request);
-          break;
-        }
-        case "POST": {
-          if (body != null) {
-            Debug.Print($"[{DateTime.UtcNow}] => BODY: {body}");
+    var client = this.Client;
+    HttpRequestMessage request;
+    switch (method.Method) {
+      case "GET": {
+        request = new HttpRequestMessage(HttpMethod.Get, requestUri) {
+          Headers = {
+            Authorization = this._authentication,
           }
-          var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
-          request.Headers.Authorization = this._authentication;
-          request.Content = new StringContent(body ?? "", Encoding.UTF8, "application/json");
-          response = await client.SendAsync(request);
-          break;
-        }
-        default:
-          throw new QueryException(HttpStatusCode.MethodNotAllowed, $"Unsupported method: {method}");
+        };
+        break;
       }
-      Debug.Print($"[{DateTime.UtcNow}] => RESPONSE: {(int) response.StatusCode}/{response.StatusCode} '{response.ReasonPhrase}' " +
-                  $"(v{response.Version})");
-      Debug.Print($"[{DateTime.UtcNow}] => HEADERS: {TextUtils.FormatMultiLine(response.Headers.ToString())}");
-      Debug.Print($"[{DateTime.UtcNow}] => CONTENT: {response.Content.Headers.ContentType}, " +
-                  $"{response.Content.Headers.ContentLength ?? 0} byte(s))");
-      this.RateLimitInfo = new RateLimitInfo(response.Headers);
-      return response;
+      case "POST": {
+        if (body != null) {
+          Debug.Print($"[{DateTime.UtcNow}] => BODY: {body}");
+        }
+        request = new HttpRequestMessage(HttpMethod.Post, requestUri) {
+          Content = new StringContent(body ?? "", Encoding.UTF8, "application/json"),
+          Headers = {
+            Authorization = this._authentication,
+          }
+        };
+        break;
+      }
+      default:
+        throw new QueryException(HttpStatusCode.MethodNotAllowed, $"Unsupported method: {method}");
+    }
+    var response = await client.SendAsync(request);
+    Debug.Print($"[{DateTime.UtcNow}] => RESPONSE: {(int) response.StatusCode}/{response.StatusCode} '{response.ReasonPhrase}' " +
+                $"(v{response.Version})");
+    Debug.Print($"[{DateTime.UtcNow}] => HEADERS: {TextUtils.FormatMultiLine(response.Headers.ToString())}");
+    Debug.Print($"[{DateTime.UtcNow}] => CONTENT: {response.Content.Headers.ContentType}, " +
+                $"{response.Content.Headers.ContentLength ?? 0} byte(s))");
+    var rateLimitInfo = new RateLimitInfo(response.Headers);
+    this._rateLimitLock.EnterWriteLock();
+    try {
+      this._rateLimitInfo = rateLimitInfo;
     }
     finally {
-      this._clientLock.Release();
+      this._rateLimitLock.ExitWriteLock();
     }
+    return response;
   }
 
   private Task PostAsync<T>(string address, T content, IDictionary<string, string>? options = null)
