@@ -11,7 +11,8 @@ internal sealed class ListenPayloadWriter : ObjectWriter<SubmissionPayload<ISubm
 
   public static readonly ListenPayloadWriter Instance = new();
 
-  protected override void WriteObjectContents(Utf8JsonWriter writer, SubmissionPayload<ISubmittedListen> value, JsonSerializerOptions options) {
+  protected override void WriteObjectContents(Utf8JsonWriter writer, SubmissionPayload<ISubmittedListen> value,
+                                              JsonSerializerOptions options) {
     writer.WriteString("listen_type", value.Type);
     switch (value.Type) {
       case "import":

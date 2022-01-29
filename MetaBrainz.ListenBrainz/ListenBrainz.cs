@@ -110,8 +110,8 @@ public sealed class ListenBrainz : IDisposable {
   public ListenBrainz(ProductHeaderValue product, Uri contact) {
     this.ContactInfo = contact;
     this.ProductInfo = product;
-    this.UserAgentContact = new ProductInfoHeaderValue($"({contact})");
-    this.UserAgentProduct = new ProductInfoHeaderValue(product);
+    this._userAgentContact = new ProductInfoHeaderValue($"({contact})");
+    this._userAgentProduct = new ProductInfoHeaderValue(product);
     this.UserToken = ListenBrainz.DefaultUserToken;
   }
 
@@ -252,8 +252,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
   public string? UserToken {
-    get => this.Authentication?.Parameter;
-    set => this.Authentication = new AuthenticationHeaderValue("Token", value);
+    get => this._authentication?.Parameter;
+    set => this._authentication = new AuthenticationHeaderValue("Token", value);
   }
 
   #endregion
@@ -390,7 +390,8 @@ public sealed class ListenBrainz : IDisposable {
   /// recorded listen. Otherwise, information is returned about both the current and the previous range.
   /// </param>
   /// <returns>The requested artist statistics.</returns>
-  public async Task<ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = null, int? offset = null, StatisticsRange? range = null) {
+  public async Task<ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = null, int? offset = null,
+                                                                     StatisticsRange? range = null) {
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
     var task = this.GetOptionalAsync<ISiteArtistStatistics, SiteArtistStatistics>($"stats/sitewide/artists", options);
     return await task.ConfigureAwait(false);
@@ -417,7 +418,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="forceRecalculation">Indicates whether recalculation of the data should be requested.</param>
   /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
-  public async Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null, bool forceRecalculation = false) {
+  public async Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null,
+                                                       bool forceRecalculation = false) {
     var options = new Dictionary<string, string>(2);
     if (range.HasValue) {
       options.Add("range", range.Value.ToJson());
@@ -447,7 +449,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
-  public IUserArtistStatistics? GetArtistStatistics(string user, int? count = null, int? offset = null, StatisticsRange? range = null)
+  public IUserArtistStatistics? GetArtistStatistics(string user, int? count = null, int? offset = null,
+                                                    StatisticsRange? range = null)
     => AsyncUtils.ResultOf(this.GetArtistStatisticsAsync(user, count, offset, range));
 
   /// <summary>Gets statistics about a user's most listened-to artists.</summary>
@@ -464,7 +467,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
-  public async Task<IUserArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = null, int? offset = null, StatisticsRange? range = null) {
+  public async Task<IUserArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = null, int? offset = null,
+                                                                     StatisticsRange? range = null) {
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
     var task = this.GetOptionalAsync<IUserArtistStatistics, UserArtistStatistics>($"stats/user/{user}/artists", options);
     return await task.ConfigureAwait(false);
@@ -516,7 +520,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>The requested listening activity.</returns>
   public async Task<IUserListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = null) {
     var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
-    var task = this.GetOptionalAsync<IUserListeningActivity, UserListeningActivity>($"stats/user/{user}/listening-activity", options);
+    var address = $"stats/user/{user}/listening-activity";
+    var task = this.GetOptionalAsync<IUserListeningActivity, UserListeningActivity>(address, options);
     return await task.ConfigureAwait(false);
   }
 
@@ -538,7 +543,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
-  public IUserRecordingStatistics? GetRecordingStatistics(string user, int? count = null, int? offset = null, StatisticsRange? range = null)
+  public IUserRecordingStatistics? GetRecordingStatistics(string user, int? count = null, int? offset = null,
+                                                          StatisticsRange? range = null)
     => AsyncUtils.ResultOf(this.GetRecordingStatisticsAsync(user, count, offset, range));
 
   /// <summary>Gets statistics about a user's most listened-to recordings ("tracks").</summary>
@@ -555,7 +561,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
-  public async Task<IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = null, int? offset = null, StatisticsRange? range = null) {
+  public async Task<IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = null, int? offset = null,
+                                                                           StatisticsRange? range = null) {
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
     var task = this.GetOptionalAsync<IUserRecordingStatistics, UserRecordingStatistics>($"stats/user/{user}/recordings", options);
     return await task.ConfigureAwait(false);
@@ -579,7 +586,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested release statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
-  public IUserReleaseStatistics? GetReleaseStatistics(string user, int? count = null, int? offset = null, StatisticsRange? range = null)
+  public IUserReleaseStatistics? GetReleaseStatistics(string user, int? count = null, int? offset = null,
+                                                      StatisticsRange? range = null)
     => AsyncUtils.ResultOf(this.GetReleaseStatisticsAsync(user, count, offset, range));
 
   /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
@@ -596,7 +604,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested releases statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
-  public async Task<IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = null, int? offset = null, StatisticsRange? range = null) {
+  public async Task<IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = null, int? offset = null,
+                                                                       StatisticsRange? range = null) {
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
     var task = this.GetOptionalAsync<IUserReleaseStatistics, UserReleaseStatistics>($"stats/user/{user}/releases", options);
     return await task.ConfigureAwait(false);
@@ -998,7 +1007,8 @@ public sealed class ListenBrainz : IDisposable {
   private IFetchedListens PerformGetListens(string user, long? after, long? before, int? count = null, int? timeRange = null)
     => AsyncUtils.ResultOf(this.PerformGetListensAsync(user, after, before, count, timeRange));
 
-  private Task<IFetchedListens> PerformGetListensAsync(string user, long? after, long? before, int? count = null, int? timeRange = null) {
+  private Task<IFetchedListens> PerformGetListensAsync(string user, long? after, long? before, int? count = null,
+                                                       int? timeRange = null) {
     var options = ListenBrainz.OptionsForGetListens(count, after, before, timeRange);
     return this.GetAsync<IFetchedListens, FetchedListens>($"user/{user}/listens", options);
   }
@@ -1108,7 +1118,8 @@ public sealed class ListenBrainz : IDisposable {
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
-  public async Task<IFetchedListens> GetListensAfterAsync(string user, DateTimeOffset after, int? count = null, int? timeRange = null)
+  public async Task<IFetchedListens> GetListensAfterAsync(string user, DateTimeOffset after, int? count = null,
+                                                          int? timeRange = null)
     => await this.PerformGetListensAsync(user, UnixTime.Convert(after), null, count, timeRange);
 
   #endregion
@@ -1184,7 +1195,8 @@ public sealed class ListenBrainz : IDisposable {
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
-  public async Task<IFetchedListens> GetListensBeforeAsync(string user, DateTimeOffset before, int? count = null, int? timeRange = null)
+  public async Task<IFetchedListens> GetListensBeforeAsync(string user, DateTimeOffset before, int? count = null,
+                                                           int? timeRange = null)
     => await this.PerformGetListensAsync(user, null, UnixTime.Convert(before), count, timeRange);
 
   #endregion
@@ -1260,7 +1272,8 @@ public sealed class ListenBrainz : IDisposable {
   /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
-  public async Task<IFetchedListens> GetListensBetweenAsync(string user, DateTimeOffset after, DateTimeOffset before, int? count = null)
+  public async Task<IFetchedListens> GetListensBetweenAsync(string user, DateTimeOffset after, DateTimeOffset before,
+                                                            int? count = null)
     => await this.PerformGetListensAsync(user, UnixTime.Convert(after), UnixTime.Convert(before), count);
 
   #endregion
@@ -1363,54 +1376,54 @@ public sealed class ListenBrainz : IDisposable {
 
   #region HTTP Client / IDisposable
 
-  private AuthenticationHeaderValue? Authentication;
+  private AuthenticationHeaderValue? _authentication;
 
-  private readonly SemaphoreSlim ClientLock = new(1);
+  private readonly SemaphoreSlim _clientLock = new(1);
 
-  private bool Disposed;
+  private bool _disposed;
 
-  private readonly ProductInfoHeaderValue UserAgentContact;
+  private readonly ProductInfoHeaderValue _userAgentContact;
 
-  private readonly ProductInfoHeaderValue UserAgentProduct;
+  private readonly ProductInfoHeaderValue _userAgentProduct;
 
-  private HttpClient? TheClient;
+  private HttpClient? _theClient;
 
   private HttpClient Client {
     get {
-      if (this.Disposed) {
+      if (this._disposed) {
         throw new ObjectDisposedException(nameof(ListenBrainz));
       }
-      if (this.TheClient == null) { // Set up the instance with the invariant settings
+      if (this._theClient == null) { // Set up the instance with the invariant settings
         var an = typeof(ListenBrainz).Assembly.GetName();
-        this.TheClient = new HttpClient {
+        this._theClient = new HttpClient {
           BaseAddress = this.BaseUri,
           DefaultRequestHeaders = {
               Accept = {
                 new MediaTypeWithQualityHeaderValue("application/json")
               },
               UserAgent = {
-                this.UserAgentProduct,
-                this.UserAgentContact,
+                this._userAgentProduct,
+                this._userAgentContact,
                 new ProductInfoHeaderValue(an.Name ?? "*Unknown Assembly*", an.Version?.ToString()),
                 new ProductInfoHeaderValue($"({ListenBrainz.UserAgentUrl})"),
               },
             }
         };
       }
-      return this.TheClient;
+      return this._theClient;
     }
   }
 
   /// <summary>Closes the underlying web service client in use by this ListenBrainz client, if there is one.</summary>
   /// <remarks>The next web service request will create a new client.</remarks>
   public void Close() {
-    this.ClientLock.Wait();
+    this._clientLock.Wait();
     try {
-      this.TheClient?.Dispose();
-      this.TheClient = null;
+      this._theClient?.Dispose();
+      this._theClient = null;
     }
     finally {
-      this.ClientLock.Release();
+      this._clientLock.Release();
     }
   }
 
@@ -1427,10 +1440,10 @@ public sealed class ListenBrainz : IDisposable {
     }
     try {
       this.Close();
-      this.ClientLock.Dispose();
+      this._clientLock.Dispose();
     }
     finally {
-      this.Disposed = true;
+      this._disposed = true;
     }
   }
 
@@ -1470,17 +1483,18 @@ public sealed class ListenBrainz : IDisposable {
     return await JsonUtils.GetJsonContentAsync<TObject>(response);
   }
 
-  private async Task<HttpResponseMessage> PerformRequestAsync(string address, HttpMethod method, string? body, IDictionary<string, string>? options = null) {
+  private async Task<HttpResponseMessage> PerformRequestAsync(string address, HttpMethod method, string? body,
+                                                              IDictionary<string, string>? options = null) {
     var requestUri = address + ListenBrainz.QueryString(options);
     Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method.Method} {this.BaseUri}{requestUri}");
-    await this.ClientLock.WaitAsync();
+    await this._clientLock.WaitAsync();
     try {
       var client = this.Client;
       HttpResponseMessage response;
       switch (method.Method) {
         case "GET": {
           var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-          request.Headers.Authorization = this.Authentication;
+          request.Headers.Authorization = this._authentication;
           response = await client.SendAsync(request);
           break;
         }
@@ -1489,7 +1503,7 @@ public sealed class ListenBrainz : IDisposable {
             Debug.Print($"[{DateTime.UtcNow}] => BODY: {body}");
           }
           var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
-          request.Headers.Authorization = this.Authentication;
+          request.Headers.Authorization = this._authentication;
           request.Content = new StringContent(body ?? "", Encoding.UTF8, "application/json");
           response = await client.SendAsync(request);
           break;
@@ -1497,14 +1511,16 @@ public sealed class ListenBrainz : IDisposable {
         default:
           throw new QueryException(HttpStatusCode.MethodNotAllowed, $"Unsupported method: {method}");
       }
-      Debug.Print($"[{DateTime.UtcNow}] => RESPONSE: {(int) response.StatusCode}/{response.StatusCode} '{response.ReasonPhrase}' (v{response.Version})");
+      Debug.Print($"[{DateTime.UtcNow}] => RESPONSE: {(int) response.StatusCode}/{response.StatusCode} '{response.ReasonPhrase}' " +
+                  $"(v{response.Version})");
       Debug.Print($"[{DateTime.UtcNow}] => HEADERS: {TextUtils.FormatMultiLine(response.Headers.ToString())}");
-      Debug.Print($"[{DateTime.UtcNow}] => CONTENT: {response.Content.Headers.ContentType}, {response.Content.Headers.ContentLength ?? 0} byte(s))");
+      Debug.Print($"[{DateTime.UtcNow}] => CONTENT: {response.Content.Headers.ContentType}, " +
+                  $"{response.Content.Headers.ContentLength ?? 0} byte(s))");
       this.RateLimitInfo = new RateLimitInfo(response.Headers);
       return response;
     }
     finally {
-      this.ClientLock.Release();
+      this._clientLock.Release();
     }
   }
 

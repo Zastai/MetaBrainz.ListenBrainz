@@ -19,7 +19,8 @@ public sealed class QueryException : Exception {
   /// <param name="reason">The reason phrase for the error.</param>
   /// <param name="message">A further error message.</param>
   /// <param name="cause">The exception that caused the error (if any).</param>
-  public QueryException(HttpStatusCode code, string? reason = null, string? message = null, Exception? cause = null) : base(message ?? reason, cause) {
+  public QueryException(HttpStatusCode code, string? reason = null, string? message = null, Exception? cause = null)
+  : base(message ?? reason, cause) {
     this.Code = code;
     this.Reason = reason;
   }
