@@ -16,7 +16,8 @@ public class SubmittedListen : SubmittedListenData, ISubmittedListen {
   /// <param name="track">The listened track's name.</param>
   /// <param name="artist">The listened track's artist.</param>
   /// <param name="release">The listened track's release.</param>
-  public SubmittedListen(DateTimeOffset timestamp, string track, string artist, string? release = null) : base(track, artist, release) {
+  public SubmittedListen(DateTimeOffset timestamp, string track, string artist, string? release = null)
+  : base(track, artist, release) {
     this.Timestamp = timestamp;
   }
 
@@ -36,7 +37,8 @@ public class SubmittedListen : SubmittedListenData, ISubmittedListen {
   /// <param name="track">The listened track's name.</param>
   /// <param name="artist">The listened track's artist.</param>
   /// <param name="release">The listened track's release.</param>
-  public SubmittedListen(string track, string artist, string? release = null) : this(DateTimeOffset.UtcNow, track, artist, release) {
+  public SubmittedListen(string track, string artist, string? release = null)
+  : this(DateTimeOffset.UtcNow, track, artist, release) {
   }
 
   /// <inheritdoc/>
