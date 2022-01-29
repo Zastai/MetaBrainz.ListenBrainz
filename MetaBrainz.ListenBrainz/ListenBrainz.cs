@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,6 +14,7 @@ using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
+using MetaBrainz.Common;
 using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Json;
@@ -276,7 +276,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>An object providing the user's ID and latest import timestamp.</returns>
   /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
   public ILatestImport GetLatestImport(string user)
-    => ListenBrainz.ResultOf(this.GetLatestImportAsync(user));
+    => AsyncUtils.ResultOf(this.GetLatestImportAsync(user));
 
   /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is requested.</param>
@@ -293,7 +293,7 @@ public sealed class ListenBrainz : IDisposable {
   /// for <paramref name="user"/>.
   /// </remarks>
   public void SetLatestImport(string user, DateTimeOffset timestamp)
-    => ListenBrainz.ResultOf(this.SetLatestImportAsync(user, UnixTime.Convert(timestamp)));
+    => AsyncUtils.ResultOf(this.SetLatestImportAsync(user, UnixTime.Convert(timestamp)));
 
   /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -305,7 +305,7 @@ public sealed class ListenBrainz : IDisposable {
   /// for <paramref name="user"/>.
   /// </remarks>
   public void SetLatestImport(string user, long timestamp)
-    => ListenBrainz.ResultOf(this.SetLatestImportAsync(user, timestamp));
+    => AsyncUtils.ResultOf(this.SetLatestImportAsync(user, timestamp));
 
   /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data should be modified.</param>
@@ -372,7 +372,7 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <returns>The requested artist statistics.</returns>
   public ISiteArtistStatistics? GetArtistStatistics(int? count = null, int? offset = null, StatisticsRange? range = null)
-    => ListenBrainz.ResultOf(this.GetArtistStatisticsAsync(count, offset, range));
+    => AsyncUtils.ResultOf(this.GetArtistStatisticsAsync(count, offset, range));
 
   /// <summary>Gets statistics about the most listened-to artists.</summary>
   /// <param name="count">
@@ -410,7 +410,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="forceRecalculation">Indicates whether recalculation of the data should be requested.</param>
   /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
   public IUserArtistMap? GetArtistMap(string user, StatisticsRange? range = null, bool forceRecalculation = false)
-    => ListenBrainz.ResultOf(this.GetArtistMapAsync(user, range, forceRecalculation));
+    => AsyncUtils.ResultOf(this.GetArtistMapAsync(user, range, forceRecalculation));
 
   /// <summary>Gets information about the number of artists a user has listened to, grouped by their country.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -448,7 +448,7 @@ public sealed class ListenBrainz : IDisposable {
   /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
   public IUserArtistStatistics? GetArtistStatistics(string user, int? count = null, int? offset = null, StatisticsRange? range = null)
-    => ListenBrainz.ResultOf(this.GetArtistStatisticsAsync(user, count, offset, range));
+    => AsyncUtils.ResultOf(this.GetArtistStatisticsAsync(user, count, offset, range));
 
   /// <summary>Gets statistics about a user's most listened-to artists.</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
@@ -479,7 +479,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="range">The range of data to include in the information.</param>
   /// <returns>The requested daily activity.</returns>
   public IUserDailyActivity? GetDailyActivity(string user, StatisticsRange? range = null)
-    => ListenBrainz.ResultOf(this.GetDailyActivityAsync(user, range));
+    => AsyncUtils.ResultOf(this.GetDailyActivityAsync(user, range));
 
   /// <summary>Gets information about how a user's listens are spread across the days of the week.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -504,7 +504,7 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <returns>The requested listening activity.</returns>
   public IUserListeningActivity? GetListeningActivity(string user, StatisticsRange? range = null)
-    => ListenBrainz.ResultOf(this.GetListeningActivityAsync(user, range));
+    => AsyncUtils.ResultOf(this.GetListeningActivityAsync(user, range));
 
   /// <summary>Gets information about how many listens a user has submitted over a period of time.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -539,7 +539,7 @@ public sealed class ListenBrainz : IDisposable {
   /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
   public IUserRecordingStatistics? GetRecordingStatistics(string user, int? count = null, int? offset = null, StatisticsRange? range = null)
-    => ListenBrainz.ResultOf(this.GetRecordingStatisticsAsync(user, count, offset, range));
+    => AsyncUtils.ResultOf(this.GetRecordingStatisticsAsync(user, count, offset, range));
 
   /// <summary>Gets statistics about a user's most listened-to recordings ("tracks").</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
@@ -580,7 +580,7 @@ public sealed class ListenBrainz : IDisposable {
   /// The requested release statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
   public IUserReleaseStatistics? GetReleaseStatistics(string user, int? count = null, int? offset = null, StatisticsRange? range = null)
-    => ListenBrainz.ResultOf(this.GetReleaseStatisticsAsync(user, count, offset, range));
+    => AsyncUtils.ResultOf(this.GetReleaseStatisticsAsync(user, count, offset, range));
 
   /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
@@ -647,7 +647,7 @@ public sealed class ListenBrainz : IDisposable {
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
   public void ImportListens(IEnumerable<ISubmittedListen> listens)
-    => ListenBrainz.ResultOf(this.ImportListensAsync(listens));
+    => AsyncUtils.ResultOf(this.ImportListensAsync(listens));
 
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listens">The listens to import.</param>
@@ -660,7 +660,7 @@ public sealed class ListenBrainz : IDisposable {
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
   public void ImportListens(params ISubmittedListen[] listens)
-    => ListenBrainz.ResultOf(this.ImportListensAsync(listens));
+    => AsyncUtils.ResultOf(this.ImportListensAsync(listens));
 
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listens">The listens to import.</param>
@@ -787,7 +787,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
   public void SetNowPlaying(ISubmittedListenData listen)
-    => ListenBrainz.ResultOf(this.SetNowPlayingAsync(listen));
+    => AsyncUtils.ResultOf(this.SetNowPlayingAsync(listen));
 
   /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="track">The name of the track being listened to.</param>
@@ -799,7 +799,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
   public void SetNowPlaying(string track, string artist, string? release = null)
-    => ListenBrainz.ResultOf(this.SetNowPlayingAsync(track, artist, release));
+    => AsyncUtils.ResultOf(this.SetNowPlayingAsync(track, artist, release));
 
   /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listen">The listen data to send.</param>
@@ -839,7 +839,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
   public void SubmitSingleListen(ISubmittedListen listen)
-    => ListenBrainz.ResultOf(this.SubmitSingleListenAsync(listen));
+    => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(listen));
 
   /// <summary>
   /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
@@ -854,7 +854,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
   public void SubmitSingleListen(DateTimeOffset timestamp, string track, string artist, string? release = null)
-    => ListenBrainz.ResultOf(this.SubmitSingleListenAsync(timestamp, track, artist, release));
+    => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(timestamp, track, artist, release));
 
   /// <summary>
   /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
@@ -872,7 +872,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
   public void SubmitSingleListen(long timestamp, string track, string artist, string? release = null)
-    => ListenBrainz.ResultOf(this.SubmitSingleListenAsync(timestamp, track, artist, release));
+    => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(timestamp, track, artist, release));
 
   /// <summary>
   /// Submits a single listen for the user whose token is set in <see cref="UserToken"/>, using the current (UTC) date and time as
@@ -887,7 +887,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
   public void SubmitSingleListen(string track, string artist, string? release = null)
-    => ListenBrainz.ResultOf(this.SubmitSingleListenAsync(track, artist, release));
+    => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(track, artist, release));
 
   /// <summary>
   /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
@@ -963,7 +963,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>An object providing the number of listens submitted by <paramref name="user"/>.</returns>
   /// <remarks>This will access the <c>GET /1/user/USER/listen-count</c> endpoint.</remarks>
   public IListenCount GetListenCount(string user)
-    => ListenBrainz.ResultOf(this.GetListenCountAsync(user));
+    => AsyncUtils.ResultOf(this.GetListenCountAsync(user));
 
   /// <summary>Gets the number of listens submitted to ListenBrainz by a particular user.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose listen count is requested.</param>
@@ -996,7 +996,7 @@ public sealed class ListenBrainz : IDisposable {
   }
 
   private IFetchedListens PerformGetListens(string user, long? after, long? before, int? count = null, int? timeRange = null)
-    => ListenBrainz.ResultOf(this.PerformGetListensAsync(user, after, before, count, timeRange));
+    => AsyncUtils.ResultOf(this.PerformGetListensAsync(user, after, before, count, timeRange));
 
   private Task<IFetchedListens> PerformGetListensAsync(string user, long? after, long? before, int? count = null, int? timeRange = null) {
     var options = ListenBrainz.OptionsForGetListens(count, after, before, timeRange);
@@ -1273,7 +1273,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <returns>The requested listens (typically 0 or 1).</returns>
   public IPlayingNow GetPlayingNow(string user)
-    => ListenBrainz.ResultOf(this.GetPlayingNowAsync(user));
+    => AsyncUtils.ResultOf(this.GetPlayingNowAsync(user));
 
   /// <summary>Gets a user's currently-playing listen(s).</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -1298,14 +1298,14 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
   public IRecentListens GetRecentListens(params string[] users)
-    => ListenBrainz.ResultOf(this.GetRecentListensAsync(users));
+    => AsyncUtils.ResultOf(this.GetRecentListensAsync(users));
 
   /// <summary>Gets recent listen(s) for a set of users.</summary>
   /// <param name="limit">The maximum number of listens to return.</param>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
   public IRecentListens GetRecentListens(int limit, params string[] users)
-    => ListenBrainz.ResultOf(this.GetRecentListensAsync(limit, users));
+    => AsyncUtils.ResultOf(this.GetRecentListensAsync(limit, users));
 
   /// <summary>Gets recent listen(s) for a set of users.</summary>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
@@ -1337,7 +1337,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="token">The user token to validate.</param>
   /// <returns>The result of the validation.</returns>
   public ITokenValidationResult ValidateToken(string token)
-    => ListenBrainz.ResultOf(this.ValidateTokenAsync(token));
+    => AsyncUtils.ResultOf(this.ValidateTokenAsync(token));
 
   /// <summary>Validates a given user token.</summary>
   /// <param name="token">The user token to validate.</param>
@@ -1452,7 +1452,7 @@ public sealed class ListenBrainz : IDisposable {
     if (response.StatusCode != HttpStatusCode.OK) {
       throw ListenBrainz.CreateQueryExceptionFor(response);
     }
-    return await ListenBrainz.GetJsonContentAsync<TObject>(response);
+    return await JsonUtils.GetJsonContentAsync<TObject>(response);
   }
 
   private async Task<TInterface?> GetOptionalAsync<TInterface, TObject>(string address, IDictionary<string, string>? options = null)
@@ -1467,7 +1467,7 @@ public sealed class ListenBrainz : IDisposable {
     if (response.StatusCode != HttpStatusCode.OK) {
       throw ListenBrainz.CreateQueryExceptionFor(response);
     }
-    return await ListenBrainz.GetJsonContentAsync<TObject>(response);
+    return await JsonUtils.GetJsonContentAsync<TObject>(response);
   }
 
   private async Task<HttpResponseMessage> PerformRequestAsync(string address, HttpMethod method, string? body, IDictionary<string, string>? options = null) {
@@ -1498,7 +1498,7 @@ public sealed class ListenBrainz : IDisposable {
           throw new QueryException(HttpStatusCode.MethodNotAllowed, $"Unsupported method: {method}");
       }
       Debug.Print($"[{DateTime.UtcNow}] => RESPONSE: {(int) response.StatusCode}/{response.StatusCode} '{response.ReasonPhrase}' (v{response.Version})");
-      Debug.Print($"[{DateTime.UtcNow}] => HEADERS: {ListenBrainz.FormatMultiLine(response.Headers.ToString())}");
+      Debug.Print($"[{DateTime.UtcNow}] => HEADERS: {TextUtils.FormatMultiLine(response.Headers.ToString())}");
       Debug.Print($"[{DateTime.UtcNow}] => CONTENT: {response.Content.Headers.ContentType}, {response.Content.Headers.ContentLength ?? 0} byte(s))");
       this.RateLimitInfo = new RateLimitInfo(response.Headers);
       return response;
@@ -1517,8 +1517,8 @@ public sealed class ListenBrainz : IDisposable {
       throw ListenBrainz.CreateQueryExceptionFor(response);
     }
 #if DEBUG
-    var content = await ListenBrainz.GetStringContentAsync(response);
-    Debug.Print($"[{DateTime.UtcNow}] => RESPONSE TEXT: {ListenBrainz.FormatMultiLine(content)}");
+    var content = await HttpUtils.GetStringContentAsync(response);
+    Debug.Print($"[{DateTime.UtcNow}] => RESPONSE TEXT: {TextUtils.FormatMultiLine(content)}");
 #endif
   }
 
@@ -1529,13 +1529,13 @@ public sealed class ListenBrainz : IDisposable {
   private static QueryException CreateQueryExceptionFor(HttpResponseMessage response) {
     string? errorInfo = null;
     if (response.Content.Headers.ContentLength > 0) {
-      errorInfo = ListenBrainz.ResultOf(ListenBrainz.GetStringContentAsync(response));
+      errorInfo = AsyncUtils.ResultOf(HttpUtils.GetStringContentAsync(response));
       if (string.IsNullOrWhiteSpace(errorInfo)) {
         Debug.Print($"[{DateTime.UtcNow}] => NO ERROR RESPONSE TEXT");
         errorInfo = null;
       }
       else {
-        Debug.Print($"[{DateTime.UtcNow}] => ERROR RESPONSE TEXT: {ListenBrainz.FormatMultiLine(errorInfo)}");
+        Debug.Print($"[{DateTime.UtcNow}] => ERROR RESPONSE TEXT: {TextUtils.FormatMultiLine(errorInfo)}");
       }
     }
     else {
@@ -1564,81 +1564,13 @@ public sealed class ListenBrainz : IDisposable {
     return new QueryException(response.StatusCode, response.ReasonPhrase, errorInfo);
   }
 
-  private static string FormatMultiLine(string text) {
-    const string prefix = "<<";
-    const string suffix = ">>";
-    const string sep = "\n  ";
-    char[] newlines = { '\r', '\n' };
-    text = text.Replace("\r\n", "\n").TrimEnd(newlines);
-    var lines = text.Split(newlines);
-    if (lines.Length == 0) {
-      return prefix + suffix;
-    }
-    if (lines.Length == 1) {
-      return prefix + lines[0] + suffix;
-    }
-    return prefix + sep + string.Join(sep, lines) + "\n" + suffix;
-  }
+  private static Uri GetDefaultContactInfo()
+    => ListenBrainz.DefaultContactInfo ??
+       throw new InvalidOperationException($"Contact info must have been set using {nameof(ListenBrainz.DefaultContactInfo)}.");
 
-  private static Uri GetDefaultContactInfo() {
-    return ListenBrainz.DefaultContactInfo ??
-      throw new InvalidOperationException($"Contact info must have been set using {nameof(ListenBrainz.DefaultContactInfo)}.");
-  }
-
-  private static ProductHeaderValue GetDefaultProductInfo() {
-    return ListenBrainz.DefaultProductInfo ??
-      throw new InvalidOperationException($"Product info must have been set using {nameof(ListenBrainz.DefaultProductInfo)}.");
-  }
-
-  private static async Task<T> GetJsonContentAsync<T>(HttpResponseMessage response) {
-#if NET || NETSTANDARD2_1_OR_GREATER
-    var stream = await response.Content.ReadAsStreamAsync();
-    await using var _ = stream.ConfigureAwait(false);
-#else
-    using var stream = await response.Content.ReadAsStreamAsync();
-#endif
-    if (stream == null) {
-      throw new QueryException(HttpStatusCode.NoContent, "Response contained no data.");
-    }
-    var contentType = response.Content?.Headers?.ContentType;
-    // FIXME: Should this check the media type?
-    var characterSet = contentType?.CharSet;
-    if (string.IsNullOrWhiteSpace(characterSet)) {
-      characterSet = "utf-8";
-    }
-    T? content;
-#if !DEBUG
-    if (characterSet == "utf-8") { // Directly use the stream
-      content = await JsonSerializer.DeserializeAsync<T>(stream, ListenBrainz.JsonReaderOptions);
-      return content ?? throw new JsonException("The received content was null.");
-    }
-#endif
-    var enc = Encoding.GetEncoding(characterSet);
-    using var sr = new StreamReader(stream, enc, false, 1024, true);
-    var json = await sr.ReadToEndAsync().ConfigureAwait(false);
-    Debug.Print($"[{DateTime.UtcNow}] => JSON: {JsonUtils.Prettify(json)}");
-    content = JsonUtils.Deserialize<T>(json, ListenBrainz.JsonReaderOptions);
-    return content ?? throw new JsonException("The received content was null.");
-  }
-
-  private static async Task<string> GetStringContentAsync(HttpResponseMessage response) {
-#if NET || NETSTANDARD2_1_OR_GREATER
-    var stream = await response.Content.ReadAsStreamAsync();
-    await using var _ = stream.ConfigureAwait(false);
-#else
-    using var stream = await response.Content.ReadAsStreamAsync();
-    if (stream == null) {
-      return "";
-    }
-#endif
-    var characterSet = response.Content?.Headers?.ContentEncoding.FirstOrDefault();
-    if (string.IsNullOrWhiteSpace(characterSet)) {
-      characterSet = "utf-8";
-    }
-    var enc = Encoding.GetEncoding(characterSet);
-    using var sr = new StreamReader(stream, enc, false, 1024, true);
-    return await sr.ReadToEndAsync().ConfigureAwait(false);
-  }
+  private static ProductHeaderValue GetDefaultProductInfo()
+    => ListenBrainz.DefaultProductInfo ??
+       throw new InvalidOperationException($"Product info must have been set using {nameof(ListenBrainz.DefaultProductInfo)}.");
 
   private static string QueryString(IDictionary<string, string>? options) {
     if (options == null || options.Count == 0) {
@@ -1653,10 +1585,6 @@ public sealed class ListenBrainz : IDisposable {
     }
     return sb.ToString();
   }
-
-  private static void ResultOf(Task task) => task.ConfigureAwait(false).GetAwaiter().GetResult();
-
-  private static T ResultOf<T>(Task<T> task) => task.ConfigureAwait(false).GetAwaiter().GetResult();
 
   #endregion
 
