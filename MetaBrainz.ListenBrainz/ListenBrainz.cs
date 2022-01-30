@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -89,18 +88,14 @@ public sealed class ListenBrainz : IDisposable {
   /// Initializes a new ListenBrainz API client instance.
   /// User agent information must have been set up via <see cref="DefaultContactInfo"/> and <see cref="DefaultProductInfo"/>.
   /// </summary>
-  public ListenBrainz()
-  : this(ListenBrainz.GetDefaultProductInfo(), ListenBrainz.GetDefaultContactInfo())
-  { }
+  public ListenBrainz() : this(ListenBrainz.GetDefaultProductInfo(), ListenBrainz.GetDefaultContactInfo()) { }
 
   /// <summary>
   /// Initializes a new ListenBrainz API client instance.
   /// Contact information must have been set up via <see cref="DefaultContactInfo"/>.
   /// </summary>
   /// <param name="product">The product info portion of the user agent to use for requests.</param>
-  public ListenBrainz(ProductHeaderValue product)
-  : this(product, ListenBrainz.GetDefaultContactInfo())
-  { }
+  public ListenBrainz(ProductHeaderValue product) : this(product, ListenBrainz.GetDefaultContactInfo()) { }
 
   /// <summary>Initializes a new ListenBrainz API client instance.</summary>
   /// <param name="product">The product info portion of the user agent to use for requests.</param>
@@ -120,9 +115,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="contact">
   /// The contact info portion (typically a URL or email address) of the user agent to use for requests. Must be a valid URI.
   /// </param>
-  public ListenBrainz(ProductHeaderValue product, string contact)
-  : this(product, new Uri(contact))
-  { }
+  public ListenBrainz(ProductHeaderValue product, string contact) : this(product, new Uri(contact)) { }
 
   /// <summary>
   /// Initializes a new ListenBrainz API client instance.
@@ -131,9 +124,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="contact">
   /// The contact info portion (typically a URL or email address) of the user agent to use for requests.
   /// </param>
-  public ListenBrainz(Uri contact)
-  : this(ListenBrainz.GetDefaultProductInfo (), contact)
-  { }
+  public ListenBrainz(Uri contact) : this(ListenBrainz.GetDefaultProductInfo(), contact) { }
 
   /// <summary>
   /// Initializes a new ListenBrainz API client instance.
@@ -142,9 +133,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="contact">
   /// The contact info portion (typically a URL or email address) of the user agent to use for requests. Must be a valid URI.
   /// </param>
-  public ListenBrainz(string contact)
-  : this(new Uri(contact))
-  { }
+  public ListenBrainz(string contact) : this(new Uri(contact)) { }
 
   /// <summary>
   /// Initializes a new ListenBrainz API client instance.
@@ -152,9 +141,7 @@ public sealed class ListenBrainz : IDisposable {
   /// </summary>
   /// <param name="application">The application name for the product info portion of the user agent to use for requests.</param>
   /// <param name="version">The version number for the product info portion of the user agent to use for requests.</param>
-  public ListenBrainz(string application, Version version)
-  : this(application, version.ToString())
-  { }
+  public ListenBrainz(string application, Version version) : this(application, version.ToString()) { }
 
   /// <summary>
   /// Initializes a new ListenBrainz API client instance.
@@ -162,9 +149,7 @@ public sealed class ListenBrainz : IDisposable {
   /// </summary>
   /// <param name="application">The application name for the product info portion of the user agent to use for requests.</param>
   /// <param name="version">The version number for the product info portion of the user agent to use for requests.</param>
-  public ListenBrainz(string application, string version)
-  : this(new ProductHeaderValue(application, version))
-  { }
+  public ListenBrainz(string application, string version) : this(new ProductHeaderValue(application, version)) { }
 
   /// <summary>Initializes a new ListenBrainz API client instance.</summary>
   /// <param name="application">The application name for the product info portion of the user agent to use for requests.</param>
@@ -172,9 +157,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="contact">
   /// The contact info portion (typically a URL or email address) of the user agent to use for requests.
   /// </param>
-  public ListenBrainz(string application, Version version, Uri contact)
-  : this(application, version.ToString(), contact)
-  { }
+  public ListenBrainz(string application, Version version, Uri contact) : this(application, version.ToString(), contact) { }
 
   /// <summary>Initializes a new ListenBrainz API client instance.</summary>
   /// <param name="application">The application name for the product info portion of the user agent to use for requests.</param>
@@ -202,9 +185,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="contact">
   /// The contact info portion (typically a URL or email address) of the user agent to use for requests. Must be a valid URI.
   /// </param>
-  public ListenBrainz(string application, string version, string contact)
-  : this(application, version, new Uri(contact))
-  { }
+  public ListenBrainz(string application, string version, string contact) : this(application, version, new Uri(contact)) { }
 
   #endregion
 
@@ -279,25 +260,21 @@ public sealed class ListenBrainz : IDisposable {
 
   #region /1/latest-import
 
-  private static Dictionary<string, string> OptionsForLatestImport(string user) {
-    return new Dictionary<string, string> {
-      ["user_name"] = user
-    };
-  }
+  private static Dictionary<string, string> OptionsForLatestImport(string user) => new() { ["user_name"] = user };
 
   /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is requested.</param>
   /// <returns>An object providing the user's ID and latest import timestamp.</returns>
   /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
-  public ILatestImport GetLatestImport(string user)
-    => AsyncUtils.ResultOf(this.GetLatestImportAsync(user));
+  public ILatestImport GetLatestImport(string user) => AsyncUtils.ResultOf(this.GetLatestImportAsync(user));
 
   /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is requested.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>An object providing the user's ID and latest import timestamp.</returns>
   /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
-  public async Task<ILatestImport> GetLatestImportAsync(string user)
-    => await this.GetAsync<ILatestImport, LatestImport>("latest-import", ListenBrainz.OptionsForLatestImport(user));
+  public Task<ILatestImport> GetLatestImportAsync(string user, CancellationToken cancellationToken = default)
+    => this.GetAsync<ILatestImport, LatestImport>("latest-import", ListenBrainz.OptionsForLatestImport(user), cancellationToken);
 
   /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data should be modified.</param>
@@ -318,34 +295,35 @@ public sealed class ListenBrainz : IDisposable {
   /// This will access the <c>POST /1/latest-import</c> endpoint and requires <see cref="UserToken"/> to be set to the token
   /// for <paramref name="user"/>.
   /// </remarks>
-  public void SetLatestImport(string user, long timestamp)
-    => AsyncUtils.ResultOf(this.SetLatestImportAsync(user, timestamp));
+  public void SetLatestImport(string user, long timestamp) => AsyncUtils.ResultOf(this.SetLatestImportAsync(user, timestamp));
 
   /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data should be modified.</param>
   /// <param name="timestamp">The timestamp to set.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/latest-import</c> endpoint.<br/>
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
-  public Task SetLatestImportAsync(string user, DateTimeOffset timestamp)
-    => this.SetLatestImportAsync(user, UnixTime.Convert(timestamp));
+  public Task SetLatestImportAsync(string user, DateTimeOffset timestamp, CancellationToken cancellationToken = default)
+    => this.SetLatestImportAsync(user, UnixTime.Convert(timestamp), cancellationToken);
 
   /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <param name="timestamp">
   /// The timestamp to set, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
   /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/latest-import</c> endpoint.<br/>
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
-  public async Task SetLatestImportAsync(string user, long timestamp)
-    => await this.PostAsync("latest-import", $"{{ ts: {timestamp} }}", ListenBrainz.OptionsForLatestImport(user));
+  public Task SetLatestImportAsync(string user, long timestamp, CancellationToken cancellationToken = default)
+    => this.PostAsync("latest-import", $"{{ ts: {timestamp} }}", ListenBrainz.OptionsForLatestImport(user), cancellationToken);
 
   #endregion
 
@@ -403,12 +381,13 @@ public sealed class ListenBrainz : IDisposable {
   /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
   /// recorded listen. Otherwise, information is returned about both the current and the previous range.
   /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested artist statistics.</returns>
-  public async Task<ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = null, int? offset = null,
-                                                                     StatisticsRange? range = null) {
+  public Task<ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = null, int? offset = null,
+                                                               StatisticsRange? range = null,
+                                                               CancellationToken cancellationToken = default) {
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    var task = this.GetOptionalAsync<ISiteArtistStatistics, SiteArtistStatistics>("stats/sitewide/artists", options);
-    return await task.ConfigureAwait(false);
+    return this.GetOptionalAsync<ISiteArtistStatistics, SiteArtistStatistics>("stats/sitewide/artists", options, cancellationToken);
   }
 
   #endregion
@@ -431,9 +410,10 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="user">The user for whom the information is requested.</param>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="forceRecalculation">Indicates whether recalculation of the data should be requested.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
-  public async Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null,
-                                                       bool forceRecalculation = false) {
+  public Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null, bool forceRecalculation = false,
+                                                 CancellationToken cancellationToken = default) {
     var options = new Dictionary<string, string>(2);
     if (range.HasValue) {
       options.Add("range", range.Value.ToJson());
@@ -441,8 +421,7 @@ public sealed class ListenBrainz : IDisposable {
     if (forceRecalculation) {
       options.Add("force_recalculate", "true");
     }
-    var task = this.GetOptionalAsync<IUserArtistMap, UserArtistMap>($"stats/user/{user}/artist-map", options);
-    return await task.ConfigureAwait(false);
+    return this.GetOptionalAsync<IUserArtistMap, UserArtistMap>($"stats/user/{user}/artist-map", options, cancellationToken);
   }
 
   #endregion
@@ -478,14 +457,16 @@ public sealed class ListenBrainz : IDisposable {
   /// <see langword="null"/>), the top most listened-to artists will be returned.
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>
   /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
-  public async Task<IUserArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = null, int? offset = null,
-                                                                     StatisticsRange? range = null) {
+  public Task<IUserArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = null, int? offset = null,
+                                                               StatisticsRange? range = null,
+                                                               CancellationToken cancellationToken = default) {
+    var address = $"stats/user/{user}/artists";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    var task = this.GetOptionalAsync<IUserArtistStatistics, UserArtistStatistics>($"stats/user/{user}/artists", options);
-    return await task.ConfigureAwait(false);
+    return this.GetOptionalAsync<IUserArtistStatistics, UserArtistStatistics>(address, options, cancellationToken);
   }
 
   #endregion
@@ -502,11 +483,13 @@ public sealed class ListenBrainz : IDisposable {
   /// <summary>Gets information about how a user's listens are spread across the days of the week.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
   /// <param name="range">The range of data to include in the information.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested daily activity.</returns>
-  public async Task<IUserDailyActivity?> GetDailyActivityAsync(string user, StatisticsRange? range = null) {
+  public Task<IUserDailyActivity?> GetDailyActivityAsync(string user, StatisticsRange? range = null,
+                                                         CancellationToken cancellationToken = default) {
+    var address = $"stats/user/{user}/daily-activity";
     var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
-    var task = this.GetOptionalAsync<IUserDailyActivity, UserDailyActivity>($"stats/user/{user}/daily-activity", options);
-    return await task.ConfigureAwait(false);
+    return this.GetOptionalAsync<IUserDailyActivity, UserDailyActivity>(address, options, cancellationToken);
   }
 
   #endregion
@@ -531,12 +514,13 @@ public sealed class ListenBrainz : IDisposable {
   /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
   /// recorded listen. Otherwise, information is returned about both the current and the previous range.
   /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listening activity.</returns>
-  public async Task<IUserListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = null) {
-    var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
+  public Task<IUserListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = null,
+                                                                 CancellationToken cancellationToken = default) {
     var address = $"stats/user/{user}/listening-activity";
-    var task = this.GetOptionalAsync<IUserListeningActivity, UserListeningActivity>(address, options);
-    return await task.ConfigureAwait(false);
+    var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
+    return this.GetOptionalAsync<IUserListeningActivity, UserListeningActivity>(address, options, cancellationToken);
   }
 
   #endregion
@@ -572,14 +556,16 @@ public sealed class ListenBrainz : IDisposable {
   /// <see langword="null"/>), the top most listened-to recordings will be returned.
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>
   /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
-  public async Task<IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = null, int? offset = null,
-                                                                           StatisticsRange? range = null) {
+  public Task<IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = null, int? offset = null,
+                                                                     StatisticsRange? range = null,
+                                                                     CancellationToken cancellationToken = default) {
+    var address = $"stats/user/{user}/recordings";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    var task = this.GetOptionalAsync<IUserRecordingStatistics, UserRecordingStatistics>($"stats/user/{user}/recordings", options);
-    return await task.ConfigureAwait(false);
+    return this.GetOptionalAsync<IUserRecordingStatistics, UserRecordingStatistics>(address, options, cancellationToken);
   }
 
   #endregion
@@ -615,14 +601,16 @@ public sealed class ListenBrainz : IDisposable {
   /// <see langword="null"/>), the top most listened-to releases will be returned.
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>
   /// The requested releases statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
-  public async Task<IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = null, int? offset = null,
-                                                                       StatisticsRange? range = null) {
+  public Task<IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = null, int? offset = null,
+                                                                 StatisticsRange? range = null,
+                                                                 CancellationToken cancellationToken = default) {
+    var address = $"stats/user/{user}/releases";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    var task = this.GetOptionalAsync<IUserReleaseStatistics, UserReleaseStatistics>($"stats/user/{user}/releases", options);
-    return await task.ConfigureAwait(false);
+    return this.GetOptionalAsync<IUserReleaseStatistics, UserReleaseStatistics>(address, options, cancellationToken);
   }
 
   #endregion
@@ -633,11 +621,11 @@ public sealed class ListenBrainz : IDisposable {
 
   #region /1/submit-listens
 
-  private ConfiguredTaskAwaitable SubmitListensAsync<T>(T payload)
-    => this.PostAsync("submit-listens", payload).ConfigureAwait(false);
+  private Task SubmitListensAsync<T>(T payload, CancellationToken cancellationToken)
+    => this.PostAsync("submit-listens", payload, null, cancellationToken);
 
-  private ConfiguredTaskAwaitable SubmitListensAsync(string payload)
-    => this.PostAsync("submit-listens", payload).ConfigureAwait(false);
+  private Task SubmitListensAsync(string payload, CancellationToken cancellationToken)
+    => this.PostAsync("submit-listens", payload, null, cancellationToken);
 
   #region Import Listens
 
@@ -669,8 +657,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
-  public void ImportListens(IEnumerable<ISubmittedListen> listens)
-    => AsyncUtils.ResultOf(this.ImportListensAsync(listens));
+  public void ImportListens(IEnumerable<ISubmittedListen> listens) => AsyncUtils.ResultOf(this.ImportListensAsync(listens));
 
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listens">The listens to import.</param>
@@ -682,11 +669,11 @@ public sealed class ListenBrainz : IDisposable {
   /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
-  public void ImportListens(params ISubmittedListen[] listens)
-    => AsyncUtils.ResultOf(this.ImportListensAsync(listens));
+  public void ImportListens(params ISubmittedListen[] listens) => AsyncUtils.ResultOf(this.ImportListensAsync(listens));
 
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listens">The listens to import.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
@@ -696,24 +683,25 @@ public sealed class ListenBrainz : IDisposable {
   /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
-  public async Task ImportListensAsync(IAsyncEnumerable<ISubmittedListen> listens) {
+  public async Task ImportListensAsync(IAsyncEnumerable<ISubmittedListen> listens, CancellationToken cancellationToken = default) {
     var payload = SubmissionPayload.CreateImport();
-    await foreach (var listen in listens) {
+    await foreach (var listen in listens.ConfigureAwait(false).WithCancellation(cancellationToken)) {
       payload.Listens.Add(listen);
       if (payload.Listens.Count < ListenBrainz.MaxListensInOnePayload) {
         continue;
       }
-      await this.ImportListensAsync(this.SerializeImport(payload)).ConfigureAwait(false);
+      await this.ImportListensAsync(this.SerializeImport(payload), cancellationToken).ConfigureAwait(false);
       payload.Listens.Clear();
     }
     if (payload.Listens.Count == 0) {
       return;
     }
-    await this.ImportListensAsync(this.SerializeImport(payload)).ConfigureAwait(false);
+    await this.ImportListensAsync(this.SerializeImport(payload), cancellationToken).ConfigureAwait(false);
   }
 
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listens">The listens to import.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
@@ -723,27 +711,42 @@ public sealed class ListenBrainz : IDisposable {
   /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
-  public async Task ImportListensAsync(IEnumerable<ISubmittedListen> listens) {
+  public async Task ImportListensAsync(IEnumerable<ISubmittedListen> listens, CancellationToken cancellationToken = default) {
     var payload = SubmissionPayload.CreateImport();
     foreach (var listen in listens) {
       payload.Listens.Add(listen);
       if (payload.Listens.Count < ListenBrainz.MaxListensInOnePayload) {
         continue;
       }
-      await this.ImportListensAsync(this.SerializeImport(payload)).ConfigureAwait(false);
+      await this.ImportListensAsync(this.SerializeImport(payload), cancellationToken).ConfigureAwait(false);
       payload.Listens.Clear();
     }
     if (payload.Listens.Count == 0) {
       return;
     }
-    await this.ImportListensAsync(this.SerializeImport(payload)).ConfigureAwait(false);
+    await this.ImportListensAsync(this.SerializeImport(payload), cancellationToken).ConfigureAwait(false);
   }
 
-  private async Task ImportListensAsync(IEnumerable<string> serializedListens) {
+  private async Task ImportListensAsync(IEnumerable<string> serializedListens, CancellationToken cancellationToken = default) {
     foreach (var json in serializedListens) {
-      await this.SubmitListensAsync(json);
+      await this.SubmitListensAsync(json, cancellationToken).ConfigureAwait(false);
     }
   }
+
+  /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <param name="listens">The listens to import.</param>
+  /// <return>A task that will perform the operation.</return>
+  /// <remarks>
+  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
+  /// Users can find their token on their profile page:
+  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
+  /// Submissions will happen every <see cref="MaxListensInOnePayload"/> listens, and if a submission's listen data would exceed
+  /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
+  /// call to this method may result in multiple web service requests, which may affect rate limiting.
+  /// </remarks>
+  public Task ImportListensAsync(CancellationToken cancellationToken, params ISubmittedListen[] listens)
+    => this.ImportListensAsync(listens, cancellationToken);
 
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listens">The listens to import.</param>
@@ -756,21 +759,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
-  public async Task ImportListensAsync(params ISubmittedListen[] listens) {
-    var payload = SubmissionPayload.CreateImport();
-    foreach (var listen in listens) {
-      payload.Listens.Add(listen);
-      if (payload.Listens.Count < ListenBrainz.MaxListensInOnePayload) {
-        continue;
-      }
-      await this.ImportListensAsync(this.SerializeImport(payload)).ConfigureAwait(false);
-      payload.Listens.Clear();
-    }
-    if (payload.Listens.Count == 0) {
-      return;
-    }
-    await this.ImportListensAsync(this.SerializeImport(payload)).ConfigureAwait(false);
-  }
+  public Task ImportListensAsync(params ISubmittedListen[] listens)
+    => this.ImportListensAsync((IEnumerable<ISubmittedListen>) listens);
 
   private IEnumerable<string> SerializeImport(SubmissionPayload<ISubmittedListen> payload) {
     var json = JsonSerializer.Serialize(payload, ListenBrainz.JsonWriterOptions);
@@ -809,8 +799,7 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
-  public void SetNowPlaying(ISubmittedListenData listen)
-    => AsyncUtils.ResultOf(this.SetNowPlayingAsync(listen));
+  public void SetNowPlaying(ISubmittedListenData listen) => AsyncUtils.ResultOf(this.SetNowPlayingAsync(listen));
 
   /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="track">The name of the track being listened to.</param>
@@ -826,27 +815,29 @@ public sealed class ListenBrainz : IDisposable {
 
   /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listen">The listen data to send.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
-  public async Task SetNowPlayingAsync(ISubmittedListenData listen)
-    => await this.SubmitListensAsync(SubmissionPayload.CreatePlayingNow(listen));
+  public Task SetNowPlayingAsync(ISubmittedListenData listen, CancellationToken cancellationToken = default)
+    => this.SubmitListensAsync(SubmissionPayload.CreatePlayingNow(listen), cancellationToken);
 
   /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="track">The name of the track being listened to.</param>
   /// <param name="artist">The name of the artist performing the track being listened to.</param>
   /// <param name="release">The name of the release containing the track being listened to.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
-  public Task SetNowPlayingAsync(string track, string artist, string? release = null)
-    => this.SetNowPlayingAsync(new SubmittedListenData(track, artist, release));
+  public Task SetNowPlayingAsync(string track, string artist, string? release = null, CancellationToken cancellationToken = default)
+    => this.SetNowPlayingAsync(new SubmittedListenData(track, artist, release), cancellationToken);
 
   #endregion
 
@@ -861,8 +852,7 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
-  public void SubmitSingleListen(ISubmittedListen listen)
-    => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(listen));
+  public void SubmitSingleListen(ISubmittedListen listen) => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(listen));
 
   /// <summary>
   /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
@@ -916,14 +906,15 @@ public sealed class ListenBrainz : IDisposable {
   /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
   /// </summary>
   /// <param name="listen">The listen data to send.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
-  public async Task SubmitSingleListenAsync(ISubmittedListen listen)
-    => await this.SubmitListensAsync(SubmissionPayload.CreateSingle(listen));
+  public Task SubmitSingleListenAsync(ISubmittedListen listen, CancellationToken cancellationToken = default)
+    => this.SubmitListensAsync(SubmissionPayload.CreateSingle(listen), cancellationToken);
 
   /// <summary>
   /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
@@ -932,14 +923,16 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="track">The name of the track being listened to.</param>
   /// <param name="artist">The name of the artist performing the track being listened to.</param>
   /// <param name="release">The name of the release containing the track being listened to.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
-  public Task SubmitSingleListenAsync(DateTimeOffset timestamp, string track, string artist, string? release = null)
-    => this.SubmitSingleListenAsync(new SubmittedListen(timestamp, track, artist, release));
+  public Task SubmitSingleListenAsync(DateTimeOffset timestamp, string track, string artist, string? release = null,
+                                      CancellationToken cancellationToken = default)
+    => this.SubmitSingleListenAsync(new SubmittedListen(timestamp, track, artist, release), cancellationToken);
 
   /// <summary>
   /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
@@ -951,14 +944,16 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="track">The name of the track being listened to.</param>
   /// <param name="artist">The name of the artist performing the track being listened to.</param>
   /// <param name="release">The name of the release containing the track being listened to.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
-  public Task SubmitSingleListenAsync(long timestamp, string track, string artist, string? release = null)
-    => this.SubmitSingleListenAsync(new SubmittedListen(timestamp, track, artist, release));
+  public Task SubmitSingleListenAsync(long timestamp, string track, string artist, string? release = null,
+                                      CancellationToken cancellationToken = default)
+    => this.SubmitSingleListenAsync(new SubmittedListen(timestamp, track, artist, release), cancellationToken);
 
   /// <summary>
   /// Submits a single listen for the user whose token is set in <see cref="UserToken"/>, using the current (UTC) date and time as
@@ -967,13 +962,15 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="track">The name of the track being listened to.</param>
   /// <param name="artist">The name of the artist performing the track being listened to.</param>
   /// <param name="release">The name of the release containing the track being listened to.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
-  public Task SubmitSingleListenAsync(string track, string artist, string? release = null)
-    => this.SubmitSingleListenAsync(new SubmittedListen(track, artist, release));
+  public Task SubmitSingleListenAsync(string track, string artist, string? release = null,
+                                      CancellationToken cancellationToken = default)
+    => this.SubmitSingleListenAsync(new SubmittedListen(track, artist, release), cancellationToken);
 
   #endregion
 
@@ -985,15 +982,15 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="user">The MusicBrainz ID of the user whose listen count is requested.</param>
   /// <returns>An object providing the number of listens submitted by <paramref name="user"/>.</returns>
   /// <remarks>This will access the <c>GET /1/user/USER/listen-count</c> endpoint.</remarks>
-  public IListenCount GetListenCount(string user)
-    => AsyncUtils.ResultOf(this.GetListenCountAsync(user));
+  public IListenCount GetListenCount(string user) => AsyncUtils.ResultOf(this.GetListenCountAsync(user));
 
   /// <summary>Gets the number of listens submitted to ListenBrainz by a particular user.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose listen count is requested.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>An object providing the number of listens submitted by <paramref name="user"/>.</returns>
   /// <remarks>This will access the <c>GET /1/user/USER/listen-count</c> endpoint.</remarks>
-  public async Task<IListenCount> GetListenCountAsync(string user)
-    => await this.GetAsync<IListenCount, ListenCount>($"user/{user}/listen-count");
+  public Task<IListenCount> GetListenCountAsync(string user, CancellationToken cancellationToken = default)
+    => this.GetAsync<IListenCount, ListenCount>($"user/{user}/listen-count", null, cancellationToken);
 
   #endregion
 
@@ -1022,9 +1019,9 @@ public sealed class ListenBrainz : IDisposable {
     => AsyncUtils.ResultOf(this.PerformGetListensAsync(user, after, before, count, timeRange));
 
   private Task<IFetchedListens> PerformGetListensAsync(string user, long? after, long? before, int? count = null,
-                                                       int? timeRange = null) {
+                                                       int? timeRange = null, CancellationToken cancellationToken = default) {
     var options = ListenBrainz.OptionsForGetListens(count, after, before, timeRange);
-    return this.GetAsync<IFetchedListens, FetchedListens>($"user/{user}/listens", options);
+    return this.GetAsync<IFetchedListens, FetchedListens>($"user/{user}/listens", options, cancellationToken);
   }
 
   #endregion
@@ -1055,9 +1052,11 @@ public sealed class ListenBrainz : IDisposable {
   /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
-  public async Task<IFetchedListens> GetListensAsync(string user, int? count = null, int? timeRange = null)
-    => await this.PerformGetListensAsync(user, null, null, count, timeRange);
+  public Task<IFetchedListens> GetListensAsync(string user, int? count = null, int? timeRange = null,
+                                               CancellationToken cancellationToken = default)
+    => this.PerformGetListensAsync(user, null, null, count, timeRange, cancellationToken);
 
   #endregion
 
@@ -1113,9 +1112,11 @@ public sealed class ListenBrainz : IDisposable {
   /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
-  public async Task<IFetchedListens> GetListensAfterAsync(string user, long after, int? count = null, int? timeRange = null)
-    => await this.PerformGetListensAsync(user, after, null, count, timeRange);
+  public Task<IFetchedListens> GetListensAfterAsync(string user, long after, int? count = null, int? timeRange = null,
+                                                    CancellationToken cancellationToken = default)
+    => this.PerformGetListensAsync(user, after, null, count, timeRange, cancellationToken);
 
   /// <summary>Gets the most recent listens for a user, starting from a particular timestamp.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -1131,10 +1132,11 @@ public sealed class ListenBrainz : IDisposable {
   /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
-  public async Task<IFetchedListens> GetListensAfterAsync(string user, DateTimeOffset after, int? count = null,
-                                                          int? timeRange = null)
-    => await this.PerformGetListensAsync(user, UnixTime.Convert(after), null, count, timeRange);
+  public Task<IFetchedListens> GetListensAfterAsync(string user, DateTimeOffset after, int? count = null,
+                                                    int? timeRange = null, CancellationToken cancellationToken = default)
+    => this.PerformGetListensAsync(user, UnixTime.Convert(after), null, count, timeRange, cancellationToken);
 
   #endregion
 
@@ -1190,9 +1192,11 @@ public sealed class ListenBrainz : IDisposable {
   /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
-  public async Task<IFetchedListens> GetListensBeforeAsync(string user, long before, int? count = null, int? timeRange = null)
-    => await this.PerformGetListensAsync(user, null, before, count, timeRange);
+  public Task<IFetchedListens> GetListensBeforeAsync(string user, long before, int? count = null, int? timeRange = null,
+                                                     CancellationToken cancellationToken = default)
+    => this.PerformGetListensAsync(user, null, before, count, timeRange, cancellationToken);
 
   /// <summary>Gets historical listens for a user, starting from a particular timestamp.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -1208,10 +1212,11 @@ public sealed class ListenBrainz : IDisposable {
   /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
-  public async Task<IFetchedListens> GetListensBeforeAsync(string user, DateTimeOffset before, int? count = null,
-                                                           int? timeRange = null)
-    => await this.PerformGetListensAsync(user, null, UnixTime.Convert(before), count, timeRange);
+  public Task<IFetchedListens> GetListensBeforeAsync(string user, DateTimeOffset before, int? count = null,
+                                                     int? timeRange = null, CancellationToken cancellationToken = default)
+    => this.PerformGetListensAsync(user, null, UnixTime.Convert(before), count, timeRange, cancellationToken);
 
   #endregion
 
@@ -1267,9 +1272,11 @@ public sealed class ListenBrainz : IDisposable {
   /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
   /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
   /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
-  public async Task<IFetchedListens> GetListensBetweenAsync(string user, long after, long before, int? count = null)
-    => await this.PerformGetListensAsync(user, after, before, count);
+  public Task<IFetchedListens> GetListensBetweenAsync(string user, long after, long before, int? count = null,
+                                                      CancellationToken cancellationToken = default)
+    => this.PerformGetListensAsync(user, after, before, count, null, cancellationToken);
 
   /// <summary>Gets the listens for a user in a specific timespan.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -1285,10 +1292,11 @@ public sealed class ListenBrainz : IDisposable {
   /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
   /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
   /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
-  public async Task<IFetchedListens> GetListensBetweenAsync(string user, DateTimeOffset after, DateTimeOffset before,
-                                                            int? count = null)
-    => await this.PerformGetListensAsync(user, UnixTime.Convert(after), UnixTime.Convert(before), count);
+  public Task<IFetchedListens> GetListensBetweenAsync(string user, DateTimeOffset after, DateTimeOffset before, int? count = null,
+                                                      CancellationToken cancellationToken = default)
+    => this.PerformGetListensAsync(user, UnixTime.Convert(after), UnixTime.Convert(before), count, null, cancellationToken);
 
   #endregion
 
@@ -1299,33 +1307,40 @@ public sealed class ListenBrainz : IDisposable {
   /// <summary>Gets a user's currently-playing listen(s).</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <returns>The requested listens (typically 0 or 1).</returns>
-  public IPlayingNow GetPlayingNow(string user)
-    => AsyncUtils.ResultOf(this.GetPlayingNowAsync(user));
+  public IPlayingNow GetPlayingNow(string user) => AsyncUtils.ResultOf(this.GetPlayingNowAsync(user));
 
   /// <summary>Gets a user's currently-playing listen(s).</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens (typically 0 or 1).</returns>
-  public Task<IPlayingNow> GetPlayingNowAsync(string user)
-    => this.GetAsync<IPlayingNow, PlayingNow>($"user/{user}/playing-now");
+  public Task<IPlayingNow> GetPlayingNowAsync(string user, CancellationToken cancellationToken = default)
+    => this.GetAsync<IPlayingNow, PlayingNow>($"user/{user}/playing-now", null, cancellationToken);
 
   #endregion
 
   #region /1/users/xxx/recent-listens
 
-  private static string FormatUserList(IEnumerable<string> userList)
-    => string.Join(",", userList.Select(Uri.EscapeDataString));
+  private static string FormatUserList(IEnumerable<string> userList) => string.Join(",", userList.Select(Uri.EscapeDataString));
 
-  private static IDictionary<string, string> OptionsForRecentListens(int limit) {
-    return new Dictionary<string, string> {
-      ["limit"] = limit.ToString(CultureInfo.InvariantCulture)
-    };
-  }
+  private static Dictionary<string, string> OptionsForRecentListens(int limit)
+    => new() { ["limit"] = limit.ToString(CultureInfo.InvariantCulture) };
 
   /// <summary>Gets recent listen(s) for a set of users.</summary>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
-  public IRecentListens GetRecentListens(params string[] users)
-    => AsyncUtils.ResultOf(this.GetRecentListensAsync(users));
+  public IRecentListens GetRecentListens(IEnumerable<string> users) => AsyncUtils.ResultOf(this.GetRecentListensAsync(users));
+
+  /// <summary>Gets recent listen(s) for a set of users.</summary>
+  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
+  /// <returns>The requested listens.</returns>
+  public IRecentListens GetRecentListens(params string[] users) => AsyncUtils.ResultOf(this.GetRecentListensAsync(users));
+
+  /// <summary>Gets recent listen(s) for a set of users.</summary>
+  /// <param name="limit">The maximum number of listens to return.</param>
+  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
+  /// <returns>The requested listens.</returns>
+  public IRecentListens GetRecentListens(int limit, IEnumerable<string> users)
+    => AsyncUtils.ResultOf(this.GetRecentListensAsync(limit, users));
 
   /// <summary>Gets recent listen(s) for a set of users.</summary>
   /// <param name="limit">The maximum number of listens to return.</param>
@@ -1335,43 +1350,72 @@ public sealed class ListenBrainz : IDisposable {
     => AsyncUtils.ResultOf(this.GetRecentListensAsync(limit, users));
 
   /// <summary>Gets recent listen(s) for a set of users.</summary>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
-  public async Task<IRecentListens> GetRecentListensAsync(params string[] users)
-    => await this.GetAsync<IRecentListens, RecentListens>($"users/{ListenBrainz.FormatUserList(users)}/recent-listens");
+  public Task<IRecentListens> GetRecentListensAsync(CancellationToken cancellationToken, params string[] users)
+    => this.GetRecentListensAsync(users, cancellationToken);
+
+  /// <summary>Gets recent listen(s) for a set of users.</summary>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
+  /// <returns>The requested listens.</returns>
+  public Task<IRecentListens> GetRecentListensAsync(IEnumerable<string> users, CancellationToken cancellationToken = default) {
+    var address = $"users/{ListenBrainz.FormatUserList(users)}/recent-listens";
+    return this.GetAsync<IRecentListens, RecentListens>(address, null, cancellationToken);
+  }
+
+  /// <summary>Gets recent listen(s) for a set of users.</summary>
+  /// <param name="limit">The maximum number of listens to return.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
+  /// <returns>The requested listens.</returns>
+  public Task<IRecentListens> GetRecentListensAsync(int limit, CancellationToken cancellationToken, params string[] users)
+    => this.GetRecentListensAsync(limit, users, cancellationToken);
+
+  /// <summary>Gets recent listen(s) for a set of users.</summary>
+  /// <param name="limit">The maximum number of listens to return.</param>
+  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested listens.</returns>
+  public Task<IRecentListens> GetRecentListensAsync(int limit, IEnumerable<string> users,
+                                                    CancellationToken cancellationToken = default) {
+    var requestUri = $"users/{ListenBrainz.FormatUserList(users)}/recent-listens";
+    var options = ListenBrainz.OptionsForRecentListens(limit);
+    return this.GetAsync<IRecentListens, RecentListens>(requestUri, options, cancellationToken);
+  }
 
   /// <summary>Gets recent listen(s) for a set of users.</summary>
   /// <param name="limit">The maximum number of listens to return.</param>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
-  public async Task<IRecentListens> GetRecentListensAsync(int limit, params string[] users) {
-    var requestUri = $"users/{ListenBrainz.FormatUserList(users)}/recent-listens";
-    var options = ListenBrainz.OptionsForRecentListens(limit);
-    return await this.GetAsync<IRecentListens, RecentListens>(requestUri, options);
-  }
+  public Task<IRecentListens> GetRecentListensAsync(int limit, params string[] users)
+    => this.GetRecentListensAsync(limit, (IEnumerable<string>) users);
+
+  /// <summary>Gets recent listen(s) for a set of users.</summary>
+  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
+  /// <returns>The requested listens.</returns>
+  public Task<IRecentListens> GetRecentListensAsync(params string[] users)
+    => this.GetAsync<IRecentListens, RecentListens>($"users/{ListenBrainz.FormatUserList(users)}/recent-listens", null);
 
   #endregion
 
   #region /1/validate-token
 
-  private static Dictionary<string, string> OptionsForTokenValidation(string token) {
-    return new Dictionary<string, string> {
-      ["token"] = token
-    };
-  }
+  private static Dictionary<string, string> OptionsForTokenValidation(string token) => new() { ["token"] = token };
 
   /// <summary>Validates a given user token.</summary>
   /// <param name="token">The user token to validate.</param>
   /// <returns>The result of the validation.</returns>
-  public ITokenValidationResult ValidateToken(string token)
-    => AsyncUtils.ResultOf(this.ValidateTokenAsync(token));
+  public ITokenValidationResult ValidateToken(string token) => AsyncUtils.ResultOf(this.ValidateTokenAsync(token));
 
   /// <summary>Validates a given user token.</summary>
   /// <param name="token">The user token to validate.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The result of the validation.</returns>
-  public async Task<ITokenValidationResult> ValidateTokenAsync(string token) {
+  public Task<ITokenValidationResult> ValidateTokenAsync(string token, CancellationToken cancellationToken = default) {
     var options = ListenBrainz.OptionsForTokenValidation(token);
-    return await this.GetAsync<ITokenValidationResult, TokenValidationResult>("validate-token", options);
+    return this.GetAsync<ITokenValidationResult, TokenValidationResult>("validate-token", options, cancellationToken);
   }
 
   #endregion
@@ -1410,16 +1454,14 @@ public sealed class ListenBrainz : IDisposable {
         this._client = new HttpClient {
           BaseAddress = this.BaseUri,
           DefaultRequestHeaders = {
-              Accept = {
-                new MediaTypeWithQualityHeaderValue("application/json")
-              },
-              UserAgent = {
-                this._userAgentProduct,
-                this._userAgentContact,
-                new ProductInfoHeaderValue(an.Name ?? "*Unknown Assembly*", an.Version?.ToString()),
-                new ProductInfoHeaderValue($"({ListenBrainz.UserAgentUrl})"),
-              },
-            }
+            Accept = { new MediaTypeWithQualityHeaderValue("application/json") },
+            UserAgent = {
+              this._userAgentProduct,
+              this._userAgentContact,
+              new ProductInfoHeaderValue(an.Name ?? "*Unknown Assembly*", an.Version?.ToString()),
+              new ProductInfoHeaderValue($"({ListenBrainz.UserAgentUrl})"),
+            },
+          }
         };
       }
       return this._client;
@@ -1460,23 +1502,23 @@ public sealed class ListenBrainz : IDisposable {
 
   #region Basic Request Execution
 
-  private async Task<TInterface> GetAsync<TInterface, TObject>(string address, IDictionary<string, string>? options = null)
-    where TInterface : class
-    where TObject : class, TInterface
-  {
-    var response = await this.PerformRequestAsync(address, HttpMethod.Get, null, options);
+  private async Task<TInterface> GetAsync<TInterface, TObject>(string address, IDictionary<string, string>? options,
+                                                               CancellationToken cancellationToken = default)
+  where TInterface : class
+  where TObject : class, TInterface {
+    var response = await this.PerformRequestAsync(address, HttpMethod.Get, null, options, cancellationToken).ConfigureAwait(false);
     // FIXME: Should this use IsSuccessStatusCode? If so, which one(s) should attempt to process the response content?
     if (response.StatusCode != HttpStatusCode.OK) {
       throw ListenBrainz.CreateQueryExceptionFor(response);
     }
-    return await JsonUtils.GetJsonContentAsync<TObject>(response);
+    return await JsonUtils.GetJsonContentAsync<TObject>(response, cancellationToken).ConfigureAwait(false);
   }
 
-  private async Task<TInterface?> GetOptionalAsync<TInterface, TObject>(string address, IDictionary<string, string>? options = null)
-    where TInterface : class
-    where TObject : class, TInterface
-  {
-    var response = await this.PerformRequestAsync(address, HttpMethod.Get, null, options);
+  private async Task<TInterface?> GetOptionalAsync<TInterface, TObject>(string address, IDictionary<string, string>? options,
+                                                                        CancellationToken cancellationToken = default)
+  where TInterface : class
+  where TObject : class, TInterface {
+    var response = await this.PerformRequestAsync(address, HttpMethod.Get, null, options, cancellationToken).ConfigureAwait(false);
     if (response.StatusCode == HttpStatusCode.NoContent) {
       return null;
     }
@@ -1484,11 +1526,12 @@ public sealed class ListenBrainz : IDisposable {
     if (response.StatusCode != HttpStatusCode.OK) {
       throw ListenBrainz.CreateQueryExceptionFor(response);
     }
-    return await JsonUtils.GetJsonContentAsync<TObject>(response);
+    return await JsonUtils.GetJsonContentAsync<TObject>(response, cancellationToken).ConfigureAwait(false);
   }
 
   private async Task<HttpResponseMessage> PerformRequestAsync(string address, HttpMethod method, string? body,
-                                                              IDictionary<string, string>? options = null) {
+                                                              IDictionary<string, string>? options,
+                                                              CancellationToken cancellationToken = default) {
     var requestUri = address + ListenBrainz.QueryString(options);
     Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method.Method} {this.BaseUri}{requestUri}");
     var client = this.Client;
@@ -1517,7 +1560,7 @@ public sealed class ListenBrainz : IDisposable {
       default:
         throw new QueryException(HttpStatusCode.MethodNotAllowed, $"Unsupported method: {method}");
     }
-    var response = await client.SendAsync(request);
+    var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
     Debug.Print($"[{DateTime.UtcNow}] => RESPONSE: {(int) response.StatusCode}/{response.StatusCode} '{response.ReasonPhrase}' " +
                 $"(v{response.Version})");
     Debug.Print($"[{DateTime.UtcNow}] => HEADERS: {TextUtils.FormatMultiLine(response.Headers.ToString())}");
@@ -1534,16 +1577,18 @@ public sealed class ListenBrainz : IDisposable {
     return response;
   }
 
-  private Task PostAsync<T>(string address, T content, IDictionary<string, string>? options = null)
-    => this.PostAsync(address, JsonSerializer.Serialize(content, ListenBrainz.JsonWriterOptions), options);
+  private Task PostAsync<T>(string address, T content, IDictionary<string, string>? options,
+                            CancellationToken cancellationToken = default)
+    => this.PostAsync(address, JsonSerializer.Serialize(content, ListenBrainz.JsonWriterOptions), options, cancellationToken);
 
-  private async Task PostAsync(string address, string body, IDictionary<string, string>? options = null) {
-    var response = await this.PerformRequestAsync(address, HttpMethod.Post, body, options);
+  private async Task PostAsync(string address, string body, IDictionary<string, string>? options,
+                               CancellationToken cancellationToken = default) {
+    var response = await this.PerformRequestAsync(address, HttpMethod.Post, body, options, cancellationToken).ConfigureAwait(false);
     if (!response.IsSuccessStatusCode) {
       throw ListenBrainz.CreateQueryExceptionFor(response);
     }
 #if DEBUG
-    var content = await HttpUtils.GetStringContentAsync(response);
+    var content = await HttpUtils.GetStringContentAsync(response, cancellationToken).ConfigureAwait(false);
     Debug.Print($"[{DateTime.UtcNow}] => RESPONSE TEXT: {TextUtils.FormatMultiLine(content)}");
 #endif
   }
