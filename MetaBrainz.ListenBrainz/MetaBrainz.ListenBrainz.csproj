@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="MetaBrainz.Build.Sdk">
+<Project>
+
+  <Sdk Name="MetaBrainz.Build.Sdk" Version="3.1.0" />
 
   <PropertyGroup>
+    <Authors>Zastai</Authors>
     <Title>ListenBrainz Web Service Client Library</Title>
     <Description>This package provides classes for accessing the ListenBrainz API (v1).</Description>
-    <PackageCopyrightYears>2018-2021</PackageCopyrightYears>
+    <PackageCopyrightOwners>Tim Van Holder</PackageCopyrightOwners>
+    <PackageCopyrightYears>2018, 2019, 2020, 2021, 2022, 2023</PackageCopyrightYears>
     <PackageRepositoryName>MetaBrainz.ListenBrainz</PackageRepositoryName>
     <PackageTags>ListenBrainz music metadata listens audioscrobbler last.fm</PackageTags>
     <Version>4.0.0-pre</Version>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AssemblyIsComVisible>false</AssemblyIsComVisible>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" IncludeAssets="compile" PrivateAssets="all" />
     <PackageReference Include="MetaBrainz.Common.Json" />
-    <PackageReference Include="System.Net.Http" />
-    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
 
 </Project>
