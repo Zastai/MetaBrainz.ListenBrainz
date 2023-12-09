@@ -5,8 +5,8 @@ This is a library providing access to the [ListenBrainz API][LB-API].
 [ListenBrainz][LB] keeps track of users' listens of music tracks
 (similar to sites like [last.fm][LastFM] and [libre.fm][LibreFM]).
 
-[CI-S]: https://img.shields.io/appveyor/build/zastai/metabrainz-listenbrainz
-[CI-L]: https://ci.appveyor.com/project/Zastai/metabrainz-listenbrainz
+[CI-S]: https://github.com/Zastai/MetaBrainz.ListenBrainz/actions/workflows/build.yml/badge.svg
+[CI-L]: https://github.com/Zastai/MetaBrainz.ListenBrainz/actions/workflows/build.yml
 [NuGet-S]: https://img.shields.io/nuget/v/MetaBrainz.ListenBrainz
 [NuGet-L]: https://nuget.org/packages/MetaBrainz.ListenBrainz
 
