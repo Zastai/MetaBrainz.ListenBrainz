@@ -1511,7 +1511,8 @@ public sealed class ListenBrainz : IDisposable {
     if (response.StatusCode != HttpStatusCode.OK) {
       throw ListenBrainz.CreateQueryExceptionFor(response);
     }
-    return await JsonUtils.GetJsonContentAsync<TObject>(response, cancellationToken).ConfigureAwait(false);
+    var task = JsonUtils.GetJsonContentAsync<TObject>(response, ListenBrainz.JsonReaderOptions, cancellationToken);
+    return await task.ConfigureAwait(false);
   }
 
   private async Task<TInterface?> GetOptionalAsync<TInterface, TObject>(string address, IDictionary<string, string>? options,
@@ -1526,7 +1527,8 @@ public sealed class ListenBrainz : IDisposable {
     if (response.StatusCode != HttpStatusCode.OK) {
       throw ListenBrainz.CreateQueryExceptionFor(response);
     }
-    return await JsonUtils.GetJsonContentAsync<TObject>(response, cancellationToken).ConfigureAwait(false);
+    var task = JsonUtils.GetJsonContentAsync<TObject>(response, ListenBrainz.JsonReaderOptions, cancellationToken);
+    return await task.ConfigureAwait(false);
   }
 
   private async Task<HttpResponseMessage> PerformRequestAsync(string address, HttpMethod method, string? body,
