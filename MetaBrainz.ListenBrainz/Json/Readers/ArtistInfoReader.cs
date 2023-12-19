@@ -46,10 +46,10 @@ internal class ArtistInfoReader : ObjectReader<ArtistInfo> {
       }
       reader.Read();
     }
-    if (listenCount == null) {
+    if (listenCount is null) {
       throw new JsonException("Expected listen count not found or null.");
     }
-    if (name == null) {
+    if (name is null) {
       throw new JsonException("Expected artist name not found or null.");
     }
     return new ArtistInfo(name, listenCount.Value) {

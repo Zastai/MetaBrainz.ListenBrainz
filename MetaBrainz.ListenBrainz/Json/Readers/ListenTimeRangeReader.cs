@@ -50,10 +50,10 @@ internal sealed class ListenTimeRangeReader : ObjectReader<ListenTimeRange> {
       }
       reader.Read();
     }
-    if (description == null) {
+    if (description is null) {
       throw new JsonException("Expected description not found or null.");
     }
-    if (listenCount == null) {
+    if (listenCount is null) {
       throw new JsonException("Expected listen count not found or null.");
     }
     return new ListenTimeRange(description, listenCount.Value) {

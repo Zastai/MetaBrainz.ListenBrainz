@@ -47,10 +47,10 @@ internal sealed class FetchedListensReader : PayloadReader<FetchedListens> {
       reader.Read();
     }
     listens = PayloadReader<FetchedListens>.VerifyPayloadContents(count, listens);
-    if (user == null) {
+    if (user is null) {
       throw new JsonException("Expected user id not found or null.");
     }
-    if (!ts.HasValue) {
+    if (ts is null) {
       throw new JsonException("Expected latest-listen timestamp not found or null.");
     }
     return new FetchedListens(listens, ts.Value, user) {

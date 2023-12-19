@@ -51,13 +51,13 @@ internal sealed class TrackInfoReader : ObjectReader<TrackInfo> {
       }
       reader.Read();
     }
-    if (name == null) {
+    if (name is null) {
       throw new JsonException("Expected track name not found or null.");
     }
-    if (artist == null) {
+    if (artist is null) {
       throw new JsonException("Expected artist name not found or null.");
     }
-    if (info == null) {
+    if (info is null) {
       throw new JsonException("Expected additional info not found or null.");
     }
     return new TrackInfo(name, artist, info) {

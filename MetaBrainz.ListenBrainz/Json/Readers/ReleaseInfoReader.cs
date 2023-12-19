@@ -58,10 +58,10 @@ internal class ReleaseInfoReader : ObjectReader<ReleaseInfo> {
       }
       reader.Read();
     }
-    if (listenCount == null) {
+    if (listenCount is null) {
       throw new JsonException("Expected listen count not found or null.");
     }
-    if (name == null) {
+    if (name is null) {
       throw new JsonException("Expected release name not found or null.");
     }
     return new ReleaseInfo(name, listenCount.Value) {

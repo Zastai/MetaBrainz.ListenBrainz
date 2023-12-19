@@ -70,10 +70,10 @@ internal class RecordingInfoReader : ObjectReader<RecordingInfo> {
       }
       reader.Read();
     }
-    if (listenCount == null) {
+    if (listenCount is null) {
       throw new JsonException("Expected listen count not found or null.");
     }
-    if (name == null) {
+    if (name is null) {
       throw new JsonException("Expected recording name not found or null.");
     }
     return new RecordingInfo(name, listenCount.Value) {

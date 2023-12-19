@@ -14,13 +14,13 @@ internal sealed class TrackInfoWriter : ObjectWriter<ISubmittedTrackInfo> {
     writer.WriteString("track_name", value.Name);
     {
       var release = value.Release;
-      if (release != null) {
+      if (release is not null) {
         writer.WriteString("release_name", release);
       }
     }
     {
       var extra = value.AdditionalInfo;
-      if (extra != null) {
+      if (extra is not null) {
         writer.WritePropertyName("additional_info");
         JsonSerializer.Serialize(writer, extra, extra.GetType(), options);
       }

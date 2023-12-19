@@ -10,7 +10,7 @@ namespace MetaBrainz.ListenBrainz.Objects;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal sealed class MusicBrainzIdMappings : JsonBasedObject, IMusicBrainzIdMappings {
-  
+
   public IReadOnlyList<Guid>? ArtistIds { get; set; }
 
   public Guid? RecordingId { get; set; }

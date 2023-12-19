@@ -51,19 +51,19 @@ internal class ListenReader : ObjectReader<Listen> {
       }
       reader.Read();
     }
-    if (inserted == null) {
+    if (inserted is null) {
       throw new JsonException("Expected inserted-at timestamp not found or null.");
     }
-    if (msid == null) {
+    if (msid is null) {
       throw new JsonException("Expected MessyBrainz recording id not found or null.");
     }
-    if (track == null) {
+    if (track is null) {
       throw new JsonException("Expected track metadata not found or null.");
     }
-    if (user == null) {
+    if (user is null) {
       throw new JsonException("Expected user name not found or null.");
     }
-    if (!ts.HasValue) {
+    if (ts is null) {
       throw new JsonException("Expected listened-at timestamp not found or null.");
     }
     return new Listen(inserted, msid.Value, ts.Value, track, user) {

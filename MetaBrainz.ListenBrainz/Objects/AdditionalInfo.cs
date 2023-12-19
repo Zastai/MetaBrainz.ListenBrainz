@@ -47,7 +47,7 @@ internal sealed class AdditionalInfo : IAdditionalInfo {
     // Extract well-known fields requiring a bit more work
     {
       var duration = AdditionalInfo.GetValue<int>(fields, "duration_ms");
-      if (duration.HasValue) {
+      if (duration is not null) {
         this.Duration = TimeSpan.FromMilliseconds(duration.Value);
       }
     }
@@ -120,18 +120,18 @@ internal sealed class AdditionalInfo : IAdditionalInfo {
   #region Helper Methods
 
   private static T? GetObject<T>(Dictionary<string, object?> fields, string name) where T : class {
-    if (fields.TryGetValue(name, out var value) && value != null && value is T typedValue) {
+    if (fields.TryGetValue(name, out var value) && value is not null && value is T typedValue) {
       return typedValue;
     }
     return null;
   }
 
   private static IReadOnlyList<T?>? GetObjectList<T>(Dictionary<string, object?> fields, string name) where T : class {
-    if (fields.TryGetValue(name, out var value) && value != null) {
+    if (fields.TryGetValue(name, out var value) && value is not null) {
       if (value is IReadOnlyList<T?> list) {
         return list;
       }
-      if (value is object[] array && array.Length == 0) {
+      if (value is object[] { Length: 0 }) {
         return Array.Empty<T?>();
       }
     }
@@ -139,14 +139,14 @@ internal sealed class AdditionalInfo : IAdditionalInfo {
   }
 
   private static T? GetValue<T>(Dictionary<string, object?> fields, string name) where T : struct {
-    if (fields.TryGetValue(name, out var value) && value != null && value is T typedValue) {
+    if (fields.TryGetValue(name, out var value) && value is not null && value is T typedValue) {
       return typedValue;
     }
     return null;
   }
 
   private static IReadOnlyList<T?>? GetValueList<T>(Dictionary<string, object?> fields, string name) where T : struct {
-    if (fields.TryGetValue(name, out var value) && value != null) {
+    if (fields.TryGetValue(name, out var value) && value is not null) {
       if (value is IReadOnlyList<T?> list) {
         return list;
       }
@@ -157,7 +157,7 @@ internal sealed class AdditionalInfo : IAdditionalInfo {
         }
         return nullableList;
       }
-      if (value is object[] array && array.Length == 0) {
+      if (value is object[] { Length: 0 }) {
         return Array.Empty<T?>();
       }
     }

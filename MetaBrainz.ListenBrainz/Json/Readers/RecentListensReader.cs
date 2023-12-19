@@ -43,7 +43,7 @@ internal sealed class RecentListensReader : PayloadReader<RecentListens> {
       reader.Read();
     }
     listens = PayloadReader<RecentListens>.VerifyPayloadContents(count, listens);
-    if (userList == null) {
+    if (userList is null) {
       throw new JsonException("Expected user list not found or null.");
     }
     return new RecentListens(listens, userList) {

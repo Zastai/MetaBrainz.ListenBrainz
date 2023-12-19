@@ -331,13 +331,13 @@ public sealed class ListenBrainz : IDisposable {
 
   private static IDictionary<string, string> OptionsForGetStatistics(int? count, int? offset, StatisticsRange? range) {
     var options = new Dictionary<string, string>(3);
-    if (count.HasValue) {
+    if (count is not null) {
       options.Add("count", count.Value.ToString(CultureInfo.InvariantCulture));
     }
-    if (offset.HasValue) {
+    if (offset is not null) {
       options.Add("offset", offset.Value.ToString(CultureInfo.InvariantCulture));
     }
-    if (range.HasValue) {
+    if (range is not null) {
       options.Add("range", range.Value.ToJson());
     }
     return options;
@@ -415,7 +415,7 @@ public sealed class ListenBrainz : IDisposable {
   public Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null, bool forceRecalculation = false,
                                                  CancellationToken cancellationToken = default) {
     var options = new Dictionary<string, string>(2);
-    if (range.HasValue) {
+    if (range is not null) {
       options.Add("range", range.Value.ToJson());
     }
     if (forceRecalculation) {
@@ -1000,16 +1000,16 @@ public sealed class ListenBrainz : IDisposable {
 
   private static IDictionary<string, string> OptionsForGetListens(int? count, long? after, long? before, int? timeRange) {
     var options = new Dictionary<string, string>(4);
-    if (count.HasValue) {
+    if (count is not null) {
       options.Add("count", count.Value.ToString(CultureInfo.InvariantCulture));
     }
-    if (before.HasValue) {
+    if (before is not null) {
       options.Add("max_ts", before.Value.ToString(CultureInfo.InvariantCulture));
     }
-    if (after.HasValue) {
+    if (after is not null) {
       options.Add("min_ts", after.Value.ToString(CultureInfo.InvariantCulture));
     }
-    if (timeRange.HasValue) {
+    if (timeRange is not null) {
       options.Add("time_range", timeRange.Value.ToString(CultureInfo.InvariantCulture));
     }
     return options;
@@ -1457,7 +1457,7 @@ public sealed class ListenBrainz : IDisposable {
       if (this._disposed) {
         throw new ObjectDisposedException(nameof(ListenBrainz));
       }
-      if (this._client == null) { // Set up the instance with the invariant settings
+      if (this._client is null) { // Set up the instance with the invariant settings
         var an = typeof(ListenBrainz).Assembly.GetName();
         this._client = new HttpClient {
           BaseAddress = this.BaseUri,
@@ -1548,7 +1548,7 @@ public sealed class ListenBrainz : IDisposable {
         break;
       }
       case "POST": {
-        if (body != null) {
+        if (body is not null) {
           Debug.Print($"[{DateTime.UtcNow}] => BODY: {body}");
         }
         request = new HttpRequestMessage(HttpMethod.Post, requestUri) {
@@ -1637,7 +1637,7 @@ public sealed class ListenBrainz : IDisposable {
        throw new InvalidOperationException($"Product info must have been set using {nameof(ListenBrainz.DefaultProductInfo)}.");
 
   private static string QueryString(IDictionary<string, string>? options) {
-    if (options == null || options.Count == 0) {
+    if (options is null || options.Count == 0) {
       return "";
     }
     var sb = new StringBuilder();

@@ -47,10 +47,10 @@ internal sealed class TokenValidationResultReader : ObjectReader<TokenValidation
       }
       reader.Read();
     }
-    if (code == null) {
+    if (code is null) {
       throw new JsonException("Expected status code not found or null.");
     }
-    if (message == null) {
+    if (message is null) {
       throw new JsonException("Expected message not found or null.");
     }
     return new TokenValidationResult((HttpStatusCode) code.Value, message) {

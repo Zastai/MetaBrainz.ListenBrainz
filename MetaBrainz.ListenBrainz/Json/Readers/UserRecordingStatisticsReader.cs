@@ -74,13 +74,13 @@ internal sealed class UserRecordingStatisticsReader : PayloadReader<UserRecordin
       reader.Read();
     }
     recordings = PayloadReader<UserRecordingStatistics>.VerifyPayloadContents(count, recordings);
-    if (lastUpdated == null) {
+    if (lastUpdated is null) {
       throw new JsonException("Expected last-updated timestamp not found or null.");
     }
-    if (range == null) {
+    if (range is null) {
       throw new JsonException("Expected range not found or null.");
     }
-    if (user == null) {
+    if (user is null) {
       throw new JsonException("Expected user id not found or null.");
     }
     return new UserRecordingStatistics(lastUpdated.Value, range.Value, user) {

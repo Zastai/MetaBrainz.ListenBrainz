@@ -9,7 +9,7 @@ using MetaBrainz.ListenBrainz.Objects;
 namespace MetaBrainz.ListenBrainz.Json.Readers;
 
 internal sealed class MusicBrainzIdMappingsReader : ObjectReader<MusicBrainzIdMappings> {
-  
+
   public static readonly MusicBrainzIdMappingsReader Instance = new();
 
   protected override MusicBrainzIdMappings ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
