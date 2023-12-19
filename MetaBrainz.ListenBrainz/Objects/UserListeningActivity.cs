@@ -11,6 +11,6 @@ internal sealed class UserListeningActivity : UserStatistics, IUserListeningActi
   : base(lastUpdated, range, user)
   { }
 
-  public IReadOnlyList<IListenTimeRange>? Activity { get; set; }
+  public IReadOnlyList<IListenTimeRange>? Activity { get; init; }
 
 }

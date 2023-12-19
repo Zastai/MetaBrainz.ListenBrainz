@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
-using MetaBrainz.Common;
 using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
 
@@ -14,7 +13,7 @@ internal sealed class FetchedListens : JsonBasedObject, IFetchedListens {
 
   public FetchedListens(IReadOnlyList<IListen> listens, long ts, string user) {
     this.Listens = listens;
-    this.Timestamp = UnixTime.Convert(ts);
+    this.Timestamp = DateTimeOffset.FromUnixTimeSeconds(ts);
     this.UnixTimestamp = ts;
     this.User = user;
   }

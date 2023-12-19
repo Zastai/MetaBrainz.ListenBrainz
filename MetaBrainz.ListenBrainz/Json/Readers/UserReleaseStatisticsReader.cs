@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
-using MetaBrainz.Common;
 using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
@@ -35,11 +34,13 @@ internal sealed class UserReleaseStatisticsReader : PayloadReader<UserReleaseSta
           case "count":
             count = reader.GetInt32();
             break;
-          case "from_ts":
-            oldestListen = UnixTime.Convert(reader.GetOptionalInt64());
+          case "from_ts": {
+            var unixTime = reader.GetOptionalInt64();
+            oldestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
+          }
           case "last_updated":
-            lastUpdated = UnixTime.Convert(reader.GetInt64());
+            lastUpdated = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64());
             break;
           case "offset":
             offset = reader.GetInt32();
@@ -50,9 +51,11 @@ internal sealed class UserReleaseStatisticsReader : PayloadReader<UserReleaseSta
               goto default; // also register it as an unhandled property
             }
             break;
-          case "to_ts":
-            newestListen = UnixTime.Convert(reader.GetOptionalInt64());
+          case "to_ts": {
+            var unixTime = reader.GetOptionalInt64();
+            newestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
+          }
           case "total_release_count":
             totalCount = reader.GetInt32();
             break;
@@ -71,13 +74,13 @@ internal sealed class UserReleaseStatisticsReader : PayloadReader<UserReleaseSta
       reader.Read();
     }
     releases = PayloadReader<UserReleaseStatistics>.VerifyPayloadContents(count, releases);
-    if (lastUpdated == null) {
+    if (lastUpdated is null) {
       throw new JsonException("Expected last-updated timestamp not found or null.");
     }
-    if (range == null) {
+    if (range is null) {
       throw new JsonException("Expected range not found or null.");
     }
-    if (user == null) {
+    if (user is null) {
       throw new JsonException("Expected user id not found or null.");
     }
     return new UserReleaseStatistics(lastUpdated.Value, range.Value, user) {

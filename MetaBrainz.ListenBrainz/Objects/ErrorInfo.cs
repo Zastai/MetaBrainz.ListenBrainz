@@ -12,8 +12,8 @@ internal sealed class ErrorInfo : JsonBasedObject {
     this.Error = error;
   }
 
-  public int Code { get; set; }
+  public int Code { get; }
 
-  public string Error { get; set; }
+  public string Error { get; }
 
 }

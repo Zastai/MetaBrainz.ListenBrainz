@@ -28,7 +28,7 @@ internal abstract class PayloadReader<T> : ObjectReader<T> {
   protected abstract T ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options);
 
   protected static IReadOnlyList<TItem> VerifyPayloadContents<TItem>(int? count, IReadOnlyList<TItem>? items) {
-    if (!count.HasValue) {
+    if (count is null) {
       throw new JsonException("Expected payload item count not found or null.");
     }
     var n = items?.Count ?? 0;

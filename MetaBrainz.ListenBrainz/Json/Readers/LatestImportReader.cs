@@ -38,10 +38,10 @@ internal sealed class LatestImportReader : ObjectReader<LatestImport> {
       }
       reader.Read();
     }
-    if (!ts.HasValue) {
+    if (ts is null) {
       throw new JsonException("Expected latest-import timestamp not found or null.");
     }
-    if (user == null) {
+    if (user is null) {
       throw new JsonException("Expected user id not found or null.");
     }
     return new LatestImport(ts.Value, user) {

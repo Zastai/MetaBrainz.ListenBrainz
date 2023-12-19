@@ -13,17 +13,17 @@ internal sealed class ReleaseInfo : JsonBasedObject, IReleaseInfo {
     this.ListenCount = listenCount;
   }
 
-  public IReadOnlyList<Guid>? ArtistIds { get; set; }
+  public IReadOnlyList<Guid>? ArtistIds { get; init; }
 
-  public Guid? ArtistMessyId { get; set; }
+  public Guid? ArtistMessyId { get; init; }
 
-  public string? ArtistName { get; set; }
+  public string? ArtistName { get; init; }
 
-  public Guid? Id { get; set; }
+  public Guid? Id { get; init; }
 
   public int ListenCount { get; }
 
-  public Guid? MessyId { get; set; }
+  public Guid? MessyId { get; init; }
 
   public string Name { get; }
 

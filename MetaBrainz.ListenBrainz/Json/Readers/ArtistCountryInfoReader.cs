@@ -42,13 +42,13 @@ internal class ArtistCountryInfoReader : ObjectReader<ArtistCountryInfo> {
       }
       reader.Read();
     }
-    if (artistCount == null) {
+    if (artistCount is null) {
       throw new JsonException("Expected artist count not found or null.");
     }
-    if (country == null) {
+    if (country is null) {
       throw new JsonException("Expected country code not found or null.");
     }
-    if (listenCount == null) {
+    if (listenCount is null) {
       throw new JsonException("Expected listen count not found or null.");
     }
     return new ArtistCountryInfo(artistCount.Value, country, listenCount.Value) {

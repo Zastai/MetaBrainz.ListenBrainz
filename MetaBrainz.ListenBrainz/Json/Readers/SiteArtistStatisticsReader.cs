@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
-using MetaBrainz.Common;
 using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
@@ -33,11 +32,13 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
           case "count":
             count = reader.GetInt32();
             break;
-          case "from_ts":
-            oldestListen = UnixTime.Convert(reader.GetOptionalInt64());
+          case "from_ts": {
+            var unixTime = reader.GetOptionalInt64();
+            oldestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
+          }
           case "last_updated":
-            lastUpdated = UnixTime.Convert(reader.GetInt64());
+            lastUpdated = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64());
             break;
           case "offset":
             offset = reader.GetInt32();
@@ -48,9 +49,11 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
               goto default; // also register it as an unhandled property
             }
             break;
-          case "to_ts":
-            newestListen = UnixTime.Convert(reader.GetOptionalInt64());
+          case "to_ts": {
+            var unixTime = reader.GetOptionalInt64();
+            newestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
+          }
           default:
             rest ??= new Dictionary<string, object?>();
             rest[prop] = reader.GetOptionalObject(options);
@@ -65,16 +68,16 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
     // LB-1013: This ALWAYS reports 1000 as count, so we can't use VerifyPayloadContents().
     // artists = this.VerifyPayloadContents(count, artists);
     artists ??= Array.Empty<IArtistInfo>();
-    if (count == null) {
+    if (count is null) {
       throw new JsonException("Expected count not found or null.");
     }
-    if (lastUpdated == null) {
+    if (lastUpdated is null) {
       throw new JsonException("Expected last-updated timestamp not found or null.");
     }
-    if (offset == null) {
+    if (offset is null) {
       throw new JsonException("Expected offset not found or null.");
     }
-    if (range == null) {
+    if (range is null) {
       throw new JsonException("Expected range not found or null.");
     }
     return new SiteArtistStatistics(count.Value, lastUpdated.Value, offset.Value, range.Value) {

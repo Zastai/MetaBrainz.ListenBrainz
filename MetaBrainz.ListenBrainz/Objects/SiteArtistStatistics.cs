@@ -13,7 +13,7 @@ internal sealed class SiteArtistStatistics : Statistics, ISiteArtistStatistics {
     this.Offset = offset;
   }
 
-  public IReadOnlyList<IArtistInfo>? Artists { get; set; }
+  public IReadOnlyList<IArtistInfo>? Artists { get; init; }
 
   public int Count { get; }
 

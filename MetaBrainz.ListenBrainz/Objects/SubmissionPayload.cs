@@ -37,6 +37,6 @@ internal sealed class SubmissionPayload<T> : SubmissionPayload where T : ISubmit
   public SubmissionPayload(string type) : base(type) {
   }
 
-  public List<T> Listens { get; } = new List<T>();
+  public List<T> Listens { get; } = new();
 
 }

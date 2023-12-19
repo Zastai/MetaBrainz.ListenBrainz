@@ -11,10 +11,10 @@ internal sealed class UserReleaseStatistics : UserStatistics, IUserReleaseStatis
   : base(lastUpdated, range, user)
   { }
 
-  public IReadOnlyList<IReleaseInfo>? Releases { get; set; }
+  public IReadOnlyList<IReleaseInfo>? Releases { get; init; }
 
-  public int? Offset { get; set; }
+  public int? Offset { get; init; }
 
-  public int? TotalCount { get; set; }
+  public int? TotalCount { get; init; }
 
 }

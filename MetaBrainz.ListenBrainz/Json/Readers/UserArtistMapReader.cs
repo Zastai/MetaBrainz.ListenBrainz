@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
-using MetaBrainz.Common;
 using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
@@ -29,11 +28,13 @@ internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
           case "artist_map":
             countries = reader.ReadList(ArtistCountryInfoReader.Instance, options);
             break;
-          case "from_ts":
-            oldestListen = UnixTime.Convert(reader.GetOptionalInt64());
+          case "from_ts": {
+            var unixTime = reader.GetOptionalInt64();
+            oldestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
+          }
           case "last_updated":
-            lastUpdated = UnixTime.Convert(reader.GetInt64());
+            lastUpdated = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64());
             break;
           case "range":
             range = EnumHelper.ParseStatisticsRange(reader.GetString());
@@ -41,9 +42,11 @@ internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
               goto default; // also register it as an unhandled property
             }
             break;
-          case "to_ts":
-            newestListen = UnixTime.Convert(reader.GetOptionalInt64());
+          case "to_ts": {
+            var unixTime = reader.GetOptionalInt64();
+            newestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
+          }
           case "user_id":
             user = reader.GetString();
             break;
@@ -58,13 +61,13 @@ internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
       }
       reader.Read();
     }
-    if (lastUpdated == null) {
+    if (lastUpdated is null) {
       throw new JsonException("Expected last-updated timestamp not found or null.");
     }
-    if (range == null) {
+    if (range is null) {
       throw new JsonException("Expected range not found or null.");
     }
-    if (user == null) {
+    if (user is null) {
       throw new JsonException("Expected user id not found or null.");
     }
     return new UserArtistMap(lastUpdated.Value, range.Value, user) {

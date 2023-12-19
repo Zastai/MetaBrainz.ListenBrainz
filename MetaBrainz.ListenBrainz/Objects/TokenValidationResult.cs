@@ -16,8 +16,8 @@ internal sealed class TokenValidationResult : JsonBasedObject, ITokenValidationR
 
   public string Message { get; }
 
-  public string? User { get; set; }
+  public string? User { get; init; }
 
-  public bool? Valid { get; set; }
+  public bool? Valid { get; init; }
 
 }

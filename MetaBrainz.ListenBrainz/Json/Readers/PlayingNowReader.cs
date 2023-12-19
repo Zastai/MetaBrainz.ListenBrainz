@@ -61,25 +61,26 @@ internal sealed class PlayingNowReader : PayloadReader<PlayingNow> {
       }
       reader.Read();
     }
-    if (!count.HasValue) {
+    if (count is null) {
       throw new JsonException("Expected listen count not found or null.");
     }
     if (count > 1) {
       throw new JsonException($"Too many listens reported (expected at most one; got {count}).");
     }
-    if (count == 1 && track == null) {
+    if (count == 1 && track is null) {
       throw new JsonException("No listen data found, but the listen count is 1.");
     }
-    if (count == 0 && track != null) {
+    if (count == 0 && track is not null) {
       throw new JsonException("Listen data found, but the listen count is 0.");
     }
-    if (user == null) {
+    if (user is null) {
       throw new JsonException("Expected user id not found or null.");
     }
-    if (!playingNow.HasValue || playingNow.Value != true) {
+    if (playingNow is not true) {
       throw new JsonException("Expected 'playing now' flag not found or set incorrectly.");
     }
-    return new PlayingNow(track, user) {
+    return new PlayingNow(user) {
+      Track = track,
       UnhandledProperties = rest
     };
   }
