@@ -28,6 +28,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public const int MaxTimeRange = 73;
 
+  public static readonly System.Diagnostics.TraceSource TraceSource;
+
   public const string UserAgentUrl = "https://github.com/Zastai/MetaBrainz.ListenBrainz";
 
   public const string WebServiceRoot = "/1/";
