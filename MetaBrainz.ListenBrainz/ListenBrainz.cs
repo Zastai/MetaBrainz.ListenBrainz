@@ -49,7 +49,7 @@ public sealed class ListenBrainz : IDisposable {
   public const int MaxTimeRange = 73;
 
   /// <summary>The URL included in the user agent for requests as part of this library's information.</summary>
-  public const string UserAgentUrl = "https://github.com/Zastai/ListenBrainz";
+  public const string UserAgentUrl = "https://github.com/Zastai/MetaBrainz.ListenBrainz";
 
   /// <summary>The root location of the web service.</summary>
   public const string WebServiceRoot = "/1/";
