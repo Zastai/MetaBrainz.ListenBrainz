@@ -267,20 +267,6 @@ public sealed class ListenBrainz : System.IDisposable {
 }
 ```
 
-### Type: QueryException
-
-```cs
-public sealed class QueryException : System.Exception {
-
-  public readonly System.Net.HttpStatusCode Code;
-
-  public readonly string? Reason;
-
-  public QueryException(System.Net.HttpStatusCode code, string? reason = null, string? message = null, System.Exception? cause = null);
-
-}
-```
-
 ### Type: StatisticsRange
 
 ```cs

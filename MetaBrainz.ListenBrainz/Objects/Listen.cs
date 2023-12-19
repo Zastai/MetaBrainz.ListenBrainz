@@ -2,7 +2,6 @@ using System;
 
 using JetBrains.Annotations;
 
-using MetaBrainz.Common;
 using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
 
@@ -14,7 +13,7 @@ internal sealed class Listen : JsonBasedObject, IListen {
   public Listen(string inserted, Guid msid, long timestamp, ITrackInfo track, string user) {
     this.InsertedAt = inserted;
     this.MessyRecordingId = msid;
-    this.Timestamp = UnixTime.Convert(timestamp);
+    this.Timestamp = DateTimeOffset.FromUnixTimeSeconds(timestamp);
     this.Track = track;
     this.UnixTimestamp = timestamp;
     this.User = user;

@@ -284,12 +284,12 @@ public sealed class ListenBrainz : IDisposable {
   /// for <paramref name="user"/>.
   /// </remarks>
   public void SetLatestImport(string user, DateTimeOffset timestamp)
-    => AsyncUtils.ResultOf(this.SetLatestImportAsync(user, UnixTime.Convert(timestamp)));
+    => AsyncUtils.ResultOf(this.SetLatestImportAsync(user, timestamp.ToUnixTimeSeconds()));
 
   /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <param name="timestamp">
-  /// The timestamp to set, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+  /// The timestamp to set, expressed as the number of seconds since <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>.
   /// </param>
   /// <remarks>
   /// This will access the <c>POST /1/latest-import</c> endpoint and requires <see cref="UserToken"/> to be set to the token
@@ -308,12 +308,12 @@ public sealed class ListenBrainz : IDisposable {
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
   public Task SetLatestImportAsync(string user, DateTimeOffset timestamp, CancellationToken cancellationToken = default)
-    => this.SetLatestImportAsync(user, UnixTime.Convert(timestamp), cancellationToken);
+    => this.SetLatestImportAsync(user, timestamp.ToUnixTimeSeconds(), cancellationToken);
 
   /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <param name="timestamp">
-  /// The timestamp to set, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+  /// The timestamp to set, expressed as the number of seconds since <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>.
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
@@ -874,7 +874,7 @@ public sealed class ListenBrainz : IDisposable {
   /// </summary>
   /// <param name="timestamp">
   /// The date and time at which the track was listened to, expressed as the number of seconds since
-  /// <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>.
   /// </param>
   /// <param name="track">The name of the track being listened to.</param>
   /// <param name="artist">The name of the artist performing the track being listened to.</param>
@@ -939,7 +939,7 @@ public sealed class ListenBrainz : IDisposable {
   /// </summary>
   /// <param name="timestamp">
   /// The date and time at which the track was listened to, expressed as the number of seconds since
-  /// <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>.
   /// </param>
   /// <param name="track">The name of the track being listened to.</param>
   /// <param name="artist">The name of the artist performing the track being listened to.</param>
@@ -1065,8 +1065,9 @@ public sealed class ListenBrainz : IDisposable {
   /// <summary>Gets the most recent listens for a user, starting from a particular timestamp.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <param name="after">
-  /// The timestamp to start from, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
-  /// Returned listens will have a timestamp greater than, but not including, this value.
+  /// The timestamp to start from, expressed as the number of seconds since
+  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp greater than, but not
+  /// including, this value.
   /// </param>
   /// <param name="count">
   /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
@@ -1096,13 +1097,14 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
   public IFetchedListens GetListensAfter(string user, DateTimeOffset after, int? count = null, int? timeRange = null)
-    => this.PerformGetListens(user, UnixTime.Convert(after), null, count, timeRange);
+    => this.PerformGetListens(user, after.ToUnixTimeSeconds(), null, count, timeRange);
 
   /// <summary>Gets the most recent listens for a user, starting from a particular timestamp.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <param name="after">
-  /// The timestamp to start from, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
-  /// Returned listens will have a timestamp greater than, but not including, this value.
+  /// The timestamp to start from, expressed as the number of seconds since
+  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp greater than, but not
+  /// including, this value.
   /// </param>
   /// <param name="count">
   /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
@@ -1136,7 +1138,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>The requested listens, in descending timestamp order.</returns>
   public Task<IFetchedListens> GetListensAfterAsync(string user, DateTimeOffset after, int? count = null,
                                                     int? timeRange = null, CancellationToken cancellationToken = default)
-    => this.PerformGetListensAsync(user, UnixTime.Convert(after), null, count, timeRange, cancellationToken);
+    => this.PerformGetListensAsync(user, after.ToUnixTimeSeconds(), null, count, timeRange, cancellationToken);
 
   #endregion
 
@@ -1145,8 +1147,9 @@ public sealed class ListenBrainz : IDisposable {
   /// <summary>Gets historical listens for a user, starting from a particular timestamp.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <param name="before">
-  /// The timestamp to start from, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
-  /// Returned listens will have a timestamp less than, but not including, this value.
+  /// The timestamp to start from, expressed as the number of seconds since
+  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp less than, but not
+  /// including, this value.
   /// </param>
   /// <param name="count">
   /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
@@ -1176,13 +1179,14 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
   public IFetchedListens GetListensBefore(string user, DateTimeOffset before, int? count = null, int? timeRange = null)
-    => this.PerformGetListens(user, null, UnixTime.Convert(before), count, timeRange);
+    => this.PerformGetListens(user, null, before.ToUnixTimeSeconds(), count, timeRange);
 
   /// <summary>Gets historical listens for a user, starting from a particular timestamp.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <param name="before">
-  /// The timestamp to start from, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
-  /// Returned listens will have a timestamp less than, but not including, this value.
+  /// The timestamp to start from, expressed as the number of seconds since
+  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp less than, but not
+  /// including, this value.
   /// </param>
   /// <param name="count">
   /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
@@ -1216,7 +1220,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>The requested listens, in descending timestamp order.</returns>
   public Task<IFetchedListens> GetListensBeforeAsync(string user, DateTimeOffset before, int? count = null,
                                                      int? timeRange = null, CancellationToken cancellationToken = default)
-    => this.PerformGetListensAsync(user, null, UnixTime.Convert(before), count, timeRange, cancellationToken);
+    => this.PerformGetListensAsync(user, null, before.ToUnixTimeSeconds(), count, timeRange, cancellationToken);
 
   #endregion
 
@@ -1225,12 +1229,14 @@ public sealed class ListenBrainz : IDisposable {
   /// <summary>Gets the listens for a user in a specific timespan.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <param name="after">
-  /// The timestamp to start from, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
-  /// Returned listens will have a timestamp greater than, but not including, this value.
+  /// The timestamp to start from, expressed as the number of seconds since
+  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp greater than, but not
+  /// including, this value.
   /// </param>
   /// <param name="before">
-  /// The timestamp to end at, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
-  /// Returned listens will have a timestamp less than, but not including, this value.
+  /// The timestamp to end at, expressed as the number of seconds since
+  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp less than, but not
+  /// including, this value.
   /// </param>
   /// <param name="count">
   /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
@@ -1256,17 +1262,19 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
   public IFetchedListens GetListensBetween(string user, DateTimeOffset after, DateTimeOffset before, int? count = null)
-    => this.PerformGetListens(user, UnixTime.Convert(after), UnixTime.Convert(before), count);
+    => this.PerformGetListens(user, after.ToUnixTimeSeconds(), before.ToUnixTimeSeconds(), count);
 
   /// <summary>Gets the listens for a user in a specific timespan.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <param name="after">
-  /// The timestamp to start from, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
-  /// Returned listens will have a timestamp greater than, but not including, this value.
+  /// The timestamp to start from, expressed as the number of seconds since
+  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp greater than, but not
+  /// including, this value.
   /// </param>
   /// <param name="before">
-  /// The timestamp to end at, expressed as the number of seconds since <see cref="UnixTime.Epoch">the Unix time epoch</see>.
-  /// Returned listens will have a timestamp less than, but not including, this value.
+  /// The timestamp to end at, expressed as the number of seconds since
+  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp less than, but not
+  /// including, this value.
   /// </param>
   /// <param name="count">
   /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
@@ -1296,7 +1304,7 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>The requested listens, in descending timestamp order.</returns>
   public Task<IFetchedListens> GetListensBetweenAsync(string user, DateTimeOffset after, DateTimeOffset before, int? count = null,
                                                       CancellationToken cancellationToken = default)
-    => this.PerformGetListensAsync(user, UnixTime.Convert(after), UnixTime.Convert(before), count, null, cancellationToken);
+    => this.PerformGetListensAsync(user, after.ToUnixTimeSeconds(), before.ToUnixTimeSeconds(), count, null, cancellationToken);
 
   #endregion
 
@@ -1507,10 +1515,6 @@ public sealed class ListenBrainz : IDisposable {
   where TInterface : class
   where TObject : class, TInterface {
     var response = await this.PerformRequestAsync(address, HttpMethod.Get, null, options, cancellationToken).ConfigureAwait(false);
-    // FIXME: Should this use IsSuccessStatusCode? If so, which one(s) should attempt to process the response content?
-    if (response.StatusCode != HttpStatusCode.OK) {
-      throw ListenBrainz.CreateQueryExceptionFor(response);
-    }
     var task = JsonUtils.GetJsonContentAsync<TObject>(response, ListenBrainz.JsonReaderOptions, cancellationToken);
     return await task.ConfigureAwait(false);
   }
@@ -1522,10 +1526,6 @@ public sealed class ListenBrainz : IDisposable {
     var response = await this.PerformRequestAsync(address, HttpMethod.Get, null, options, cancellationToken).ConfigureAwait(false);
     if (response.StatusCode == HttpStatusCode.NoContent) {
       return null;
-    }
-    // FIXME: Should this use IsSuccessStatusCode? If so, which one(s) should attempt to process the response content?
-    if (response.StatusCode != HttpStatusCode.OK) {
-      throw ListenBrainz.CreateQueryExceptionFor(response);
     }
     var task = JsonUtils.GetJsonContentAsync<TObject>(response, ListenBrainz.JsonReaderOptions, cancellationToken);
     return await task.ConfigureAwait(false);
@@ -1560,7 +1560,7 @@ public sealed class ListenBrainz : IDisposable {
         break;
       }
       default:
-        throw new QueryException(HttpStatusCode.MethodNotAllowed, $"Unsupported method: {method}");
+        throw new HttpError(HttpStatusCode.MethodNotAllowed, $"Unsupported method: {method}");
     }
     var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
     Debug.Print($"[{DateTime.UtcNow}] => RESPONSE: {(int) response.StatusCode}/{response.StatusCode} '{response.ReasonPhrase}' " +
@@ -1576,7 +1576,39 @@ public sealed class ListenBrainz : IDisposable {
     finally {
       this._rateLimitLock.ExitWriteLock();
     }
-    return response;
+    try {
+      return await response.EnsureSuccessfulAsync(cancellationToken).ConfigureAwait(false);
+    }
+    catch (HttpError error) {
+      // If we get an error with content that can be interpreted as an ErrorInfo structure, wrap it in an error containing that info
+      if (!string.IsNullOrEmpty(error.Content)) {
+        ErrorInfo? ei;
+        try {
+          ei = JsonSerializer.Deserialize<ErrorInfo>(error.Content, ListenBrainz.JsonReaderOptions);
+          if (ei is null) {
+            throw new JsonException("Error info was null.");
+          }
+        }
+        catch (Exception e) {
+          Debug.Print($"[{DateTime.UtcNow}] => FAILED TO PARSE ERROR RESPONSE CONTENT AS JSON: {e.Message}");
+          ei = null;
+        }
+        if (ei is not null) {
+          var reason = error.Reason;
+          if (ei.Code != (int) response.StatusCode) {
+            Debug.Print($"[{DateTime.UtcNow}] => ERROR CODE ({ei.Code}) DOES NOT MATCH HTTP STATUS CODE!");
+            reason = "Error";
+          }
+          if (ei.UnhandledProperties is not null) {
+            foreach (var prop in ei.UnhandledProperties) {
+              Debug.Print($"[{DateTime.UtcNow}] => UNEXPECTED ERROR PROPERTY: {prop.Key} -> {prop.Value}");
+            }
+          }
+          throw new HttpError((HttpStatusCode) ei.Code, reason, response.Version, ei.Error, error);
+        }
+      }
+      throw;
+    }
   }
 
   private Task PostAsync<T>(string address, T content, IDictionary<string, string>? options,
@@ -1586,11 +1618,8 @@ public sealed class ListenBrainz : IDisposable {
   private async Task PostAsync(string address, string body, IDictionary<string, string>? options,
                                CancellationToken cancellationToken = default) {
     var response = await this.PerformRequestAsync(address, HttpMethod.Post, body, options, cancellationToken).ConfigureAwait(false);
-    if (!response.IsSuccessStatusCode) {
-      throw ListenBrainz.CreateQueryExceptionFor(response);
-    }
 #if DEBUG
-    var content = await HttpUtils.GetStringContentAsync(response, cancellationToken).ConfigureAwait(false);
+    var content = await response.GetStringContentAsync(cancellationToken).ConfigureAwait(false);
     Debug.Print($"[{DateTime.UtcNow}] => RESPONSE TEXT: {TextUtils.FormatMultiLine(content)}");
 #endif
   }
@@ -1598,44 +1627,6 @@ public sealed class ListenBrainz : IDisposable {
   #endregion
 
   #region Utility Methods
-
-  private static QueryException CreateQueryExceptionFor(HttpResponseMessage response) {
-    string? errorInfo = null;
-    if (response.Content.Headers.ContentLength > 0) {
-      errorInfo = AsyncUtils.ResultOf(HttpUtils.GetStringContentAsync(response));
-      if (string.IsNullOrWhiteSpace(errorInfo)) {
-        Debug.Print($"[{DateTime.UtcNow}] => NO ERROR RESPONSE TEXT");
-        errorInfo = null;
-      }
-      else {
-        Debug.Print($"[{DateTime.UtcNow}] => ERROR RESPONSE TEXT: {TextUtils.FormatMultiLine(errorInfo)}");
-      }
-    }
-    else {
-      Debug.Print($"[{DateTime.UtcNow}] => NO ERROR RESPONSE CONTENT");
-    }
-    if (errorInfo != null) {
-      try {
-        var ei = JsonSerializer.Deserialize<ErrorInfo>(errorInfo, ListenBrainz.JsonReaderOptions);
-        if (ei is null) {
-          throw new JsonException("Error info was null.");
-        }
-        errorInfo = ei.Error;
-        if (ei.Code != (int) response.StatusCode) {
-          Debug.Print($"[{DateTime.UtcNow}] => ERROR CODE ({ei.Code}) DOES NOT MATCH HTTP STATUS CODE!");
-        }
-        if (ei.UnhandledProperties != null) {
-          foreach (var prop in ei.UnhandledProperties) {
-            Debug.Print($"[{DateTime.UtcNow}] => UNEXPECTED ERROR PROPERTY: {prop.Key} -> {prop.Value}");
-          }
-        }
-      }
-      catch (Exception e) {
-        Debug.Print($"[{DateTime.UtcNow}] => FAILED TO PARSE AS JSON ({e.Message}); USING AS-IS");
-      }
-    }
-    return new QueryException(response.StatusCode, response.ReasonPhrase, errorInfo);
-  }
 
   private static Uri GetDefaultContactInfo()
     => ListenBrainz.DefaultContactInfo ??

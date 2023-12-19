@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
-using MetaBrainz.Common;
 using MetaBrainz.Common.Json;
 using MetaBrainz.Common.Json.Converters;
 using MetaBrainz.ListenBrainz.Objects;
@@ -24,18 +23,22 @@ internal sealed class ListenTimeRangeReader : ObjectReader<ListenTimeRange> {
       try {
         reader.Read();
         switch (prop) {
-          case "from_ts":
-            rangeStart = UnixTime.Convert(reader.GetOptionalInt64());
+          case "from_ts": {
+            var unixTime = reader.GetOptionalInt64();
+            rangeStart = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
+          }
           case "listen_count":
             listenCount = reader.GetInt32();
             break;
           case "time_range":
             description = reader.GetString();
             break;
-          case "to_ts":
-            rangeEnd = UnixTime.Convert(reader.GetOptionalInt64());
+          case "to_ts": {
+            var unixTime = reader.GetOptionalInt64();
+            rangeEnd = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
+          }
           default:
             rest ??= new Dictionary<string, object?>();
             rest[prop] = reader.GetOptionalObject(options);
