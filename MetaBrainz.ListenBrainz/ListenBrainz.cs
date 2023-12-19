@@ -266,6 +266,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="user">The MusicBrainz ID of the user whose data is requested.</param>
   /// <returns>An object providing the user's ID and latest import timestamp.</returns>
   /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public ILatestImport GetLatestImport(string user) => AsyncUtils.ResultOf(this.GetLatestImportAsync(user));
 
   /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
@@ -273,6 +275,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>An object providing the user's ID and latest import timestamp.</returns>
   /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ILatestImport> GetLatestImportAsync(string user, CancellationToken cancellationToken = default)
     => this.GetAsync<ILatestImport, LatestImport>("latest-import", ListenBrainz.OptionsForLatestImport(user), cancellationToken);
 
@@ -283,6 +287,8 @@ public sealed class ListenBrainz : IDisposable {
   /// This will access the <c>POST /1/latest-import</c> endpoint and requires <see cref="UserToken"/> to be set to the token
   /// for <paramref name="user"/>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public void SetLatestImport(string user, DateTimeOffset timestamp)
     => AsyncUtils.ResultOf(this.SetLatestImportAsync(user, timestamp.ToUnixTimeSeconds()));
 
@@ -295,6 +301,8 @@ public sealed class ListenBrainz : IDisposable {
   /// This will access the <c>POST /1/latest-import</c> endpoint and requires <see cref="UserToken"/> to be set to the token
   /// for <paramref name="user"/>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public void SetLatestImport(string user, long timestamp) => AsyncUtils.ResultOf(this.SetLatestImportAsync(user, timestamp));
 
   /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
@@ -307,6 +315,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SetLatestImportAsync(string user, DateTimeOffset timestamp, CancellationToken cancellationToken = default)
     => this.SetLatestImportAsync(user, timestamp.ToUnixTimeSeconds(), cancellationToken);
 
@@ -322,6 +332,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SetLatestImportAsync(string user, long timestamp, CancellationToken cancellationToken = default)
     => this.PostAsync("latest-import", $"{{ ts: {timestamp} }}", ListenBrainz.OptionsForLatestImport(user), cancellationToken);
 
@@ -363,6 +375,8 @@ public sealed class ListenBrainz : IDisposable {
   /// recorded listen. Otherwise, information is returned about both the current and the previous range.
   /// </param>
   /// <returns>The requested artist statistics.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public ISiteArtistStatistics? GetArtistStatistics(int? count = null, int? offset = null, StatisticsRange? range = null)
     => AsyncUtils.ResultOf(this.GetArtistStatisticsAsync(count, offset, range));
 
@@ -383,6 +397,8 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested artist statistics.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = null, int? offset = null,
                                                                StatisticsRange? range = null,
                                                                CancellationToken cancellationToken = default) {
@@ -403,6 +419,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="forceRecalculation">Indicates whether recalculation of the data should be requested.</param>
   /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IUserArtistMap? GetArtistMap(string user, StatisticsRange? range = null, bool forceRecalculation = false)
     => AsyncUtils.ResultOf(this.GetArtistMapAsync(user, range, forceRecalculation));
 
@@ -412,6 +430,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="forceRecalculation">Indicates whether recalculation of the data should be requested.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null, bool forceRecalculation = false,
                                                  CancellationToken cancellationToken = default) {
     var options = new Dictionary<string, string>(2);
@@ -442,6 +462,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IUserArtistStatistics? GetArtistStatistics(string user, int? count = null, int? offset = null,
                                                     StatisticsRange? range = null)
     => AsyncUtils.ResultOf(this.GetArtistStatisticsAsync(user, count, offset, range));
@@ -461,6 +483,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = null, int? offset = null,
                                                                StatisticsRange? range = null,
                                                                CancellationToken cancellationToken = default) {
@@ -477,6 +501,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="user">The user for whom the information is requested.</param>
   /// <param name="range">The range of data to include in the information.</param>
   /// <returns>The requested daily activity.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IUserDailyActivity? GetDailyActivity(string user, StatisticsRange? range = null)
     => AsyncUtils.ResultOf(this.GetDailyActivityAsync(user, range));
 
@@ -485,6 +511,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="range">The range of data to include in the information.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested daily activity.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserDailyActivity?> GetDailyActivityAsync(string user, StatisticsRange? range = null,
                                                          CancellationToken cancellationToken = default) {
     var address = $"stats/user/{user}/daily-activity";
@@ -504,6 +532,8 @@ public sealed class ListenBrainz : IDisposable {
   /// recorded listen. Otherwise, information is returned about both the current and the previous range.
   /// </param>
   /// <returns>The requested listening activity.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IUserListeningActivity? GetListeningActivity(string user, StatisticsRange? range = null)
     => AsyncUtils.ResultOf(this.GetListeningActivityAsync(user, range));
 
@@ -516,6 +546,8 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listening activity.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = null,
                                                                  CancellationToken cancellationToken = default) {
     var address = $"stats/user/{user}/listening-activity";
@@ -541,6 +573,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IUserRecordingStatistics? GetRecordingStatistics(string user, int? count = null, int? offset = null,
                                                           StatisticsRange? range = null)
     => AsyncUtils.ResultOf(this.GetRecordingStatisticsAsync(user, count, offset, range));
@@ -560,6 +594,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = null, int? offset = null,
                                                                      StatisticsRange? range = null,
                                                                      CancellationToken cancellationToken = default) {
@@ -586,6 +622,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested release statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IUserReleaseStatistics? GetReleaseStatistics(string user, int? count = null, int? offset = null,
                                                       StatisticsRange? range = null)
     => AsyncUtils.ResultOf(this.GetReleaseStatisticsAsync(user, count, offset, range));
@@ -605,6 +643,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <returns>
   /// The requested releases statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
   /// </returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = null, int? offset = null,
                                                                  StatisticsRange? range = null,
                                                                  CancellationToken cancellationToken = default) {
@@ -657,6 +697,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public void ImportListens(IEnumerable<ISubmittedListen> listens) => AsyncUtils.ResultOf(this.ImportListensAsync(listens));
 
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
@@ -669,6 +711,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public void ImportListens(params ISubmittedListen[] listens) => AsyncUtils.ResultOf(this.ImportListensAsync(listens));
 
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
@@ -683,6 +727,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public async Task ImportListensAsync(IAsyncEnumerable<ISubmittedListen> listens, CancellationToken cancellationToken = default) {
     var payload = SubmissionPayload.CreateImport();
     await foreach (var listen in listens.ConfigureAwait(false).WithCancellation(cancellationToken)) {
@@ -711,6 +757,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public async Task ImportListensAsync(IEnumerable<ISubmittedListen> listens, CancellationToken cancellationToken = default) {
     var payload = SubmissionPayload.CreateImport();
     foreach (var listen in listens) {
@@ -745,6 +793,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task ImportListensAsync(CancellationToken cancellationToken, params ISubmittedListen[] listens)
     => this.ImportListensAsync(listens, cancellationToken);
 
@@ -759,6 +809,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
   /// call to this method may result in multiple web service requests, which may affect rate limiting.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task ImportListensAsync(params ISubmittedListen[] listens)
     => this.ImportListensAsync((IEnumerable<ISubmittedListen>) listens);
 
@@ -799,6 +851,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public void SetNowPlaying(ISubmittedListenData listen) => AsyncUtils.ResultOf(this.SetNowPlayingAsync(listen));
 
   /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
@@ -810,6 +864,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public void SetNowPlaying(string track, string artist, string? release = null)
     => AsyncUtils.ResultOf(this.SetNowPlayingAsync(track, artist, release));
 
@@ -822,6 +878,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SetNowPlayingAsync(ISubmittedListenData listen, CancellationToken cancellationToken = default)
     => this.SubmitListensAsync(SubmissionPayload.CreatePlayingNow(listen), cancellationToken);
 
@@ -836,6 +894,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SetNowPlayingAsync(string track, string artist, string? release = null, CancellationToken cancellationToken = default)
     => this.SetNowPlayingAsync(new SubmittedListenData(track, artist, release), cancellationToken);
 
@@ -852,6 +912,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public void SubmitSingleListen(ISubmittedListen listen) => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(listen));
 
   /// <summary>
@@ -866,6 +928,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public void SubmitSingleListen(DateTimeOffset timestamp, string track, string artist, string? release = null)
     => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(timestamp, track, artist, release));
 
@@ -884,6 +948,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public void SubmitSingleListen(long timestamp, string track, string artist, string? release = null)
     => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(timestamp, track, artist, release));
 
@@ -899,6 +965,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public void SubmitSingleListen(string track, string artist, string? release = null)
     => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(track, artist, release));
 
@@ -913,6 +981,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SubmitSingleListenAsync(ISubmittedListen listen, CancellationToken cancellationToken = default)
     => this.SubmitListensAsync(SubmissionPayload.CreateSingle(listen), cancellationToken);
 
@@ -930,6 +1000,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SubmitSingleListenAsync(DateTimeOffset timestamp, string track, string artist, string? release = null,
                                       CancellationToken cancellationToken = default)
     => this.SubmitSingleListenAsync(new SubmittedListen(timestamp, track, artist, release), cancellationToken);
@@ -951,6 +1023,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SubmitSingleListenAsync(long timestamp, string track, string artist, string? release = null,
                                       CancellationToken cancellationToken = default)
     => this.SubmitSingleListenAsync(new SubmittedListen(timestamp, track, artist, release), cancellationToken);
@@ -968,6 +1042,8 @@ public sealed class ListenBrainz : IDisposable {
   /// Users can find their token on their profile page:
   /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
   /// </remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SubmitSingleListenAsync(string track, string artist, string? release = null,
                                       CancellationToken cancellationToken = default)
     => this.SubmitSingleListenAsync(new SubmittedListen(track, artist, release), cancellationToken);
@@ -982,6 +1058,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="user">The MusicBrainz ID of the user whose listen count is requested.</param>
   /// <returns>An object providing the number of listens submitted by <paramref name="user"/>.</returns>
   /// <remarks>This will access the <c>GET /1/user/USER/listen-count</c> endpoint.</remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IListenCount GetListenCount(string user) => AsyncUtils.ResultOf(this.GetListenCountAsync(user));
 
   /// <summary>Gets the number of listens submitted to ListenBrainz by a particular user.</summary>
@@ -989,6 +1067,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>An object providing the number of listens submitted by <paramref name="user"/>.</returns>
   /// <remarks>This will access the <c>GET /1/user/USER/listen-count</c> endpoint.</remarks>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IListenCount> GetListenCountAsync(string user, CancellationToken cancellationToken = default)
     => this.GetAsync<IListenCount, ListenCount>($"user/{user}/listen-count", null, cancellationToken);
 
@@ -1039,6 +1119,8 @@ public sealed class ListenBrainz : IDisposable {
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IFetchedListens GetListens(string user, int? count = null, int? timeRange = null)
     => this.PerformGetListens(user, null, null, count, timeRange);
 
@@ -1054,6 +1136,8 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IFetchedListens> GetListensAsync(string user, int? count = null, int? timeRange = null,
                                                CancellationToken cancellationToken = default)
     => this.PerformGetListensAsync(user, null, null, count, timeRange, cancellationToken);
@@ -1078,6 +1162,8 @@ public sealed class ListenBrainz : IDisposable {
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IFetchedListens GetListensAfter(string user, long after, int? count = null, int? timeRange = null)
     => this.PerformGetListens(user, after, null, count, timeRange);
 
@@ -1096,6 +1182,8 @@ public sealed class ListenBrainz : IDisposable {
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IFetchedListens GetListensAfter(string user, DateTimeOffset after, int? count = null, int? timeRange = null)
     => this.PerformGetListens(user, after.ToUnixTimeSeconds(), null, count, timeRange);
 
@@ -1116,6 +1204,8 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IFetchedListens> GetListensAfterAsync(string user, long after, int? count = null, int? timeRange = null,
                                                     CancellationToken cancellationToken = default)
     => this.PerformGetListensAsync(user, after, null, count, timeRange, cancellationToken);
@@ -1136,6 +1226,8 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IFetchedListens> GetListensAfterAsync(string user, DateTimeOffset after, int? count = null,
                                                     int? timeRange = null, CancellationToken cancellationToken = default)
     => this.PerformGetListensAsync(user, after.ToUnixTimeSeconds(), null, count, timeRange, cancellationToken);
@@ -1160,6 +1252,8 @@ public sealed class ListenBrainz : IDisposable {
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IFetchedListens GetListensBefore(string user, long before, int? count = null, int? timeRange = null)
     => this.PerformGetListens(user, null, before, count, timeRange);
 
@@ -1178,6 +1272,8 @@ public sealed class ListenBrainz : IDisposable {
   /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IFetchedListens GetListensBefore(string user, DateTimeOffset before, int? count = null, int? timeRange = null)
     => this.PerformGetListens(user, null, before.ToUnixTimeSeconds(), count, timeRange);
 
@@ -1198,6 +1294,8 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IFetchedListens> GetListensBeforeAsync(string user, long before, int? count = null, int? timeRange = null,
                                                      CancellationToken cancellationToken = default)
     => this.PerformGetListensAsync(user, null, before, count, timeRange, cancellationToken);
@@ -1218,6 +1316,8 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IFetchedListens> GetListensBeforeAsync(string user, DateTimeOffset before, int? count = null,
                                                      int? timeRange = null, CancellationToken cancellationToken = default)
     => this.PerformGetListensAsync(user, null, before.ToUnixTimeSeconds(), count, timeRange, cancellationToken);
@@ -1243,6 +1343,8 @@ public sealed class ListenBrainz : IDisposable {
   /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IFetchedListens GetListensBetween(string user, long after, long before, int? count = null)
     => this.PerformGetListens(user, after, before, count);
 
@@ -1261,6 +1363,8 @@ public sealed class ListenBrainz : IDisposable {
   /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
   /// </param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IFetchedListens GetListensBetween(string user, DateTimeOffset after, DateTimeOffset before, int? count = null)
     => this.PerformGetListens(user, after.ToUnixTimeSeconds(), before.ToUnixTimeSeconds(), count);
 
@@ -1282,6 +1386,8 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IFetchedListens> GetListensBetweenAsync(string user, long after, long before, int? count = null,
                                                       CancellationToken cancellationToken = default)
     => this.PerformGetListensAsync(user, after, before, count, null, cancellationToken);
@@ -1302,6 +1408,8 @@ public sealed class ListenBrainz : IDisposable {
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IFetchedListens> GetListensBetweenAsync(string user, DateTimeOffset after, DateTimeOffset before, int? count = null,
                                                       CancellationToken cancellationToken = default)
     => this.PerformGetListensAsync(user, after.ToUnixTimeSeconds(), before.ToUnixTimeSeconds(), count, null, cancellationToken);
@@ -1315,12 +1423,16 @@ public sealed class ListenBrainz : IDisposable {
   /// <summary>Gets a user's currently-playing listen(s).</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <returns>The requested listens (typically 0 or 1).</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IPlayingNow GetPlayingNow(string user) => AsyncUtils.ResultOf(this.GetPlayingNowAsync(user));
 
   /// <summary>Gets a user's currently-playing listen(s).</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens (typically 0 or 1).</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IPlayingNow> GetPlayingNowAsync(string user, CancellationToken cancellationToken = default)
     => this.GetAsync<IPlayingNow, PlayingNow>($"user/{user}/playing-now", null, cancellationToken);
 
@@ -1336,17 +1448,23 @@ public sealed class ListenBrainz : IDisposable {
   /// <summary>Gets recent listen(s) for a set of users.</summary>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IRecentListens GetRecentListens(IEnumerable<string> users) => AsyncUtils.ResultOf(this.GetRecentListensAsync(users));
 
   /// <summary>Gets recent listen(s) for a set of users.</summary>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IRecentListens GetRecentListens(params string[] users) => AsyncUtils.ResultOf(this.GetRecentListensAsync(users));
 
   /// <summary>Gets recent listen(s) for a set of users.</summary>
   /// <param name="limit">The maximum number of listens to return.</param>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IRecentListens GetRecentListens(int limit, IEnumerable<string> users)
     => AsyncUtils.ResultOf(this.GetRecentListensAsync(limit, users));
 
@@ -1354,6 +1472,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="limit">The maximum number of listens to return.</param>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public IRecentListens GetRecentListens(int limit, params string[] users)
     => AsyncUtils.ResultOf(this.GetRecentListensAsync(limit, users));
 
@@ -1361,6 +1481,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IRecentListens> GetRecentListensAsync(CancellationToken cancellationToken, params string[] users)
     => this.GetRecentListensAsync(users, cancellationToken);
 
@@ -1368,6 +1490,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IRecentListens> GetRecentListensAsync(IEnumerable<string> users, CancellationToken cancellationToken = default) {
     var address = $"users/{ListenBrainz.FormatUserList(users)}/recent-listens";
     return this.GetAsync<IRecentListens, RecentListens>(address, null, cancellationToken);
@@ -1378,6 +1502,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IRecentListens> GetRecentListensAsync(int limit, CancellationToken cancellationToken, params string[] users)
     => this.GetRecentListensAsync(limit, users, cancellationToken);
 
@@ -1386,6 +1512,8 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IRecentListens> GetRecentListensAsync(int limit, IEnumerable<string> users,
                                                     CancellationToken cancellationToken = default) {
     var requestUri = $"users/{ListenBrainz.FormatUserList(users)}/recent-listens";
@@ -1397,12 +1525,16 @@ public sealed class ListenBrainz : IDisposable {
   /// <param name="limit">The maximum number of listens to return.</param>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IRecentListens> GetRecentListensAsync(int limit, params string[] users)
     => this.GetRecentListensAsync(limit, (IEnumerable<string>) users);
 
   /// <summary>Gets recent listen(s) for a set of users.</summary>
   /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
   /// <returns>The requested listens.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IRecentListens> GetRecentListensAsync(params string[] users)
     => this.GetAsync<IRecentListens, RecentListens>($"users/{ListenBrainz.FormatUserList(users)}/recent-listens", null);
 
@@ -1415,12 +1547,16 @@ public sealed class ListenBrainz : IDisposable {
   /// <summary>Validates a given user token.</summary>
   /// <param name="token">The user token to validate.</param>
   /// <returns>The result of the validation.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public ITokenValidationResult ValidateToken(string token) => AsyncUtils.ResultOf(this.ValidateTokenAsync(token));
 
   /// <summary>Validates a given user token.</summary>
   /// <param name="token">The user token to validate.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The result of the validation.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ITokenValidationResult> ValidateTokenAsync(string token, CancellationToken cancellationToken = default) {
     var options = ListenBrainz.OptionsForTokenValidation(token);
     return this.GetAsync<ITokenValidationResult, TokenValidationResult>("validate-token", options, cancellationToken);
