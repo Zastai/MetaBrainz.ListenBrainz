@@ -49,7 +49,7 @@ public sealed class ListenBrainz : IDisposable {
   public const int MaxTimeRange = 73;
 
   /// <summary>The URL included in the user agent for requests as part of this library's information.</summary>
-  public const string UserAgentUrl = "https://github.com/Zastai/ListenBrainz";
+  public const string UserAgentUrl = "https://github.com/Zastai/MetaBrainz.ListenBrainz";
 
   /// <summary>The root location of the web service.</summary>
   public const string WebServiceRoot = "/1/";
@@ -79,6 +79,9 @@ public sealed class ListenBrainz : IDisposable {
 
   /// <summary>The default user token to use for requests; used as initial value for <see cref="UserToken"/>.</summary>
   public static string? DefaultUserToken { get; set; }
+
+  /// <summary>The trace source (named 'MetaBrainz.ListenBrainz') used by this class.</summary>
+  public static readonly TraceSource TraceSource = new("MetaBrainz.ListenBrainz", SourceLevels.Off);
 
   #endregion
 
@@ -1672,7 +1675,8 @@ public sealed class ListenBrainz : IDisposable {
                                                               IDictionary<string, string>? options,
                                                               CancellationToken cancellationToken = default) {
     var requestUri = address + ListenBrainz.QueryString(options);
-    Debug.Print($"[{DateTime.UtcNow}] WEB SERVICE REQUEST: {method.Method} {this.BaseUri}{requestUri}");
+    var ts = ListenBrainz.TraceSource;
+    ts.TraceEvent(TraceEventType.Verbose, 1, "WEB SERVICE REQUEST: {0} {1}{2}", method.Method, this.BaseUri, requestUri);
     var client = this.Client;
     HttpRequestMessage request;
     switch (method.Method) {
@@ -1685,8 +1689,8 @@ public sealed class ListenBrainz : IDisposable {
         break;
       }
       case "POST": {
-        if (body is not null) {
-          Debug.Print($"[{DateTime.UtcNow}] => BODY: {body}");
+        if (body is not null && ts.Switch.ShouldTrace(TraceEventType.Verbose)) {
+          ts.TraceEvent(TraceEventType.Verbose, 2, "BODY: {0}", TextUtils.FormatMultiLine(body));
         }
         request = new HttpRequestMessage(HttpMethod.Post, requestUri) {
           Content = new StringContent(body ?? "", Encoding.UTF8, "application/json"),
@@ -1700,11 +1704,13 @@ public sealed class ListenBrainz : IDisposable {
         throw new HttpError(HttpStatusCode.MethodNotAllowed, $"Unsupported method: {method}");
     }
     var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
-    Debug.Print($"[{DateTime.UtcNow}] => RESPONSE: {(int) response.StatusCode}/{response.StatusCode} '{response.ReasonPhrase}' " +
-                $"(v{response.Version})");
-    Debug.Print($"[{DateTime.UtcNow}] => HEADERS: {TextUtils.FormatMultiLine(response.Headers.ToString())}");
-    Debug.Print($"[{DateTime.UtcNow}] => CONTENT: {response.Content.Headers.ContentType}, " +
-                $"{response.Content.Headers.ContentLength ?? 0} byte(s))");
+    if (ts.Switch.ShouldTrace(TraceEventType.Verbose)) {
+      ts.TraceEvent(TraceEventType.Verbose, 3, "RESPONSE: {0:D}/{0} '{1}' (v{2})", response.StatusCode, response.ReasonPhrase,
+                    response.Version);
+      ts.TraceEvent(TraceEventType.Verbose, 4, "HEADERS: {0}", TextUtils.FormatMultiLine(response.Headers.ToString()));
+      var headers = response.Content.Headers;
+      ts.TraceEvent(TraceEventType.Verbose, 5, "CONTENT ({0}): {1} bytes", headers.ContentType, headers.ContentLength ?? 0);
+    }
     var rateLimitInfo = new RateLimitInfo(response.Headers);
     this._rateLimitLock.EnterWriteLock();
     try {
@@ -1727,18 +1733,18 @@ public sealed class ListenBrainz : IDisposable {
           }
         }
         catch (Exception e) {
-          Debug.Print($"[{DateTime.UtcNow}] => FAILED TO PARSE ERROR RESPONSE CONTENT AS JSON: {e.Message}");
+          ts.TraceEvent(TraceEventType.Verbose, 6, "FAILED TO PARSE ERROR RESPONSE CONTENT AS JSON: {0}", e.Message);
           ei = null;
         }
         if (ei is not null) {
           var reason = error.Reason;
           if (ei.Code != (int) response.StatusCode) {
-            Debug.Print($"[{DateTime.UtcNow}] => ERROR CODE ({ei.Code}) DOES NOT MATCH HTTP STATUS CODE!");
+            ts.TraceEvent(TraceEventType.Verbose, 7, "ERROR CODE ({0}) DOES NOT MATCH HTTP STATUS CODE", ei.Code);
             reason = "Error";
           }
           if (ei.UnhandledProperties is not null) {
             foreach (var prop in ei.UnhandledProperties) {
-              Debug.Print($"[{DateTime.UtcNow}] => UNEXPECTED ERROR PROPERTY: {prop.Key} -> {prop.Value}");
+              ts.TraceEvent(TraceEventType.Verbose, 8, "UNEXPECTED ERROR PROPERTY: {0} -> {1}", prop.Key, prop.Value);
             }
           }
           throw new HttpError((HttpStatusCode) ei.Code, reason, response.Version, ei.Error, error);
@@ -1755,10 +1761,13 @@ public sealed class ListenBrainz : IDisposable {
   private async Task PostAsync(string address, string body, IDictionary<string, string>? options,
                                CancellationToken cancellationToken = default) {
     var response = await this.PerformRequestAsync(address, HttpMethod.Post, body, options, cancellationToken).ConfigureAwait(false);
-#if DEBUG
-    var content = await response.GetStringContentAsync(cancellationToken).ConfigureAwait(false);
-    Debug.Print($"[{DateTime.UtcNow}] => RESPONSE TEXT: {TextUtils.FormatMultiLine(content)}");
-#endif
+    if (ListenBrainz.TraceSource.Switch.ShouldTrace(TraceEventType.Verbose)) {
+      var content = await response.GetStringContentAsync(cancellationToken).ConfigureAwait(false);
+      if (content.Length > 0) {
+        ListenBrainz.TraceSource.TraceEvent(TraceEventType.Verbose, 9, "POST RETURNED A MESSAGE: {0}",
+                                            TextUtils.FormatMultiLine(content));
+      }
+    }
   }
 
   #endregion
