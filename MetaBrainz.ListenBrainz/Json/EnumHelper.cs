@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MetaBrainz.ListenBrainz.Json;
 
 internal static class EnumHelper {
 
+  [return: NotNullIfNotNull(nameof(text))]
   public static StatisticsRange? ParseStatisticsRange(string? text) {
     if (text == null) {
       return null;
