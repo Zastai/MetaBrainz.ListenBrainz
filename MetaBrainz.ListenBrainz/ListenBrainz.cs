@@ -1430,16 +1430,6 @@ public sealed class ListenBrainz : IDisposable {
 
   #endregion
 
-  #region Internals
-
-  #region JSON Options
-
-  private static readonly JsonSerializerOptions JsonReaderOptions = JsonUtils.CreateReaderOptions(Converters.Readers);
-
-  private static readonly JsonSerializerOptions JsonWriterOptions = JsonUtils.CreateWriterOptions(Converters.Writers);
-
-  #endregion
-
   #region HTTP Client / IDisposable
 
   private AuthenticationHeaderValue? _authentication;
@@ -1457,7 +1447,8 @@ public sealed class ListenBrainz : IDisposable {
       if (this._disposed) {
         throw new ObjectDisposedException(nameof(ListenBrainz));
       }
-      if (this._client is null) { // Set up the instance with the invariant settings
+      if (this._client is null) {
+        // Set up the instance with the invariant settings
         var an = typeof(ListenBrainz).Assembly.GetName();
         this._client = new HttpClient {
           BaseAddress = this.BaseUri,
@@ -1505,6 +1496,16 @@ public sealed class ListenBrainz : IDisposable {
   ~ListenBrainz() {
     this.Dispose(false);
   }
+
+  #endregion
+
+  #region Internals
+
+  #region JSON Options
+
+  private static readonly JsonSerializerOptions JsonReaderOptions = JsonUtils.CreateReaderOptions(Converters.Readers);
+
+  private static readonly JsonSerializerOptions JsonWriterOptions = JsonUtils.CreateWriterOptions(Converters.Writers);
 
   #endregion
 
