@@ -11,10 +11,10 @@ internal sealed class UserRecordingStatistics : UserStatistics, IUserRecordingSt
   : base(lastUpdated, range, user)
   { }
 
-  public IReadOnlyList<IRecordingInfo>? Recordings { get; set; }
+  public IReadOnlyList<IRecordingInfo>? Recordings { get; init; }
 
-  public int? Offset { get; set; }
+  public int? Offset { get; init; }
 
-  public int? TotalCount { get; set; }
+  public int? TotalCount { get; init; }
 
 }

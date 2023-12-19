@@ -8,12 +8,11 @@ namespace MetaBrainz.ListenBrainz.Objects;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal sealed class PlayingNow : JsonBasedObject, IPlayingNow {
 
-  public PlayingNow(IPlayingTrack? track, string user) {
-    this.Track = track;
+  public PlayingNow(string user) {
     this.User = user;
   }
 
-  public IPlayingTrack? Track { get; }
+  public IPlayingTrack? Track { get; init; }
 
   public string User { get; }
 

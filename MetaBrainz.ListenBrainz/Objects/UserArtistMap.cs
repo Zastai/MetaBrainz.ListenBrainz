@@ -11,6 +11,6 @@ internal sealed class UserArtistMap : UserStatistics, IUserArtistMap {
   : base(lastUpdated, range, user)
   { }
 
-  public IReadOnlyList<IArtistCountryInfo>? Countries { get; set; }
+  public IReadOnlyList<IArtistCountryInfo>? Countries { get; init; }
 
 }

@@ -79,7 +79,8 @@ internal sealed class PlayingNowReader : PayloadReader<PlayingNow> {
     if (playingNow is not true) {
       throw new JsonException("Expected 'playing now' flag not found or set incorrectly.");
     }
-    return new PlayingNow(track, user) {
+    return new PlayingNow(user) {
+      Track = track,
       UnhandledProperties = rest
     };
   }

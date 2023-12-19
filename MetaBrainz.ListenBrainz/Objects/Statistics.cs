@@ -14,9 +14,9 @@ internal abstract class Statistics : JsonBasedObject, IStatistics {
 
   public DateTimeOffset LastUpdated { get; }
 
-  public DateTimeOffset? NewestListen { get; set; }
+  public DateTimeOffset? NewestListen { get; init; }
 
-  public DateTimeOffset? OldestListen { get; set; }
+  public DateTimeOffset? OldestListen { get; init; }
 
   public StatisticsRange Range { get; }
 

@@ -10,6 +10,6 @@ internal sealed class UserDailyActivity : UserStatistics, IUserDailyActivity {
   : base(lastUpdated, range, user)
   { }
 
-  public IDailyActivity? Activity { get; set; }
+  public IDailyActivity? Activity { get; init; }
 
 }

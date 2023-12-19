@@ -18,10 +18,10 @@ internal sealed class TrackInfo : JsonBasedObject, ITrackInfo {
 
   public string Artist { get; }
 
-  public IMusicBrainzIdMappings? MusicBrainzIdMappings { get; set; }
+  public IMusicBrainzIdMappings? MusicBrainzIdMappings { get; init; }
 
   public string Name { get; }
 
-  public string? Release { get; set; }
+  public string? Release { get; init; }
 
 }

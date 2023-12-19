@@ -13,24 +13,24 @@ internal sealed class RecordingInfo : JsonBasedObject, IRecordingInfo {
     this.ListenCount = listenCount;
   }
 
-  public IReadOnlyList<Guid>? ArtistIds { get; set; }
+  public IReadOnlyList<Guid>? ArtistIds { get; init; }
 
-  public Guid? ArtistMessyId { get; set; }
+  public Guid? ArtistMessyId { get; init; }
 
-  public string? ArtistName { get; set; }
+  public string? ArtistName { get; init; }
 
   public int ListenCount { get; }
 
-  public Guid? Id { get; set; }
+  public Guid? Id { get; init; }
 
-  public Guid? MessyId { get; set; }
+  public Guid? MessyId { get; init; }
 
   public string Name { get; }
 
-  public Guid? ReleaseId { get; set; }
+  public Guid? ReleaseId { get; init; }
 
-  public Guid? ReleaseMessyId { get; set; }
+  public Guid? ReleaseMessyId { get; init; }
 
-  public string? ReleaseName { get; set; }
+  public string? ReleaseName { get; init; }
 
 }

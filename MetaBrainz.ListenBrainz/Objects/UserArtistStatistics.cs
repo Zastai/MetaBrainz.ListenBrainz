@@ -15,7 +15,7 @@ internal sealed class UserArtistStatistics : UserStatistics, IUserArtistStatisti
     this.TotalCount = totalCount;
   }
 
-  public IReadOnlyList<IArtistInfo>? Artists { get; set; }
+  public IReadOnlyList<IArtistInfo>? Artists { get; init; }
 
   public int Count { get; }
 
