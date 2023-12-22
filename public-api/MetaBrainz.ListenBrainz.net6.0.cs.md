@@ -586,7 +586,7 @@ public interface ILatestImport : MetaBrainz.Common.Json.IJsonBasedObject {
 ```cs
 public interface IListen : MetaBrainz.Common.Json.IJsonBasedObject {
 
-  string InsertedAt {
+  System.DateTimeOffset InsertedAt {
     public abstract get;
   }
 
