@@ -518,11 +518,11 @@ public interface IFetchedListens : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
-  System.DateTimeOffset Timestamp {
+  System.DateTimeOffset Newest {
     public abstract get;
   }
 
-  long UnixTimestamp {
+  System.DateTimeOffset Oldest {
     public abstract get;
   }
 
@@ -578,19 +578,15 @@ public interface IListen : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
+  System.DateTimeOffset ListenedAt {
+    public abstract get;
+  }
+
   System.Guid MessyRecordingId {
     public abstract get;
   }
 
-  System.DateTimeOffset Timestamp {
-    public abstract get;
-  }
-
   ITrackInfo Track {
-    public abstract get;
-  }
-
-  long UnixTimestamp {
     public abstract get;
   }
 
