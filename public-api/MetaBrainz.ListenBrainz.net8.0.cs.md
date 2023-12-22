@@ -425,6 +425,26 @@ public interface IArtistCountryInfo {
 }
 ```
 
+### Type: IArtistCredit
+
+```cs
+public interface IArtistCredit {
+
+  string CreditedName {
+    public abstract get;
+  }
+
+  System.Guid Id {
+    public abstract get;
+  }
+
+  string? JoinPhrase {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IArtistInfo
 
 ```cs
@@ -642,7 +662,23 @@ public interface IMusicBrainzIdMappings {
     public abstract get;
   }
 
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseId {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IArtistCredit>? Credits {
+    public abstract get;
+  }
+
   System.Guid? RecordingId {
+    public abstract get;
+  }
+
+  string? RecordingName {
     public abstract get;
   }
 
