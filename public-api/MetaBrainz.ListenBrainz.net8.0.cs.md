@@ -410,6 +410,10 @@ public interface IArtistCountryInfo {
     public abstract get;
   }
 
+  System.Collections.Generic.IReadOnlyList<IArtistInfo>? Artists {
+    public abstract get;
+  }
+
   string Country {
     public abstract get;
   }

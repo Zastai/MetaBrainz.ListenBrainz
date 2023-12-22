@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
 
@@ -12,6 +14,8 @@ internal sealed class ArtistCountryInfo : JsonBasedObject, IArtistCountryInfo {
   }
 
   public int ArtistCount { get; }
+
+  public IReadOnlyList<IArtistInfo>? Artists { get; init; }
 
   public string Country { get; }
 
