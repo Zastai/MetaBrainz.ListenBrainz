@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -1438,108 +1437,6 @@ public sealed class ListenBrainz : IDisposable {
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IPlayingNow> GetPlayingNowAsync(string user, CancellationToken cancellationToken = default)
     => this.GetAsync<IPlayingNow, PlayingNow>($"user/{user}/playing-now", null, cancellationToken);
-
-  #endregion
-
-  #region /1/users/xxx/recent-listens
-
-  private static string FormatUserList(IEnumerable<string> userList) => string.Join(",", userList.Select(Uri.EscapeDataString));
-
-  private static Dictionary<string, string> OptionsForRecentListens(int limit)
-    => new() { ["limit"] = limit.ToString(CultureInfo.InvariantCulture) };
-
-  /// <summary>Gets recent listen(s) for a set of users.</summary>
-  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
-  /// <returns>The requested listens.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IRecentListens GetRecentListens(IEnumerable<string> users) => AsyncUtils.ResultOf(this.GetRecentListensAsync(users));
-
-  /// <summary>Gets recent listen(s) for a set of users.</summary>
-  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
-  /// <returns>The requested listens.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IRecentListens GetRecentListens(params string[] users) => AsyncUtils.ResultOf(this.GetRecentListensAsync(users));
-
-  /// <summary>Gets recent listen(s) for a set of users.</summary>
-  /// <param name="limit">The maximum number of listens to return.</param>
-  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
-  /// <returns>The requested listens.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IRecentListens GetRecentListens(int limit, IEnumerable<string> users)
-    => AsyncUtils.ResultOf(this.GetRecentListensAsync(limit, users));
-
-  /// <summary>Gets recent listen(s) for a set of users.</summary>
-  /// <param name="limit">The maximum number of listens to return.</param>
-  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
-  /// <returns>The requested listens.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IRecentListens GetRecentListens(int limit, params string[] users)
-    => AsyncUtils.ResultOf(this.GetRecentListensAsync(limit, users));
-
-  /// <summary>Gets recent listen(s) for a set of users.</summary>
-  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
-  /// <returns>The requested listens.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IRecentListens> GetRecentListensAsync(CancellationToken cancellationToken, params string[] users)
-    => this.GetRecentListensAsync(users, cancellationToken);
-
-  /// <summary>Gets recent listen(s) for a set of users.</summary>
-  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
-  /// <returns>The requested listens.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IRecentListens> GetRecentListensAsync(IEnumerable<string> users, CancellationToken cancellationToken = default) {
-    var address = $"users/{ListenBrainz.FormatUserList(users)}/recent-listens";
-    return this.GetAsync<IRecentListens, RecentListens>(address, null, cancellationToken);
-  }
-
-  /// <summary>Gets recent listen(s) for a set of users.</summary>
-  /// <param name="limit">The maximum number of listens to return.</param>
-  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
-  /// <returns>The requested listens.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IRecentListens> GetRecentListensAsync(int limit, CancellationToken cancellationToken, params string[] users)
-    => this.GetRecentListensAsync(limit, users, cancellationToken);
-
-  /// <summary>Gets recent listen(s) for a set of users.</summary>
-  /// <param name="limit">The maximum number of listens to return.</param>
-  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
-  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested listens.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IRecentListens> GetRecentListensAsync(int limit, IEnumerable<string> users,
-                                                    CancellationToken cancellationToken = default) {
-    var requestUri = $"users/{ListenBrainz.FormatUserList(users)}/recent-listens";
-    var options = ListenBrainz.OptionsForRecentListens(limit);
-    return this.GetAsync<IRecentListens, RecentListens>(requestUri, options, cancellationToken);
-  }
-
-  /// <summary>Gets recent listen(s) for a set of users.</summary>
-  /// <param name="limit">The maximum number of listens to return.</param>
-  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
-  /// <returns>The requested listens.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IRecentListens> GetRecentListensAsync(int limit, params string[] users)
-    => this.GetRecentListensAsync(limit, (IEnumerable<string>) users);
-
-  /// <summary>Gets recent listen(s) for a set of users.</summary>
-  /// <param name="users">The MusicBrainz IDs of the users whose data is needed.</param>
-  /// <returns>The requested listens.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IRecentListens> GetRecentListensAsync(params string[] users)
-    => this.GetAsync<IRecentListens, RecentListens>($"users/{ListenBrainz.FormatUserList(users)}/recent-listens", null);
 
   #endregion
 

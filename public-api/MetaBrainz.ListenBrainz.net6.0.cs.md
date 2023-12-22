@@ -190,26 +190,6 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IPlayingNow> GetPlayingNowAsync(string user, System.Threading.CancellationToken cancellationToken = default);
 
-  public MetaBrainz.ListenBrainz.Interfaces.IRecentListens GetRecentListens(System.Collections.Generic.IEnumerable<string> users);
-
-  public MetaBrainz.ListenBrainz.Interfaces.IRecentListens GetRecentListens(int limit, System.Collections.Generic.IEnumerable<string> users);
-
-  public MetaBrainz.ListenBrainz.Interfaces.IRecentListens GetRecentListens(int limit, params string[] users);
-
-  public MetaBrainz.ListenBrainz.Interfaces.IRecentListens GetRecentListens(params string[] users);
-
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IRecentListens> GetRecentListensAsync(System.Collections.Generic.IEnumerable<string> users, System.Threading.CancellationToken cancellationToken = default);
-
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IRecentListens> GetRecentListensAsync(System.Threading.CancellationToken cancellationToken, params string[] users);
-
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IRecentListens> GetRecentListensAsync(int limit, System.Collections.Generic.IEnumerable<string> users, System.Threading.CancellationToken cancellationToken = default);
-
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IRecentListens> GetRecentListensAsync(int limit, System.Threading.CancellationToken cancellationToken, params string[] users);
-
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IRecentListens> GetRecentListensAsync(int limit, params string[] users);
-
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IRecentListens> GetRecentListensAsync(params string[] users);
-
   public MetaBrainz.ListenBrainz.Interfaces.IUserRecordingStatistics? GetRecordingStatistics(string user, int? count = default, int? offset = default, StatisticsRange? range = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
