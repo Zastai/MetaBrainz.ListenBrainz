@@ -677,22 +677,6 @@ public interface IPlayingTrack : MetaBrainz.Common.Json.IJsonBasedObject {
 }
 ```
 
-### Type: IRecentListens
-
-```cs
-public interface IRecentListens : MetaBrainz.Common.Json.IJsonBasedObject {
-
-  System.Collections.Generic.IReadOnlyList<IListen> Listens {
-    public abstract get;
-  }
-
-  string UserList {
-    public abstract get;
-  }
-
-}
-```
-
 ### Type: IRecordingInfo
 
 ```cs
