@@ -11,7 +11,13 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 [PublicAPI]
 public interface IArtistInfo : IJsonBasedObject {
 
+  /// <summary>The MusicBrainz ID for the artist, if available.</summary>
+  Guid? Id { get; }
+
   /// <summary>The MusicBrainz IDs for the artist, if available.</summary>
+  /// <remarks>
+  /// This may be obsolete; the current API only ever seems to return a single ID, which will be available in <see cref="Id"/>.
+  /// </remarks>
   IReadOnlyList<Guid>? Ids { get; }
 
   /// <summary>The number of times the artist's tracks were listened to.</summary>

@@ -426,6 +426,10 @@ public interface IArtistCountryInfo {
 ```cs
 public interface IArtistInfo : MetaBrainz.Common.Json.IJsonBasedObject {
 
+  System.Guid? Id {
+    public abstract get;
+  }
+
   System.Collections.Generic.IReadOnlyList<System.Guid>? Ids {
     public abstract get;
   }
