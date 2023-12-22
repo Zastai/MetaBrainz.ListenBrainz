@@ -734,6 +734,18 @@ public interface IRecordingInfo {
     public abstract get;
   }
 
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseId {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IArtistCredit>? Credits {
+    public abstract get;
+  }
+
   System.Guid? Id {
     public abstract get;
   }
@@ -779,6 +791,18 @@ public interface IReleaseInfo {
   }
 
   string? ArtistName {
+    public abstract get;
+  }
+
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseId {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IArtistCredit>? Credits {
     public abstract get;
   }
 

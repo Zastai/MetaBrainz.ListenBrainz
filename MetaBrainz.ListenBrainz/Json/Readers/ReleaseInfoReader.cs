@@ -4,6 +4,7 @@ using System.Text.Json;
 
 using MetaBrainz.Common.Json;
 using MetaBrainz.Common.Json.Converters;
+using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
@@ -16,6 +17,9 @@ internal class ReleaseInfoReader : ObjectReader<ReleaseInfo> {
     IReadOnlyList<Guid>? artistMbids = null;
     Guid? artistMsid = null;
     string? artistName = null;
+    long? caaId = null;
+    Guid? caaRelease = null;
+    IReadOnlyList<IArtistCredit>? credits = null;
     int? listenCount = null;
     Guid? mbid = null;
     Guid? msid = null;
@@ -34,6 +38,15 @@ internal class ReleaseInfoReader : ObjectReader<ReleaseInfo> {
             break;
           case "artist_name":
             artistName = reader.GetString();
+            break;
+          case "artists":
+            credits = reader.ReadList(ArtistCreditReader.Instance, options);
+            break;
+          case "caa_id":
+            caaId = reader.GetOptionalInt64();
+            break;
+          case "caa_release_mbid":
+            caaRelease = reader.GetOptionalGuid();
             break;
           case "listen_count":
             listenCount = reader.GetInt32();
@@ -68,6 +81,9 @@ internal class ReleaseInfoReader : ObjectReader<ReleaseInfo> {
       ArtistIds = artistMbids,
       ArtistMessyId = artistMsid,
       ArtistName = artistName,
+      Credits = credits,
+      CoverArtId = caaId,
+      CoverArtReleaseId = caaRelease,
       Id = mbid,
       MessyId = msid,
       UnhandledProperties = rest,

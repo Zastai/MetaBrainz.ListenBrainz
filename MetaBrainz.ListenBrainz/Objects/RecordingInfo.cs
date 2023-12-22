@@ -19,6 +19,12 @@ internal sealed class RecordingInfo : JsonBasedObject, IRecordingInfo {
 
   public string? ArtistName { get; init; }
 
+  public long? CoverArtId { get; init; }
+
+  public Guid? CoverArtReleaseId { get; init; }
+
+  public IReadOnlyList<IArtistCredit>? Credits { get; init; }
+
   public int ListenCount { get; }
 
   public Guid? Id { get; init; }
