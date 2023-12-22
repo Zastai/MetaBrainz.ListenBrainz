@@ -14,7 +14,7 @@ internal class ListenReader : ObjectReader<Listen> {
   public static readonly ListenReader Instance = new();
 
   protected override Listen ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-    string? inserted = null;
+    long? inserted = null;
     Guid? msid = null;
     ITrackInfo? track = null;
     string? user = null;
@@ -26,7 +26,7 @@ internal class ListenReader : ObjectReader<Listen> {
         reader.Read();
         switch (prop) {
           case "inserted_at":
-            inserted = reader.GetString();
+            inserted = reader.GetInt64();
             break;
           case "listened_at":
             ts = reader.GetInt64();
@@ -66,7 +66,7 @@ internal class ListenReader : ObjectReader<Listen> {
     if (ts is null) {
       throw new JsonException("Expected listened-at timestamp not found or null.");
     }
-    return new Listen(inserted, msid.Value, ts.Value, track, user) {
+    return new Listen(inserted.Value, msid.Value, ts.Value, track, user) {
       UnhandledProperties = rest
     };
   }

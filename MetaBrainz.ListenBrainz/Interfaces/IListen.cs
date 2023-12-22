@@ -11,8 +11,8 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 [PublicAPI]
 public interface IListen : IJsonBasedObject {
 
-  /// <summary>The timestamp at which the listen information was inserted in the database, in human-readable format.</summary>
-  string InsertedAt { get; }
+  /// <summary>The timestamp at which the listen information was inserted in the database.</summary>
+  DateTimeOffset InsertedAt { get; }
 
   /// <summary>The MessyBrainz ID for the recording that was listened to.</summary>
   Guid MessyRecordingId { get; }
