@@ -15,8 +15,9 @@ internal sealed class FetchedListensReader : PayloadReader<FetchedListens> {
   protected override FetchedListens ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     ushort? count = null;
     IReadOnlyList<IListen>? listens = null;
+    long? newest = null;
+    long? oldest = null;
     string? user = null;
-    long? ts = null;
     Dictionary<string, object?>? rest = null;
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
@@ -30,7 +31,10 @@ internal sealed class FetchedListensReader : PayloadReader<FetchedListens> {
             listens = reader.ReadList(ListenReader.Instance, options);
             break;
           case "latest_listen_ts":
-            ts = reader.GetInt64();
+            newest = reader.GetOptionalInt64();
+            break;
+          case "oldest_listen_ts":
+            oldest = reader.GetOptionalInt64();
             break;
           case "user_id":
             user = reader.GetString();
@@ -50,10 +54,13 @@ internal sealed class FetchedListensReader : PayloadReader<FetchedListens> {
     if (user is null) {
       throw new JsonException("Expected user id not found or null.");
     }
-    if (ts is null) {
+    if (newest is null) {
       throw new JsonException("Expected latest-listen timestamp not found or null.");
     }
-    return new FetchedListens(listens, ts.Value, user) {
+    if (oldest is null) {
+      throw new JsonException("Expected oldest-listen timestamp not found or null.");
+    }
+    return new FetchedListens(listens, newest.Value, oldest.Value, user) {
       UnhandledProperties = rest
     };
   }

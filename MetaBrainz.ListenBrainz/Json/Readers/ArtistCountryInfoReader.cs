@@ -4,6 +4,7 @@ using System.Text.Json;
 
 using MetaBrainz.Common.Json;
 using MetaBrainz.Common.Json.Converters;
+using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
@@ -14,6 +15,7 @@ internal class ArtistCountryInfoReader : ObjectReader<ArtistCountryInfo> {
 
   protected override ArtistCountryInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     int? artistCount = null;
+    IReadOnlyList<IArtistInfo>? artists = null;
     int? listenCount = null;
     string? country = null;
     Dictionary<string, object?>? rest = null;
@@ -22,6 +24,9 @@ internal class ArtistCountryInfoReader : ObjectReader<ArtistCountryInfo> {
       try {
         reader.Read();
         switch (prop) {
+          case "artists":
+            artists = reader.ReadList(ArtistInfoReader.Instance, options);
+            break;
           case "artist_count":
             artistCount = reader.GetInt32();
             break;
@@ -52,6 +57,7 @@ internal class ArtistCountryInfoReader : ObjectReader<ArtistCountryInfo> {
       throw new JsonException("Expected listen count not found or null.");
     }
     return new ArtistCountryInfo(artistCount.Value, country, listenCount.Value) {
+      Artists = artists,
       UnhandledProperties = rest,
     };
   }

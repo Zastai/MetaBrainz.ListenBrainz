@@ -18,6 +18,15 @@ public interface IReleaseInfo {
   /// <summary>The release's artist's name, if available.</summary>
   string? ArtistName { get; }
 
+  /// <summary>The internal ID for the track's release in the CoverArt Archive.</summary>
+  long? CoverArtId { get; }
+
+  /// <summary>The MusicBrainz ID for the track's release in the CoverArt Archive.</summary>
+  Guid? CoverArtReleaseId { get; }
+
+  /// <summary>The MusicBrainz credits for the track's artists.</summary>
+  IReadOnlyList<IArtistCredit>? Credits { get; }
+
   /// <summary>The MusicBrainz ID for the release, if available.</summary>
   Guid? Id { get; }
 

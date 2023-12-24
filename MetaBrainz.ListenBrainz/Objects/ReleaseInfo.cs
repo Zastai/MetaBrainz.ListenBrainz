@@ -19,6 +19,12 @@ internal sealed class ReleaseInfo : JsonBasedObject, IReleaseInfo {
 
   public string? ArtistName { get; init; }
 
+  public long? CoverArtId { get; init; }
+
+  public Guid? CoverArtReleaseId { get; init; }
+
+  public IReadOnlyList<IArtistCredit>? Credits { get; init; }
+
   public Guid? Id { get; init; }
 
   public int ListenCount { get; }

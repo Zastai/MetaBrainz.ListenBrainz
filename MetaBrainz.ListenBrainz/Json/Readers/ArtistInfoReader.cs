@@ -14,6 +14,7 @@ internal class ArtistInfoReader : ObjectReader<ArtistInfo> {
 
   protected override ArtistInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     int? listenCount = null;
+    Guid? mbid = null;
     IReadOnlyList<Guid>? mbids = null;
     Guid? msid = null;
     string? name = null;
@@ -23,6 +24,9 @@ internal class ArtistInfoReader : ObjectReader<ArtistInfo> {
       try {
         reader.Read();
         switch (prop) {
+          case "artist_mbid":
+            mbid = reader.GetOptionalGuid();
+            break;
           case "artist_mbids":
             mbids = reader.ReadList<Guid>(options);
             break;
@@ -53,6 +57,7 @@ internal class ArtistInfoReader : ObjectReader<ArtistInfo> {
       throw new JsonException("Expected artist name not found or null.");
     }
     return new ArtistInfo(name, listenCount.Value) {
+      Id = mbid,
       Ids = mbids,
       MessyId = msid,
       UnhandledProperties = rest,

@@ -18,7 +18,7 @@ internal class ListenReader : ObjectReader<Listen> {
     Guid? msid = null;
     ITrackInfo? track = null;
     string? user = null;
-    long? ts = null;
+    long? listened = null;
     Dictionary<string, object?>? rest = null;
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
@@ -26,10 +26,10 @@ internal class ListenReader : ObjectReader<Listen> {
         reader.Read();
         switch (prop) {
           case "inserted_at":
-            inserted = reader.GetInt64();
+            inserted = reader.GetOptionalInt64();
             break;
           case "listened_at":
-            ts = reader.GetInt64();
+            listened = reader.GetOptionalInt64();
             break;
           case "recording_msid":
             msid = reader.GetGuid();
@@ -54,6 +54,9 @@ internal class ListenReader : ObjectReader<Listen> {
     if (inserted is null) {
       throw new JsonException("Expected inserted-at timestamp not found or null.");
     }
+    if (listened is null) {
+      throw new JsonException("Expected listened-at timestamp not found or null.");
+    }
     if (msid is null) {
       throw new JsonException("Expected MessyBrainz recording id not found or null.");
     }
@@ -63,10 +66,7 @@ internal class ListenReader : ObjectReader<Listen> {
     if (user is null) {
       throw new JsonException("Expected user name not found or null.");
     }
-    if (ts is null) {
-      throw new JsonException("Expected listened-at timestamp not found or null.");
-    }
-    return new Listen(inserted.Value, msid.Value, ts.Value, track, user) {
+    return new Listen(inserted.Value, listened.Value, msid.Value, track, user) {
       UnhandledProperties = rest
     };
   }

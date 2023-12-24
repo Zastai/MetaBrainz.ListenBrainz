@@ -13,6 +13,8 @@ internal sealed class ArtistInfo : JsonBasedObject, IArtistInfo {
     this.ListenCount = listenCount;
   }
 
+  public Guid? Id { get; init; }
+
   public IReadOnlyList<Guid>? Ids { get; init; }
 
   public int ListenCount { get; }

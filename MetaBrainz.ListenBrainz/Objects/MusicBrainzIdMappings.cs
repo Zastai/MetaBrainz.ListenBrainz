@@ -13,7 +13,15 @@ internal sealed class MusicBrainzIdMappings : JsonBasedObject, IMusicBrainzIdMap
 
   public IReadOnlyList<Guid>? ArtistIds { get; init; }
 
+  public long? CoverArtId { get; init; }
+
+  public Guid? CoverArtReleaseId { get; init; }
+
+  public IReadOnlyList<IArtistCredit>? Credits { get; init; }
+
   public Guid? RecordingId { get; init; }
+
+  public string? RecordingName { get; init; }
 
   public Guid? ReleaseId { get; init; }
 

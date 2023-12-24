@@ -410,6 +410,10 @@ public interface IArtistCountryInfo {
     public abstract get;
   }
 
+  System.Collections.Generic.IReadOnlyList<IArtistInfo>? Artists {
+    public abstract get;
+  }
+
   string Country {
     public abstract get;
   }
@@ -421,10 +425,34 @@ public interface IArtistCountryInfo {
 }
 ```
 
+### Type: IArtistCredit
+
+```cs
+public interface IArtistCredit {
+
+  string CreditedName {
+    public abstract get;
+  }
+
+  System.Guid Id {
+    public abstract get;
+  }
+
+  string? JoinPhrase {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IArtistInfo
 
 ```cs
 public interface IArtistInfo : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Guid? Id {
+    public abstract get;
+  }
 
   System.Collections.Generic.IReadOnlyList<System.Guid>? Ids {
     public abstract get;
@@ -510,11 +538,11 @@ public interface IFetchedListens : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
-  System.DateTimeOffset Timestamp {
+  System.DateTimeOffset Newest {
     public abstract get;
   }
 
-  long UnixTimestamp {
+  System.DateTimeOffset Oldest {
     public abstract get;
   }
 
@@ -570,19 +598,15 @@ public interface IListen : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
+  System.DateTimeOffset ListenedAt {
+    public abstract get;
+  }
+
   System.Guid MessyRecordingId {
     public abstract get;
   }
 
-  System.DateTimeOffset Timestamp {
-    public abstract get;
-  }
-
   ITrackInfo Track {
-    public abstract get;
-  }
-
-  long UnixTimestamp {
     public abstract get;
   }
 
@@ -638,7 +662,23 @@ public interface IMusicBrainzIdMappings {
     public abstract get;
   }
 
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseId {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IArtistCredit>? Credits {
+    public abstract get;
+  }
+
   System.Guid? RecordingId {
+    public abstract get;
+  }
+
+  string? RecordingName {
     public abstract get;
   }
 
@@ -694,6 +734,18 @@ public interface IRecordingInfo {
     public abstract get;
   }
 
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseId {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IArtistCredit>? Credits {
+    public abstract get;
+  }
+
   System.Guid? Id {
     public abstract get;
   }
@@ -739,6 +791,18 @@ public interface IReleaseInfo {
   }
 
   string? ArtistName {
+    public abstract get;
+  }
+
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseId {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IArtistCredit>? Credits {
     public abstract get;
   }
 

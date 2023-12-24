@@ -11,18 +11,18 @@ namespace MetaBrainz.ListenBrainz.Objects;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal sealed class FetchedListens : JsonBasedObject, IFetchedListens {
 
-  public FetchedListens(IReadOnlyList<IListen> listens, long ts, string user) {
+  public FetchedListens(IReadOnlyList<IListen> listens, long newest, long oldest, string user) {
     this.Listens = listens;
-    this.Timestamp = DateTimeOffset.FromUnixTimeSeconds(ts);
-    this.UnixTimestamp = ts;
+    this.Newest = DateTimeOffset.FromUnixTimeSeconds(newest);
+    this.Oldest = DateTimeOffset.FromUnixTimeSeconds(oldest);
     this.User = user;
   }
 
   public IReadOnlyList<IListen> Listens { get; }
 
-  public DateTimeOffset Timestamp { get; }
+  public DateTimeOffset Newest { get; }
 
-  public long UnixTimestamp { get; }
+  public DateTimeOffset Oldest { get; }
 
   public string User { get; }
 

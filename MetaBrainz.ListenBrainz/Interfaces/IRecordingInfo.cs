@@ -18,6 +18,15 @@ public interface IRecordingInfo {
   /// <summary>The recording's artist's name, if available.</summary>
   string? ArtistName { get; }
 
+  /// <summary>The internal ID for the recording's release in the CoverArt Archive.</summary>
+  long? CoverArtId { get; }
+
+  /// <summary>The MusicBrainz ID for the recording's release in the CoverArt Archive.</summary>
+  Guid? CoverArtReleaseId { get; }
+
+  /// <summary>The MusicBrainz credits for the recording's artists.</summary>
+  IReadOnlyList<IArtistCredit>? Credits { get; }
+
   /// <summary>The number of times the recording was listened to.</summary>
   int ListenCount { get; }
 
