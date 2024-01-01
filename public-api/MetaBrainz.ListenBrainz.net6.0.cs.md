@@ -38,21 +38,7 @@ public sealed class ListenBrainz : System.IDisposable {
     public get;
   }
 
-  System.Uri ContactInfo {
-    public get;
-  }
-
-  System.Uri? DefaultContactInfo {
-    public static get;
-    public static set;
-  }
-
   int DefaultPort {
-    public static get;
-    public static set;
-  }
-
-  System.Net.Http.Headers.ProductHeaderValue? DefaultProductInfo {
     public static get;
     public static set;
   }
@@ -67,6 +53,10 @@ public sealed class ListenBrainz : System.IDisposable {
     public static set;
   }
 
+  System.Collections.Generic.IList<System.Net.Http.Headers.ProductInfoHeaderValue> DefaultUserAgent {
+    public static get;
+  }
+
   string? DefaultUserToken {
     public static get;
     public static set;
@@ -75,10 +65,6 @@ public sealed class ListenBrainz : System.IDisposable {
   int Port {
     public get;
     public set;
-  }
-
-  System.Net.Http.Headers.ProductHeaderValue ProductInfo {
-    public get;
   }
 
   MetaBrainz.Common.RateLimitInfo RateLimitInfo {
@@ -95,6 +81,10 @@ public sealed class ListenBrainz : System.IDisposable {
     public set;
   }
 
+  System.Collections.Generic.IList<System.Net.Http.Headers.ProductInfoHeaderValue> UserAgent {
+    public get;
+  }
+
   string? UserToken {
     public get;
     public set;
@@ -102,29 +92,27 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public ListenBrainz();
 
-  public ListenBrainz(System.Net.Http.Headers.ProductHeaderValue product);
+  public ListenBrainz(params System.Net.Http.Headers.ProductInfoHeaderValue[] userAgent);
 
-  public ListenBrainz(System.Net.Http.Headers.ProductHeaderValue product, System.Uri contact);
+  public ListenBrainz(System.Net.Http.HttpClient client, bool takeOwnership = false);
 
-  public ListenBrainz(System.Net.Http.Headers.ProductHeaderValue product, string contact);
+  public ListenBrainz(string application, System.Version? version);
 
-  public ListenBrainz(System.Uri contact);
+  public ListenBrainz(string application, System.Version? version, System.Uri contact);
 
-  public ListenBrainz(string contact);
+  public ListenBrainz(string application, System.Version? version, string contact);
 
-  public ListenBrainz(string application, System.Version version);
+  public ListenBrainz(string application, string? version);
 
-  public ListenBrainz(string application, System.Version version, System.Uri contact);
+  public ListenBrainz(string application, string? version, System.Uri contact);
 
-  public ListenBrainz(string application, System.Version version, string contact);
-
-  public ListenBrainz(string application, string version);
-
-  public ListenBrainz(string application, string version, System.Uri contact);
-
-  public ListenBrainz(string application, string version, string contact);
+  public ListenBrainz(string application, string? version, string contact);
 
   public void Close();
+
+  public void ConfigureClient(System.Action<System.Net.Http.HttpClient>? code);
+
+  public void ConfigureClientCreation(System.Func<System.Net.Http.HttpClient>? code);
 
   public sealed override void Dispose();
 
