@@ -316,13 +316,7 @@ public sealed partial class ListenBrainz : IDisposable {
 
   private HttpClient Client {
     get {
-#if NET6_0
-      if (this._disposed) {
-        throw new ObjectDisposedException(nameof(ListenBrainz));
-      }
-#else
       ObjectDisposedException.ThrowIf(this._disposed, typeof(ListenBrainz));
-#endif
       if (this._client is null) {
         var client = this._clientCreation?.Invoke() ?? new HttpClient();
         this._userAgent.ForEach(client.DefaultRequestHeaders.UserAgent.Add);
