@@ -237,6 +237,35 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
+  #region /1/stats/user/xxx/release-groups
+
+  /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
+  /// <param name="user">The user for whom the statistics are requested.</param>
+  /// <param name="count">
+  /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
+  /// returned.
+  /// </param>
+  /// <param name="offset">
+  /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
+  /// <see langword="null"/>), the top most listened-to releases will be returned.
+  /// </param>
+  /// <param name="range">The range of data to include in the statistics.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>
+  /// The requested releases statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
+  /// </returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IUserReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(string user, int? count = null, int? offset = null,
+                                                                           StatisticsRange? range = null,
+                                                                           CancellationToken cancellationToken = default) {
+    var address = $"stats/user/{user}/release-groups";
+    var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
+    return this.GetOptionalAsync<IUserReleaseGroupStatistics, UserReleaseGroupStatistics>(address, options, cancellationToken);
+  }
+
+  #endregion
+
   #region /1/stats/user/xxx/releases
 
   /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>

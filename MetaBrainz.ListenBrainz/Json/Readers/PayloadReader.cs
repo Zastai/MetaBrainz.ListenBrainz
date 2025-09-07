@@ -35,7 +35,8 @@ internal abstract class PayloadReader<T> : ObjectReader<T> {
     if (n != count.Value) {
       throw new JsonException($"The size of the list of items ({n}) does not match the reported item count ({count}).");
     }
-    return items ?? Array.Empty<TItem>(); // treat missing/null the same as []
+    // treat missing/null the same as []
+    return items ?? [ ];
   }
 
 }
