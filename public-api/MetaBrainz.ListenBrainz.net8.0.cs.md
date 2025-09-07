@@ -118,7 +118,9 @@ public sealed class ListenBrainz : System.IDisposable {
 
   protected override void Finalize();
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = default, bool forceRecalculation = false, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteArtistMap?> GetArtistMapAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
@@ -401,6 +403,18 @@ public interface IArtistInfo : MetaBrainz.Common.Json.IJsonBasedObject {
   }
 
   string Name {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IArtistMap
+
+```cs
+public interface IArtistMap {
+
+  System.Collections.Generic.IReadOnlyList<IArtistCountryInfo>? Countries {
     public abstract get;
   }
 
@@ -803,6 +817,14 @@ public interface IReleaseInfo {
 }
 ```
 
+### Type: ISiteArtistMap
+
+```cs
+public interface ISiteArtistMap : IArtistMap, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
+
+}
+```
+
 ### Type: ISiteArtistStatistics
 
 ```cs
@@ -938,11 +960,7 @@ public interface ITrackInfo : MetaBrainz.Common.Json.IJsonBasedObject {
 ### Type: IUserArtistMap
 
 ```cs
-public interface IUserArtistMap : IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-  System.Collections.Generic.IReadOnlyList<IArtistCountryInfo>? Countries {
-    public abstract get;
-  }
+public interface IUserArtistMap : IArtistMap, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
 }
 ```
