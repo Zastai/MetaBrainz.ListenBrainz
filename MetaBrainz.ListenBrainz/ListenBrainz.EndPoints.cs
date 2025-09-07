@@ -147,8 +147,9 @@ public sealed partial class ListenBrainz {
   public Task<ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = null, int? offset = null,
                                                                StatisticsRange? range = null,
                                                                CancellationToken cancellationToken = default) {
+    const string address = "stats/sitewide/artists";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    return this.GetOptionalAsync<ISiteArtistStatistics, SiteArtistStatistics>("stats/sitewide/artists", options, cancellationToken);
+    return this.GetOptionalAsync<ISiteArtistStatistics, SiteArtistStatistics>(address, options, cancellationToken);
   }
 
   /// <summary>Gets statistics about a user's most listened-to artists.</summary>
@@ -210,6 +211,23 @@ public sealed partial class ListenBrainz {
 
   #region listening-activity
 
+  /// <summary>Gets information about how many listens have been submitted over a period of time.</summary>
+  /// <param name="range">
+  /// The range of data to include in the information.<br/>
+  /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
+  /// recorded listen. Otherwise, information is returned about both the current and the previous range.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested listening activity.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<ISiteListeningActivity?> GetListeningActivityAsync(StatisticsRange? range = null,
+                                                                 CancellationToken cancellationToken = default) {
+    const string address = "stats/sitewide/listening-activity";
+    var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
+    return this.GetOptionalAsync<ISiteListeningActivity, SiteListeningActivity>(address, options, cancellationToken);
+  }
+
   /// <summary>Gets information about how many listens a user has submitted over a period of time.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
   /// <param name="range">
@@ -251,9 +269,9 @@ public sealed partial class ListenBrainz {
   public Task<ISiteRecordingStatistics?> GetRecordingStatisticsAsync(int? count = null, int? offset = null,
                                                                      StatisticsRange? range = null,
                                                                      CancellationToken cancellationToken = default) {
+    const string address = "stats/sitewide/recordings";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    return this.GetOptionalAsync<ISiteRecordingStatistics, SiteRecordingStatistics>("stats/sitewide/recordings", options,
-                                                                                    cancellationToken);
+    return this.GetOptionalAsync<ISiteRecordingStatistics, SiteRecordingStatistics>(address, options, cancellationToken);
   }
 
   /// <summary>Gets statistics about a user's most listened-to recordings ("tracks").</summary>

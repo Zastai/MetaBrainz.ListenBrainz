@@ -132,6 +132,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IListenCount> GetListenCountAsync(string user, System.Threading.CancellationToken cancellationToken = default);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteListeningActivity?> GetListeningActivityAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFetchedListens> GetListensAfterAsync(string user, System.DateTimeOffset after, int? count = default, int? timeRange = default, System.Threading.CancellationToken cancellationToken = default);
@@ -583,6 +585,18 @@ public interface IListenCount : MetaBrainz.Common.Json.IJsonBasedObject {
 }
 ```
 
+### Type: IListeningActivity
+
+```cs
+public interface IListeningActivity {
+
+  System.Collections.Generic.IReadOnlyList<IListenTimeRange>? Activity {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IListenTimeRange
 
 ```cs
@@ -855,6 +869,14 @@ public interface ISiteArtistStatistics : IArtistStatistics, IStatistics, MetaBra
 }
 ```
 
+### Type: ISiteListeningActivity
+
+```cs
+public interface ISiteListeningActivity : IListeningActivity, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
+
+}
+```
+
 ### Type: ISiteRecordingStatistics
 
 ```cs
@@ -1018,11 +1040,7 @@ public interface IUserDailyActivity : IStatistics, IUserStatistics, MetaBrainz.C
 ### Type: IUserListeningActivity
 
 ```cs
-public interface IUserListeningActivity : IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-  System.Collections.Generic.IReadOnlyList<IListenTimeRange>? Activity {
-    public abstract get;
-  }
+public interface IUserListeningActivity : IListeningActivity, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
 }
 ```
