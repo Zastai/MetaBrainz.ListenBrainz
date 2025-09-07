@@ -2,6 +2,6 @@ using JetBrains.Annotations;
 
 namespace MetaBrainz.ListenBrainz.Interfaces;
 
-/// <summary>Statistics about how many times particular artists were listened to.</summary>
+/// <summary>Statistics about how many times particular artists were listened to across all of ListenBrainz.</summary>
 [PublicAPI]
 public interface ISiteArtistStatistics : IArtistStatistics, IStatistics;

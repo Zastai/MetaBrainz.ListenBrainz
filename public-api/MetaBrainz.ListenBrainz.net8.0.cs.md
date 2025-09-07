@@ -150,6 +150,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IPlayingNow> GetPlayingNowAsync(string user, System.Threading.CancellationToken cancellationToken = default);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteRecordingStatistics?> GetRecordingStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
@@ -729,6 +731,26 @@ public interface IRecordingInfo {
 }
 ```
 
+### Type: IRecordingStatistics
+
+```cs
+public interface IRecordingStatistics {
+
+  int? Offset {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IRecordingInfo>? Recordings {
+    public abstract get;
+  }
+
+  int? TotalCount {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IReleaseGroupInfo
 
 ```cs
@@ -829,6 +851,14 @@ public interface ISiteArtistMap : IArtistMap, IStatistics, MetaBrainz.Common.Jso
 
 ```cs
 public interface ISiteArtistStatistics : IArtistStatistics, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
+
+}
+```
+
+### Type: ISiteRecordingStatistics
+
+```cs
+public interface ISiteRecordingStatistics : IRecordingStatistics, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
 }
 ```
@@ -1000,19 +1030,7 @@ public interface IUserListeningActivity : IStatistics, IUserStatistics, MetaBrai
 ### Type: IUserRecordingStatistics
 
 ```cs
-public interface IUserRecordingStatistics : IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-  int? Offset {
-    public abstract get;
-  }
-
-  System.Collections.Generic.IReadOnlyList<IRecordingInfo>? Recordings {
-    public abstract get;
-  }
-
-  int? TotalCount {
-    public abstract get;
-  }
+public interface IUserRecordingStatistics : IRecordingStatistics, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
 }
 ```
