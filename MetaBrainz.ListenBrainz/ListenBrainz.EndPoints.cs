@@ -21,14 +21,6 @@ public sealed partial class ListenBrainz {
 
   /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is requested.</param>
-  /// <returns>An object providing the user's ID and latest import timestamp.</returns>
-  /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public ILatestImport GetLatestImport(string user) => AsyncUtils.ResultOf(this.GetLatestImportAsync(user));
-
-  /// <summary>Get the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose data is requested.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>An object providing the user's ID and latest import timestamp.</returns>
   /// <remarks>This will access the <c>GET /1/latest-import</c> endpoint.</remarks>
@@ -36,31 +28,6 @@ public sealed partial class ListenBrainz {
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ILatestImport> GetLatestImportAsync(string user, CancellationToken cancellationToken = default)
     => this.GetAsync<ILatestImport, LatestImport>("latest-import", ListenBrainz.OptionsForLatestImport(user), cancellationToken);
-
-  /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose data should be modified.</param>
-  /// <param name="timestamp">The timestamp to set.</param>
-  /// <remarks>
-  /// This will access the <c>POST /1/latest-import</c> endpoint and requires <see cref="UserToken"/> to be set to the token
-  /// for <paramref name="user"/>.
-  /// </remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public void SetLatestImport(string user, DateTimeOffset timestamp)
-    => AsyncUtils.ResultOf(this.SetLatestImportAsync(user, timestamp.ToUnixTimeSeconds()));
-
-  /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
-  /// <param name="timestamp">
-  /// The timestamp to set, expressed as the number of seconds since <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>.
-  /// </param>
-  /// <remarks>
-  /// This will access the <c>POST /1/latest-import</c> endpoint and requires <see cref="UserToken"/> to be set to the token
-  /// for <paramref name="user"/>.
-  /// </remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public void SetLatestImport(string user, long timestamp) => AsyncUtils.ResultOf(this.SetLatestImportAsync(user, timestamp));
 
   /// <summary>Set the timestamp of the newest listen submitted by a user in previous imports to ListenBrainz.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data should be modified.</param>
@@ -131,27 +98,6 @@ public sealed partial class ListenBrainz {
   /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
   /// recorded listen. Otherwise, information is returned about both the current and the previous range.
   /// </param>
-  /// <returns>The requested artist statistics.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public ISiteArtistStatistics? GetArtistStatistics(int? count = null, int? offset = null, StatisticsRange? range = null)
-    => AsyncUtils.ResultOf(this.GetArtistStatisticsAsync(count, offset, range));
-
-  /// <summary>Gets statistics about the most listened-to artists.</summary>
-  /// <param name="count">
-  /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
-  /// returned.
-  /// </param>
-  /// <param name="offset">
-  /// The offset (from the start of the results) of the statistics to return for each time range. If not specified (or specified
-  /// as zero or <see langword="null"/>), the top most listened-to artists will be returned. Note that at most 1000 artists will
-  /// be included in the statistics for each time range.
-  /// </param>
-  /// <param name="range">
-  /// The range of data to include in the statistics.<br/>
-  /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
-  /// recorded listen. Otherwise, information is returned about both the current and the previous range.
-  /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested artist statistics.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
@@ -170,16 +116,6 @@ public sealed partial class ListenBrainz {
   #region /1/stats/user/xxx
 
   #region /1/stats/user/xxx/artist-map
-
-  /// <summary>Gets information about the number of artists a user has listened to, grouped by their country.</summary>
-  /// <param name="user">The user for whom the information is requested.</param>
-  /// <param name="range">The range of data to include in the statistics.</param>
-  /// <param name="forceRecalculation">Indicates whether recalculation of the data should be requested.</param>
-  /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IUserArtistMap? GetArtistMap(string user, StatisticsRange? range = null, bool forceRecalculation = false)
-    => AsyncUtils.ResultOf(this.GetArtistMapAsync(user, range, forceRecalculation));
 
   /// <summary>Gets information about the number of artists a user has listened to, grouped by their country.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -216,26 +152,6 @@ public sealed partial class ListenBrainz {
   /// <see langword="null"/>), the top most listened-to artists will be returned.
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
-  /// <returns>
-  /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
-  /// </returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IUserArtistStatistics? GetArtistStatistics(string user, int? count = null, int? offset = null,
-                                                    StatisticsRange? range = null)
-    => AsyncUtils.ResultOf(this.GetArtistStatisticsAsync(user, count, offset, range));
-
-  /// <summary>Gets statistics about a user's most listened-to artists.</summary>
-  /// <param name="user">The user for whom the statistics are requested.</param>
-  /// <param name="count">
-  /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
-  /// returned.
-  /// </param>
-  /// <param name="offset">
-  /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
-  /// <see langword="null"/>), the top most listened-to artists will be returned.
-  /// </param>
-  /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>
   /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
@@ -257,15 +173,6 @@ public sealed partial class ListenBrainz {
   /// <summary>Gets information about how a user's listens are spread across the days of the week.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
   /// <param name="range">The range of data to include in the information.</param>
-  /// <returns>The requested daily activity.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IUserDailyActivity? GetDailyActivity(string user, StatisticsRange? range = null)
-    => AsyncUtils.ResultOf(this.GetDailyActivityAsync(user, range));
-
-  /// <summary>Gets information about how a user's listens are spread across the days of the week.</summary>
-  /// <param name="user">The user for whom the information is requested.</param>
-  /// <param name="range">The range of data to include in the information.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested daily activity.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
@@ -280,19 +187,6 @@ public sealed partial class ListenBrainz {
   #endregion
 
   #region /1/stats/user/xxx/listening-activity
-
-  /// <summary>Gets information about how many listens a user has submitted over a period of time.</summary>
-  /// <param name="user">The user for whom the information is requested.</param>
-  /// <param name="range">
-  /// The range of data to include in the information.<br/>
-  /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
-  /// recorded listen. Otherwise, information is returned about both the current and the previous range.
-  /// </param>
-  /// <returns>The requested listening activity.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IUserListeningActivity? GetListeningActivity(string user, StatisticsRange? range = null)
-    => AsyncUtils.ResultOf(this.GetListeningActivityAsync(user, range));
 
   /// <summary>Gets information about how many listens a user has submitted over a period of time.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -327,26 +221,6 @@ public sealed partial class ListenBrainz {
   /// <see langword="null"/>), the top most listened-to recordings will be returned.
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
-  /// <returns>
-  /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
-  /// </returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IUserRecordingStatistics? GetRecordingStatistics(string user, int? count = null, int? offset = null,
-                                                          StatisticsRange? range = null)
-    => AsyncUtils.ResultOf(this.GetRecordingStatisticsAsync(user, count, offset, range));
-
-  /// <summary>Gets statistics about a user's most listened-to recordings ("tracks").</summary>
-  /// <param name="user">The user for whom the statistics are requested.</param>
-  /// <param name="count">
-  /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
-  /// returned.
-  /// </param>
-  /// <param name="offset">
-  /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
-  /// <see langword="null"/>), the top most listened-to recordings will be returned.
-  /// </param>
-  /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>
   /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
@@ -364,26 +238,6 @@ public sealed partial class ListenBrainz {
   #endregion
 
   #region /1/stats/user/xxx/releases
-
-  /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
-  /// <param name="user">The user for whom the statistics are requested.</param>
-  /// <param name="count">
-  /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
-  /// returned.
-  /// </param>
-  /// <param name="offset">
-  /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
-  /// <see langword="null"/>), the top most listened-to releases will be returned.
-  /// </param>
-  /// <param name="range">The range of data to include in the statistics.</param>
-  /// <returns>
-  /// The requested release statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
-  /// </returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IUserReleaseStatistics? GetReleaseStatistics(string user, int? count = null, int? offset = null,
-                                                      StatisticsRange? range = null)
-    => AsyncUtils.ResultOf(this.GetReleaseStatisticsAsync(user, count, offset, range));
 
   /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
@@ -443,34 +297,6 @@ public sealed partial class ListenBrainz {
   /// So the maximum listens that can be submitted at once is <c>(<see cref="MaxListenSize"/> - 36) / 72</c> (currently 141).
   /// </remarks>
   private const int MaxListensInOnePayload = (ListenBrainz.MaxListenSize - 36) / 72;
-
-  /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
-  /// <param name="listens">The listens to import.</param>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
-  /// Submissions will happen every <see cref="MaxListensInOnePayload"/> listens, and if a submission's listen data would exceed
-  /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
-  /// call to this method may result in multiple web service requests, which may affect rate limiting.
-  /// </remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public void ImportListens(IEnumerable<ISubmittedListen> listens) => AsyncUtils.ResultOf(this.ImportListensAsync(listens));
-
-  /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
-  /// <param name="listens">The listens to import.</param>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
-  /// Submissions will happen every <see cref="MaxListensInOnePayload"/> listens, and if a submission's listen data would exceed
-  /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
-  /// call to this method may result in multiple web service requests, which may affect rate limiting.
-  /// </remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public void ImportListens(params ISubmittedListen[] listens) => AsyncUtils.ResultOf(this.ImportListensAsync(listens));
 
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listens">The listens to import.</param>
@@ -603,31 +429,6 @@ public sealed partial class ListenBrainz {
 
   /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listen">The listen data to send.</param>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public void SetNowPlaying(ISubmittedListenData listen) => AsyncUtils.ResultOf(this.SetNowPlayingAsync(listen));
-
-  /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
-  /// <param name="track">The name of the track being listened to.</param>
-  /// <param name="artist">The name of the artist performing the track being listened to.</param>
-  /// <param name="release">The name of the release containing the track being listened to.</param>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public void SetNowPlaying(string track, string artist, string? release = null)
-    => AsyncUtils.ResultOf(this.SetNowPlayingAsync(track, artist, release));
-
-  /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
-  /// <param name="listen">The listen data to send.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
@@ -659,73 +460,6 @@ public sealed partial class ListenBrainz {
   #endregion
 
   #region Submit Single Listen
-
-  /// <summary>
-  /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
-  /// </summary>
-  /// <param name="listen">The listen to send.</param>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public void SubmitSingleListen(ISubmittedListen listen) => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(listen));
-
-  /// <summary>
-  /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
-  /// </summary>
-  /// <param name="timestamp">The date and time at which the track was listened to.</param>
-  /// <param name="track">The name of the track being listened to.</param>
-  /// <param name="artist">The name of the artist performing the track being listened to.</param>
-  /// <param name="release">The name of the release containing the track being listened to.</param>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public void SubmitSingleListen(DateTimeOffset timestamp, string track, string artist, string? release = null)
-    => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(timestamp, track, artist, release));
-
-  /// <summary>
-  /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
-  /// </summary>
-  /// <param name="timestamp">
-  /// The date and time at which the track was listened to, expressed as the number of seconds since
-  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>.
-  /// </param>
-  /// <param name="track">The name of the track being listened to.</param>
-  /// <param name="artist">The name of the artist performing the track being listened to.</param>
-  /// <param name="release">The name of the release containing the track being listened to.</param>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public void SubmitSingleListen(long timestamp, string track, string artist, string? release = null)
-    => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(timestamp, track, artist, release));
-
-  /// <summary>
-  /// Submits a single listen for the user whose token is set in <see cref="UserToken"/>, using the current (UTC) date and time as
-  /// timestamp.
-  /// </summary>
-  /// <param name="track">The name of the track being listened to.</param>
-  /// <param name="artist">The name of the artist performing the track being listened to.</param>
-  /// <param name="release">The name of the release containing the track being listened to.</param>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public void SubmitSingleListen(string track, string artist, string? release = null)
-    => AsyncUtils.ResultOf(this.SubmitSingleListenAsync(track, artist, release));
 
   /// <summary>
   /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
@@ -813,14 +547,6 @@ public sealed partial class ListenBrainz {
 
   /// <summary>Gets the number of listens submitted to ListenBrainz by a particular user.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose listen count is requested.</param>
-  /// <returns>An object providing the number of listens submitted by <paramref name="user"/>.</returns>
-  /// <remarks>This will access the <c>GET /1/user/USER/listen-count</c> endpoint.</remarks>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IListenCount GetListenCount(string user) => AsyncUtils.ResultOf(this.GetListenCountAsync(user));
-
-  /// <summary>Gets the number of listens submitted to ListenBrainz by a particular user.</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose listen count is requested.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>An object providing the number of listens submitted by <paramref name="user"/>.</returns>
   /// <remarks>This will access the <c>GET /1/user/USER/listen-count</c> endpoint.</remarks>
@@ -835,7 +561,8 @@ public sealed partial class ListenBrainz {
 
   #region Internal Helpers
 
-  private static IDictionary<string, string> OptionsForGetListens(int? count, long? after, long? before, int? timeRange) {
+  private Task<IFetchedListens> PerformGetListensAsync(string user, long? after, long? before, int? count = null,
+                                                       int? timeRange = null, CancellationToken cancellationToken = default) {
     var options = new Dictionary<string, string>(4);
     if (count is not null) {
       options.Add("count", count.Value.ToString(CultureInfo.InvariantCulture));
@@ -849,37 +576,12 @@ public sealed partial class ListenBrainz {
     if (timeRange is not null) {
       options.Add("time_range", timeRange.Value.ToString(CultureInfo.InvariantCulture));
     }
-    return options;
-  }
-
-  private IFetchedListens PerformGetListens(string user, long? after, long? before, int? count = null, int? timeRange = null)
-    => AsyncUtils.ResultOf(this.PerformGetListensAsync(user, after, before, count, timeRange));
-
-  private Task<IFetchedListens> PerformGetListensAsync(string user, long? after, long? before, int? count = null,
-                                                       int? timeRange = null, CancellationToken cancellationToken = default) {
-    var options = ListenBrainz.OptionsForGetListens(count, after, before, timeRange);
     return this.GetAsync<IFetchedListens, FetchedListens>($"user/{user}/listens", options, cancellationToken);
   }
 
   #endregion
 
   #region No Timestamps
-
-  /// <summary>Gets the most recent listens for a user.</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
-  /// <param name="count">
-  /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-  /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
-  /// </param>
-  /// <param name="timeRange">
-  /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
-  /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
-  /// </param>
-  /// <returns>The requested listens, in descending timestamp order.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IFetchedListens GetListens(string user, int? count = null, int? timeRange = null)
-    => this.PerformGetListens(user, null, null, count, timeRange);
 
   /// <summary>Gets the most recent listens for a user.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -902,47 +604,6 @@ public sealed partial class ListenBrainz {
   #endregion
 
   #region Minimum Timestamp
-
-  /// <summary>Gets the most recent listens for a user, starting from a particular timestamp.</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
-  /// <param name="after">
-  /// The timestamp to start from, expressed as the number of seconds since
-  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp greater than, but not
-  /// including, this value.
-  /// </param>
-  /// <param name="count">
-  /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-  /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
-  /// </param>
-  /// <param name="timeRange">
-  /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
-  /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
-  /// </param>
-  /// <returns>The requested listens, in descending timestamp order.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IFetchedListens GetListensAfter(string user, long after, int? count = null, int? timeRange = null)
-    => this.PerformGetListens(user, after, null, count, timeRange);
-
-  /// <summary>Gets the most recent listens for a user, starting from a particular timestamp.</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
-  /// <param name="after">
-  /// The timestamp to start from (with a precision of seconds).
-  /// Returned listens will have a timestamp greater than, but not including, this value.
-  /// </param>
-  /// <param name="count">
-  /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-  /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
-  /// </param>
-  /// <param name="timeRange">
-  /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
-  /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
-  /// </param>
-  /// <returns>The requested listens, in descending timestamp order.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IFetchedListens GetListensAfter(string user, DateTimeOffset after, int? count = null, int? timeRange = null)
-    => this.PerformGetListens(user, after.ToUnixTimeSeconds(), null, count, timeRange);
 
   /// <summary>Gets the most recent listens for a user, starting from a particular timestamp.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -992,47 +653,6 @@ public sealed partial class ListenBrainz {
   #endregion
 
   #region Maximum Timestamp
-
-  /// <summary>Gets historical listens for a user, starting from a particular timestamp.</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
-  /// <param name="before">
-  /// The timestamp to start from, expressed as the number of seconds since
-  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp less than, but not
-  /// including, this value.
-  /// </param>
-  /// <param name="count">
-  /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-  /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
-  /// </param>
-  /// <param name="timeRange">
-  /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
-  /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
-  /// </param>
-  /// <returns>The requested listens, in descending timestamp order.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IFetchedListens GetListensBefore(string user, long before, int? count = null, int? timeRange = null)
-    => this.PerformGetListens(user, null, before, count, timeRange);
-
-  /// <summary>Gets historical listens for a user, starting from a particular timestamp.</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
-  /// <param name="before">
-  /// The timestamp to start from (with a precision of seconds).
-  /// Returned listens will have a timestamp less than, but not including, this value.
-  /// </param>
-  /// <param name="count">
-  /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-  /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
-  /// </param>
-  /// <param name="timeRange">
-  /// The time range to search, in sets of 5 days; must be no greater than <see cref="MaxTimeRange"/>.<br/>
-  /// If not specified, <see cref="DefaultTimeRange"/> will be used as time range.
-  /// </param>
-  /// <returns>The requested listens, in descending timestamp order.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IFetchedListens GetListensBefore(string user, DateTimeOffset before, int? count = null, int? timeRange = null)
-    => this.PerformGetListens(user, null, before.ToUnixTimeSeconds(), count, timeRange);
 
   /// <summary>Gets historical listens for a user, starting from a particular timestamp.</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
@@ -1099,48 +719,6 @@ public sealed partial class ListenBrainz {
   /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
   /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
   /// </param>
-  /// <returns>The requested listens, in descending timestamp order.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IFetchedListens GetListensBetween(string user, long after, long before, int? count = null)
-    => this.PerformGetListens(user, after, before, count);
-
-  /// <summary>Gets the listens for a user in a specific timespan.</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
-  /// <param name="after">
-  /// The timestamp to end at (with a precision of seconds).
-  /// Returned listens will have a timestamp greater than, but not including, this value.
-  /// </param>
-  /// <param name="before">
-  /// The timestamp to start from (with a precision of seconds).
-  /// Returned listens will have a timestamp less than, but not including, this value.
-  /// </param>
-  /// <param name="count">
-  /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-  /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
-  /// </param>
-  /// <returns>The requested listens, in descending timestamp order.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IFetchedListens GetListensBetween(string user, DateTimeOffset after, DateTimeOffset before, int? count = null)
-    => this.PerformGetListens(user, after.ToUnixTimeSeconds(), before.ToUnixTimeSeconds(), count);
-
-  /// <summary>Gets the listens for a user in a specific timespan.</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
-  /// <param name="after">
-  /// The timestamp to start from, expressed as the number of seconds since
-  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp greater than, but not
-  /// including, this value.
-  /// </param>
-  /// <param name="before">
-  /// The timestamp to end at, expressed as the number of seconds since
-  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>. Returned listens will have a timestamp less than, but not
-  /// including, this value.
-  /// </param>
-  /// <param name="count">
-  /// The (maximum) number of listens to return; must be no greater than <see cref="MaxItemsPerGet"/>.<br/>
-  /// If not specified, this will return up to <see cref="DefaultItemsPerGet"/> listens.
-  /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens, in descending timestamp order.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
@@ -1179,13 +757,6 @@ public sealed partial class ListenBrainz {
 
   /// <summary>Gets a user's currently-playing listen(s).</summary>
   /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
-  /// <returns>The requested listens (typically 0 or 1).</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public IPlayingNow GetPlayingNow(string user) => AsyncUtils.ResultOf(this.GetPlayingNowAsync(user));
-
-  /// <summary>Gets a user's currently-playing listen(s).</summary>
-  /// <param name="user">The MusicBrainz ID of the user whose data is needed.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested listens (typically 0 or 1).</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
@@ -1197,15 +768,6 @@ public sealed partial class ListenBrainz {
 
   #region /1/validate-token
 
-  private static Dictionary<string, string> OptionsForTokenValidation(string token) => new() { ["token"] = token };
-
-  /// <summary>Validates a given user token.</summary>
-  /// <param name="token">The user token to validate.</param>
-  /// <returns>The result of the validation.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public ITokenValidationResult ValidateToken(string token) => AsyncUtils.ResultOf(this.ValidateTokenAsync(token));
-
   /// <summary>Validates a given user token.</summary>
   /// <param name="token">The user token to validate.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
@@ -1213,7 +775,9 @@ public sealed partial class ListenBrainz {
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ITokenValidationResult> ValidateTokenAsync(string token, CancellationToken cancellationToken = default) {
-    var options = ListenBrainz.OptionsForTokenValidation(token);
+    var options = new Dictionary<string, string> {
+      ["token"] = token
+    };
     return this.GetAsync<ITokenValidationResult, TokenValidationResult>("validate-token", options, cancellationToken);
   }
 

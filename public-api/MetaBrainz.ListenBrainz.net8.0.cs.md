@@ -118,39 +118,19 @@ public sealed class ListenBrainz : System.IDisposable {
 
   protected override void Finalize();
 
-  public MetaBrainz.ListenBrainz.Interfaces.IUserArtistMap? GetArtistMap(string user, StatisticsRange? range = default, bool forceRecalculation = false);
-
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = default, bool forceRecalculation = false, System.Threading.CancellationToken cancellationToken = default);
-
-  public MetaBrainz.ListenBrainz.Interfaces.ISiteArtistStatistics? GetArtistStatistics(int? count = default, int? offset = default, StatisticsRange? range = default);
-
-  public MetaBrainz.ListenBrainz.Interfaces.IUserArtistStatistics? GetArtistStatistics(string user, int? count = default, int? offset = default, StatisticsRange? range = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public MetaBrainz.ListenBrainz.Interfaces.IUserDailyActivity? GetDailyActivity(string user, StatisticsRange? range = default);
-
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserDailyActivity?> GetDailyActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
-
-  public MetaBrainz.ListenBrainz.Interfaces.ILatestImport GetLatestImport(string user);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ILatestImport> GetLatestImportAsync(string user, System.Threading.CancellationToken cancellationToken = default);
 
-  public MetaBrainz.ListenBrainz.Interfaces.IListenCount GetListenCount(string user);
-
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IListenCount> GetListenCountAsync(string user, System.Threading.CancellationToken cancellationToken = default);
 
-  public MetaBrainz.ListenBrainz.Interfaces.IUserListeningActivity? GetListeningActivity(string user, StatisticsRange? range = default);
-
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
-
-  public MetaBrainz.ListenBrainz.Interfaces.IFetchedListens GetListens(string user, int? count = default, int? timeRange = default);
-
-  public MetaBrainz.ListenBrainz.Interfaces.IFetchedListens GetListensAfter(string user, System.DateTimeOffset after, int? count = default, int? timeRange = default);
-
-  public MetaBrainz.ListenBrainz.Interfaces.IFetchedListens GetListensAfter(string user, long after, int? count = default, int? timeRange = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFetchedListens> GetListensAfterAsync(string user, System.DateTimeOffset after, int? count = default, int? timeRange = default, System.Threading.CancellationToken cancellationToken = default);
 
@@ -158,37 +138,19 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFetchedListens> GetListensAsync(string user, int? count = default, int? timeRange = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public MetaBrainz.ListenBrainz.Interfaces.IFetchedListens GetListensBefore(string user, System.DateTimeOffset before, int? count = default, int? timeRange = default);
-
-  public MetaBrainz.ListenBrainz.Interfaces.IFetchedListens GetListensBefore(string user, long before, int? count = default, int? timeRange = default);
-
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFetchedListens> GetListensBeforeAsync(string user, System.DateTimeOffset before, int? count = default, int? timeRange = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFetchedListens> GetListensBeforeAsync(string user, long before, int? count = default, int? timeRange = default, System.Threading.CancellationToken cancellationToken = default);
-
-  public MetaBrainz.ListenBrainz.Interfaces.IFetchedListens GetListensBetween(string user, System.DateTimeOffset after, System.DateTimeOffset before, int? count = default);
-
-  public MetaBrainz.ListenBrainz.Interfaces.IFetchedListens GetListensBetween(string user, long after, long before, int? count = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFetchedListens> GetListensBetweenAsync(string user, System.DateTimeOffset after, System.DateTimeOffset before, int? count = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFetchedListens> GetListensBetweenAsync(string user, long after, long before, int? count = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public MetaBrainz.ListenBrainz.Interfaces.IPlayingNow GetPlayingNow(string user);
-
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IPlayingNow> GetPlayingNowAsync(string user, System.Threading.CancellationToken cancellationToken = default);
-
-  public MetaBrainz.ListenBrainz.Interfaces.IUserRecordingStatistics? GetRecordingStatistics(string user, int? count = default, int? offset = default, StatisticsRange? range = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public MetaBrainz.ListenBrainz.Interfaces.IUserReleaseStatistics? GetReleaseStatistics(string user, int? count = default, int? offset = default, StatisticsRange? range = default);
-
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
-
-  public void ImportListens(params MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen[] listens);
-
-  public void ImportListens(System.Collections.Generic.IEnumerable<MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen> listens);
 
   public System.Threading.Tasks.Task ImportListensAsync(params MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen[] listens);
 
@@ -198,29 +160,13 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task ImportListensAsync(System.Threading.CancellationToken cancellationToken, params MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen[] listens);
 
-  public void SetLatestImport(string user, System.DateTimeOffset timestamp);
-
-  public void SetLatestImport(string user, long timestamp);
-
   public System.Threading.Tasks.Task SetLatestImportAsync(string user, System.DateTimeOffset timestamp, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task SetLatestImportAsync(string user, long timestamp, System.Threading.CancellationToken cancellationToken = default);
 
-  public void SetNowPlaying(MetaBrainz.ListenBrainz.Interfaces.ISubmittedListenData listen);
-
-  public void SetNowPlaying(string track, string artist, string? release = null);
-
   public System.Threading.Tasks.Task SetNowPlayingAsync(MetaBrainz.ListenBrainz.Interfaces.ISubmittedListenData listen, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task SetNowPlayingAsync(string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
-
-  public void SubmitSingleListen(MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen listen);
-
-  public void SubmitSingleListen(System.DateTimeOffset timestamp, string track, string artist, string? release = null);
-
-  public void SubmitSingleListen(long timestamp, string track, string artist, string? release = null);
-
-  public void SubmitSingleListen(string track, string artist, string? release = null);
 
   public System.Threading.Tasks.Task SubmitSingleListenAsync(MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen listen, System.Threading.CancellationToken cancellationToken = default);
 
@@ -229,8 +175,6 @@ public sealed class ListenBrainz : System.IDisposable {
   public System.Threading.Tasks.Task SubmitSingleListenAsync(long timestamp, string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task SubmitSingleListenAsync(string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
-
-  public MetaBrainz.ListenBrainz.Interfaces.ITokenValidationResult ValidateToken(string token);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ITokenValidationResult> ValidateTokenAsync(string token, System.Threading.CancellationToken cancellationToken = default);
 
