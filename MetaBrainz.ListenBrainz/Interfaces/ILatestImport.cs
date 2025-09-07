@@ -16,7 +16,7 @@ public interface ILatestImport : IJsonBasedObject {
 
   /// <summary>
   /// The timestamp of the newest listen submitted in previous imports, expressed as the number of seconds since
-  /// <see cref="UnixTime.Epoch">the Unix time epoch</see>.
+  /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>.
   /// </summary>
   long? UnixTimestamp { get; }
 
