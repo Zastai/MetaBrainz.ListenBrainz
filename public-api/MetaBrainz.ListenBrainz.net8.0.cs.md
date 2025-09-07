@@ -158,6 +158,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteReleaseStatistics?> GetReleaseStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task ImportListensAsync(params MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen[] listens);
@@ -853,6 +855,26 @@ public interface IReleaseInfo {
 }
 ```
 
+### Type: IReleaseStatistics
+
+```cs
+public interface IReleaseStatistics {
+
+  int? Offset {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IReleaseInfo>? Releases {
+    public abstract get;
+  }
+
+  int? TotalCount {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: ISiteArtistMap
 
 ```cs
@@ -881,6 +903,14 @@ public interface ISiteListeningActivity : IListeningActivity, IStatistics, MetaB
 
 ```cs
 public interface ISiteRecordingStatistics : IRecordingStatistics, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
+
+}
+```
+
+### Type: ISiteReleaseStatistics
+
+```cs
+public interface ISiteReleaseStatistics : IReleaseStatistics, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
 }
 ```
@@ -1076,19 +1106,7 @@ public interface IUserReleaseGroupStatistics : IStatistics, IUserStatistics, Met
 ### Type: IUserReleaseStatistics
 
 ```cs
-public interface IUserReleaseStatistics : IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-  int? Offset {
-    public abstract get;
-  }
-
-  System.Collections.Generic.IReadOnlyList<IReleaseInfo>? Releases {
-    public abstract get;
-  }
-
-  int? TotalCount {
-    public abstract get;
-  }
+public interface IUserReleaseStatistics : IReleaseStatistics, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
 }
 ```

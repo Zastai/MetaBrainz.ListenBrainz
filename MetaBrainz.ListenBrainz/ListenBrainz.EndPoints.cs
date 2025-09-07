@@ -97,7 +97,9 @@ public sealed partial class ListenBrainz {
 
   #region artist-map
 
-  /// <summary>Gets information about the number of times artists are listened to, grouped by their country.</summary>
+  /// <summary>
+  /// Gets information about the number of times artists are listened to across all of ListenBrainz, grouped by their country.
+  /// </summary>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
@@ -125,7 +127,7 @@ public sealed partial class ListenBrainz {
 
   #region artists
 
-  /// <summary>Gets statistics about the most listened-to artists.</summary>
+  /// <summary>Gets statistics about the most listened-to artists across all of ListenBrainz.</summary>
   /// <param name="count">
   /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
   /// returned.
@@ -211,7 +213,7 @@ public sealed partial class ListenBrainz {
 
   #region listening-activity
 
-  /// <summary>Gets information about how many listens have been submitted over a period of time.</summary>
+  /// <summary>Gets information about how many listens have been submitted across to ListenBrainz over a period of time.</summary>
   /// <param name="range">
   /// The range of data to include in the information.<br/>
   /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
@@ -228,7 +230,7 @@ public sealed partial class ListenBrainz {
     return this.GetOptionalAsync<ISiteListeningActivity, SiteListeningActivity>(address, options, cancellationToken);
   }
 
-  /// <summary>Gets information about how many listens a user has submitted over a period of time.</summary>
+  /// <summary>Gets information about how many listens a user has submitted to ListenBrainz over a period of time.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
   /// <param name="range">
   /// The range of data to include in the information.<br/>
@@ -250,7 +252,7 @@ public sealed partial class ListenBrainz {
 
   #region recordings
 
-  /// <summary>Gets statistics about the most listened-to recordings ("tracks").</summary>
+  /// <summary>Gets statistics about the most listened-to recordings ("tracks") across all of ListenBrainz.</summary>
   /// <param name="count">
   /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
   /// returned.
@@ -331,6 +333,30 @@ public sealed partial class ListenBrainz {
   #endregion
 
   #region releases
+
+  /// <summary>Gets statistics about the most listened-to releases ("albums") across all of ListenBrainz.</summary>
+  /// <param name="count">
+  /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
+  /// returned.
+  /// </param>
+  /// <param name="offset">
+  /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
+  /// <see langword="null"/>), the top most listened-to releases will be returned.
+  /// </param>
+  /// <param name="range">The range of data to include in the statistics.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>
+  /// The requested releases statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
+  /// </returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<ISiteReleaseStatistics?> GetReleaseStatisticsAsync(int? count = null, int? offset = null,
+                                                                 StatisticsRange? range = null,
+                                                                 CancellationToken cancellationToken = default) {
+    const string address = "stats/sitewide/releases";
+    var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
+    return this.GetOptionalAsync<ISiteReleaseStatistics, SiteReleaseStatistics>(address, options, cancellationToken);
+  }
 
   /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
