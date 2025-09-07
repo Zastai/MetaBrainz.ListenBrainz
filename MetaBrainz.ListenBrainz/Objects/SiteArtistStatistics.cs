@@ -5,18 +5,15 @@ using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects;
 
-internal sealed class SiteArtistStatistics : Statistics, ISiteArtistStatistics {
-
-  public SiteArtistStatistics(int count, DateTimeOffset lastUpdated, int offset, StatisticsRange range)
-  : base(lastUpdated, range) {
-    this.Count = count;
-    this.Offset = offset;
-  }
+internal sealed class SiteArtistStatistics(int count, int totalCount, DateTimeOffset lastUpdated, int offset, StatisticsRange range)
+  : Statistics(lastUpdated, range), ISiteArtistStatistics {
 
   public IReadOnlyList<IArtistInfo>? Artists { get; init; }
 
-  public int Count { get; }
+  public int Count { get; } = count;
 
-  public int Offset { get; }
+  public int Offset { get; } = offset;
+
+  public int TotalCount { get; } = totalCount;
 
 }
