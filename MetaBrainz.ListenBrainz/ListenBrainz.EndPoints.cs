@@ -65,6 +65,14 @@ public sealed partial class ListenBrainz {
 
   #region /1/stats
 
+  private static IDictionary<string, string> OptionsForGetArtistMap(StatisticsRange? range) {
+    var options = new Dictionary<string, string>(1);
+    if (range is not null) {
+      options.Add("range", range.Value.ToJson());
+    }
+    return options;
+  }
+
   private static IDictionary<string, string> OptionsForGetStatistics(int? count, int? offset, StatisticsRange? range) {
     var options = new Dictionary<string, string>(3);
     if (count is not null) {
@@ -89,23 +97,27 @@ public sealed partial class ListenBrainz {
 
   #region artist-map
 
-  /// <summary>Gets information about the number of artists a user has listened to, grouped by their country.</summary>
-  /// <param name="user">The user for whom the information is requested.</param>
+  /// <summary>Gets information about the number of times artists are listened to, grouped by their country.</summary>
   /// <param name="range">The range of data to include in the statistics.</param>
-  /// <param name="forceRecalculation">Indicates whether recalculation of the data should be requested.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null, bool forceRecalculation = false,
+  public Task<ISiteArtistMap?> GetArtistMapAsync(StatisticsRange? range = null, CancellationToken cancellationToken = default) {
+    var options = ListenBrainz.OptionsForGetArtistMap(range);
+    return this.GetOptionalAsync<ISiteArtistMap, SiteArtistMap>("stats/sitewide/artist-map", options, cancellationToken);
+  }
+
+  /// <summary>Gets information about the number of artists a user has listened to, grouped by their country.</summary>
+  /// <param name="user">The user for whom the information is requested.</param>
+  /// <param name="range">The range of data to include in the statistics.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null,
                                                  CancellationToken cancellationToken = default) {
-    var options = new Dictionary<string, string>(2);
-    if (range is not null) {
-      options.Add("range", range.Value.ToJson());
-    }
-    if (forceRecalculation) {
-      options.Add("force_recalculate", "true");
-    }
+    var options = ListenBrainz.OptionsForGetArtistMap(range);
     return this.GetOptionalAsync<IUserArtistMap, UserArtistMap>($"stats/user/{user}/artist-map", options, cancellationToken);
   }
 
