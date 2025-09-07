@@ -156,6 +156,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteReleaseStatistics?> GetReleaseStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
@@ -807,6 +809,26 @@ public interface IReleaseGroupInfo {
 }
 ```
 
+### Type: IReleaseGroupStatistics
+
+```cs
+public interface IReleaseGroupStatistics {
+
+  int? Offset {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IReleaseGroupInfo>? ReleaseGroups {
+    public abstract get;
+  }
+
+  int? TotalCount {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IReleaseInfo
 
 ```cs
@@ -903,6 +925,14 @@ public interface ISiteListeningActivity : IListeningActivity, IStatistics, MetaB
 
 ```cs
 public interface ISiteRecordingStatistics : IRecordingStatistics, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
+
+}
+```
+
+### Type: ISiteReleaseGroupStatistics
+
+```cs
+public interface ISiteReleaseGroupStatistics : IReleaseGroupStatistics, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
 }
 ```
@@ -1086,19 +1116,7 @@ public interface IUserRecordingStatistics : IRecordingStatistics, IStatistics, I
 ### Type: IUserReleaseGroupStatistics
 
 ```cs
-public interface IUserReleaseGroupStatistics : IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-  int? Offset {
-    public abstract get;
-  }
-
-  System.Collections.Generic.IReadOnlyList<IReleaseGroupInfo>? ReleaseGroups {
-    public abstract get;
-  }
-
-  int? TotalCount {
-    public abstract get;
-  }
+public interface IUserReleaseGroupStatistics : IReleaseGroupStatistics, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
 }
 ```

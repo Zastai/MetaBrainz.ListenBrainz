@@ -19,6 +19,7 @@ internal static class Converters {
       yield return SiteArtistStatisticsReader.Instance;
       yield return SiteListeningActivityReader.Instance;
       yield return SiteRecordingStatisticsReader.Instance;
+      yield return SiteReleaseGroupStatisticsReader.Instance;
       yield return SiteReleaseStatisticsReader.Instance;
       yield return TokenValidationResultReader.Instance;
       yield return UserArtistMapReader.Instance;
@@ -26,8 +27,8 @@ internal static class Converters {
       yield return UserDailyActivityReader.Instance;
       yield return UserListeningActivityReader.Instance;
       yield return UserRecordingStatisticsReader.Instance;
-      yield return UserReleaseStatisticsReader.Instance;
       yield return UserReleaseGroupStatisticsReader.Instance;
+      yield return UserReleaseStatisticsReader.Instance;
     }
   }
 
