@@ -424,6 +424,10 @@ public interface IArtistStatistics {
     public abstract get;
   }
 
+  int TotalCount {
+    public abstract get;
+  }
+
 }
 ```
 
@@ -947,10 +951,6 @@ public interface IUserArtistMap : IStatistics, IUserStatistics, MetaBrainz.Commo
 
 ```cs
 public interface IUserArtistStatistics : IArtistStatistics, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-  int TotalCount {
-    public abstract get;
-  }
 
 }
 ```

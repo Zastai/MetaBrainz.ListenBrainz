@@ -21,6 +21,7 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
     DateTimeOffset? oldestListen = null;
     StatisticsRange? range = null;
     Dictionary<string, object?>? rest = null;
+    int? totalCount = null;
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
       try {
@@ -54,6 +55,9 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
             newestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
           }
+          case "total_artist_count":
+            totalCount = reader.GetInt32();
+            break;
           default:
             rest ??= new Dictionary<string, object?>();
             rest[prop] = reader.GetOptionalObject(options);
@@ -65,12 +69,7 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
       }
       reader.Read();
     }
-    // LB-1013: This ALWAYS reports 1000 as count, so we can't use VerifyPayloadContents().
-    // artists = this.VerifyPayloadContents(count, artists);
-    artists ??= Array.Empty<IArtistInfo>();
-    if (count is null) {
-      throw new JsonException("Expected count not found or null.");
-    }
+    artists = PayloadReader<SiteArtistStatistics>.VerifyPayloadContents(count, artists);
     if (lastUpdated is null) {
       throw new JsonException("Expected last-updated timestamp not found or null.");
     }
@@ -80,7 +79,10 @@ internal sealed class SiteArtistStatisticsReader : PayloadReader<SiteArtistStati
     if (range is null) {
       throw new JsonException("Expected range not found or null.");
     }
-    return new SiteArtistStatistics(count.Value, lastUpdated.Value, offset.Value, range.Value) {
+    if (totalCount is null) {
+      throw new JsonException("Expected total count not found or null.");
+    }
+    return new SiteArtistStatistics(count ?? 0, totalCount.Value, lastUpdated.Value, offset.Value, range.Value) {
       Artists = artists,
       NewestListen = newestListen,
       OldestListen = oldestListen,

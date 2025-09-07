@@ -17,4 +17,7 @@ public interface IArtistStatistics {
   /// <summary>The offset of the artist lists (in each time range) from the start of the full set.</summary>
   int Offset { get; }
 
+  /// <summary>The total number of (distinct) artists listened to.</summary>
+  public int TotalCount { get; }
+
 }

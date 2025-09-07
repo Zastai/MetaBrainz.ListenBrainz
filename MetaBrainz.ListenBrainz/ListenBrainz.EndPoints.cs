@@ -79,9 +79,39 @@ public sealed partial class ListenBrainz {
     return options;
   }
 
-  #region /1/stats/sitewide
+  #region artist-activity
 
-  #region /1/stats/sitewide/artists
+  #endregion
+
+  #region artist-evolution-activity
+
+  #endregion
+
+  #region artist-map
+
+  /// <summary>Gets information about the number of artists a user has listened to, grouped by their country.</summary>
+  /// <param name="user">The user for whom the information is requested.</param>
+  /// <param name="range">The range of data to include in the statistics.</param>
+  /// <param name="forceRecalculation">Indicates whether recalculation of the data should be requested.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null, bool forceRecalculation = false,
+                                                 CancellationToken cancellationToken = default) {
+    var options = new Dictionary<string, string>(2);
+    if (range is not null) {
+      options.Add("range", range.Value.ToJson());
+    }
+    if (forceRecalculation) {
+      options.Add("force_recalculate", "true");
+    }
+    return this.GetOptionalAsync<IUserArtistMap, UserArtistMap>($"stats/user/{user}/artist-map", options, cancellationToken);
+  }
+
+  #endregion
+
+  #region artists
 
   /// <summary>Gets statistics about the most listened-to artists.</summary>
   /// <param name="count">
@@ -108,38 +138,6 @@ public sealed partial class ListenBrainz {
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
     return this.GetOptionalAsync<ISiteArtistStatistics, SiteArtistStatistics>("stats/sitewide/artists", options, cancellationToken);
   }
-
-  #endregion
-
-  #endregion
-
-  #region /1/stats/user/xxx
-
-  #region /1/stats/user/xxx/artist-map
-
-  /// <summary>Gets information about the number of artists a user has listened to, grouped by their country.</summary>
-  /// <param name="user">The user for whom the information is requested.</param>
-  /// <param name="range">The range of data to include in the statistics.</param>
-  /// <param name="forceRecalculation">Indicates whether recalculation of the data should be requested.</param>
-  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
-  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
-  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null, bool forceRecalculation = false,
-                                                 CancellationToken cancellationToken = default) {
-    var options = new Dictionary<string, string>(2);
-    if (range is not null) {
-      options.Add("range", range.Value.ToJson());
-    }
-    if (forceRecalculation) {
-      options.Add("force_recalculate", "true");
-    }
-    return this.GetOptionalAsync<IUserArtistMap, UserArtistMap>($"stats/user/{user}/artist-map", options, cancellationToken);
-  }
-
-  #endregion
-
-  #region /1/stats/user/xxx/artists
 
   /// <summary>Gets statistics about a user's most listened-to artists.</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
@@ -168,7 +166,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/user/xxx/daily-activity
+  #region daily-activity
 
   /// <summary>Gets information about how a user's listens are spread across the days of the week.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -186,7 +184,19 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/user/xxx/listening-activity
+  #region era-activity
+
+  #endregion
+
+  #region genre-activity
+
+  #endregion
+
+  #region listeners
+
+  #endregion
+
+  #region listening-activity
 
   /// <summary>Gets information about how many listens a user has submitted over a period of time.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -208,7 +218,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/user/xxx/recordings
+  #region recordings
 
   /// <summary>Gets statistics about a user's most listened-to recordings ("tracks").</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
@@ -237,9 +247,9 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/user/xxx/release-groups
+  #region release-groups
 
-  /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
+  /// <summary>Gets statistics about a user's most listened-to release groups (sets of all editions of an "album").</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
   /// <param name="count">
   /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
@@ -247,7 +257,7 @@ public sealed partial class ListenBrainz {
   /// </param>
   /// <param name="offset">
   /// The offset (from the start of the results) of the statistics to return. If not specified (or specified as zero or
-  /// <see langword="null"/>), the top most listened-to releases will be returned.
+  /// <see langword="null"/>), the top most listened-to release groups will be returned.
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
@@ -266,7 +276,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/user/xxx/releases
+  #region releases
 
   /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
@@ -294,6 +304,39 @@ public sealed partial class ListenBrainz {
   }
 
   #endregion
+
+  #region year-in-music
+
+  // While the endpoint is listed in the docs, its payload is not.
+  // The top level has:
+  // - user_name: the name of the user
+  // - data: the year-in-music data, with the following fields:
+  //   - artist_map: same contents as the artist-map entry point (with the artist data limited to name, mbid and listen count)
+  //   - day_of_week: name of a day of the week; presumably the day the most listens are recorded
+  //   - listens_per_day: list of objects (one per day of the year):
+  //     - time_range: string containing the date (e.g. "02 October 2022")
+  //     - from_ts/to_ts: Unix timestamps
+  //     - listen_count
+  //   - most_listened_year: dictionary mapping a year (as a string) to the number of listens for recordings from that year
+  //   - new_releases_of_top_artists: list of release group info
+  //     - similar to what's in the RG stats, but "title" instead of "release_group_name", and no listen count
+  //   - playlist-top-discoveries-for-year
+  //     - ListenBrainz Troi playlist data
+  //   - playlist-top-discoveries-for-year-coverart: map of mbid to CAA URL
+  //   - playlist-top-missed-recordings-for-year
+  //     - ListenBrainz Troi playlist data
+  //   - playlist-top-missed-recordings-for-year-coverart: map of mbid to CAA URL
+  //   - similar_users: map of user names (string) to a decimal number (0-1)
+  //   - top_artists: list of artist info (similar to what's in the artist map: name, mbid, listen count)
+  //   - top_recordings: list of record info (similar to what's in the recording stats)
+  //   - top_releases: list of release info (similar to what's in the release stats)
+  //   - total_artists_count (an integer)
+  //   - total_listen_count (an integer)
+  //   - total_listening_time (a decimal number; presumably expressed in minutes)
+  //   - total_new_artists_discovered (an integer)
+  //   - total_recordings_count (an integer)
+  //   - total_releases_count (an integer)
+  //   - yim_artist_map: identical to artist_map
 
   #endregion
 
