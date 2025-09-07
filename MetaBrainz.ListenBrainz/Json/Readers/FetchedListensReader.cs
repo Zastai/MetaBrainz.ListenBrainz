@@ -50,18 +50,18 @@ internal sealed class FetchedListensReader : PayloadReader<FetchedListens> {
       }
       reader.Read();
     }
-    listens = PayloadReader<FetchedListens>.VerifyPayloadContents(count, listens);
-    if (user is null) {
-      throw new JsonException("Expected user id not found or null.");
-    }
     if (newest is null) {
       throw new JsonException("Expected latest-listen timestamp not found or null.");
     }
     if (oldest is null) {
       throw new JsonException("Expected oldest-listen timestamp not found or null.");
     }
-    return new FetchedListens(listens, newest.Value, oldest.Value, user) {
-      UnhandledProperties = rest
+    return new FetchedListens {
+      Listens = listens.VerifyPayloadContents(count),
+      Newest = DateTimeOffset.FromUnixTimeSeconds(newest.Value),
+      Oldest = DateTimeOffset.FromUnixTimeSeconds(oldest.Value),
+      UnhandledProperties = rest,
+      User = user ?? throw new JsonException("Expected user id not found or null."),
     };
   }
 

@@ -69,18 +69,13 @@ internal sealed class SiteReleaseStatisticsReader : PayloadReader<SiteReleaseSta
       }
       reader.Read();
     }
-    releases = PayloadReader<SiteReleaseStatistics>.VerifyPayloadContents(count, releases);
-    if (lastUpdated is null) {
-      throw new JsonException("Expected last-updated timestamp not found or null.");
-    }
-    if (range is null) {
-      throw new JsonException("Expected range not found or null.");
-    }
-    return new SiteReleaseStatistics(lastUpdated.Value, range.Value) {
+    return new SiteReleaseStatistics {
+      LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
       Offset = offset,
       OldestListen = oldestListen,
-      Releases = releases,
+      Range = range ?? throw new JsonException("Expected range not found or null."),
+      Releases = releases.VerifyPayloadContents(count),
       TotalCount = totalCount,
       UnhandledProperties = rest,
     };

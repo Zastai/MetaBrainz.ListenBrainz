@@ -73,27 +73,18 @@ internal sealed class UserArtistStatisticsReader : PayloadReader<UserArtistStati
       }
       reader.Read();
     }
-    artists = PayloadReader<UserArtistStatistics>.VerifyPayloadContents(count, artists);
-    if (lastUpdated is null) {
-      throw new JsonException("Expected last-updated timestamp not found or null.");
-    }
-    if (offset is null) {
-      throw new JsonException("Expected offset not found or null.");
-    }
-    if (range is null) {
-      throw new JsonException("Expected range not found or null.");
-    }
-    if (totalCount is null) {
-      throw new JsonException("Expected total count not found or null.");
-    }
-    if (user is null) {
-      throw new JsonException("Expected user id not found or null.");
-    }
-    return new UserArtistStatistics(count ?? 0, totalCount.Value, lastUpdated.Value, offset.Value, range.Value, user) {
+    artists = artists.VerifyPayloadContents(count);
+    return new UserArtistStatistics {
       Artists = artists,
+      Count = count ?? 0,
+      LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
+      Offset = offset ?? throw new JsonException("Expected offset not found or null."),
       OldestListen = oldestListen,
+      Range = range ?? throw new JsonException("Expected range not found or null."),
+      TotalCount = totalCount ?? throw new JsonException("Expected total count not found or null."),
       UnhandledProperties = rest,
+      User = user ?? throw new JsonException("Expected user id not found or null."),
     };
   }
 

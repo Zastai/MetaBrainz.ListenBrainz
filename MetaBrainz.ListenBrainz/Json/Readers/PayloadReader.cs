@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text.Json;
 
 using MetaBrainz.Common.Json.Converters;
@@ -25,17 +24,5 @@ internal abstract class PayloadReader<T> : ObjectReader<T> {
   }
 
   protected abstract T ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options);
-
-  protected static IReadOnlyList<TItem> VerifyPayloadContents<TItem>(int? count, IReadOnlyList<TItem>? items) {
-    if (count is null) {
-      throw new JsonException("Expected payload item count not found or null.");
-    }
-    var n = items?.Count ?? 0;
-    if (n != count.Value) {
-      throw new JsonException($"The size of the list of items ({n}) does not match the reported item count ({count}).");
-    }
-    // treat missing/null the same as []
-    return items ?? [ ];
-  }
 
 }

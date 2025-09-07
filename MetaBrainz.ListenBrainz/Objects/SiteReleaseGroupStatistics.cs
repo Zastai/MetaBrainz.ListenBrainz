@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
 
 using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects;
 
-internal sealed class SiteReleaseGroupStatistics(DateTimeOffset lastUpdated, StatisticsRange range)
-  : Statistics(lastUpdated, range), ISiteReleaseGroupStatistics {
+internal sealed class SiteReleaseGroupStatistics : Statistics, ISiteReleaseGroupStatistics {
 
   public IReadOnlyList<IReleaseGroupInfo>? ReleaseGroups { get; init; }
 
