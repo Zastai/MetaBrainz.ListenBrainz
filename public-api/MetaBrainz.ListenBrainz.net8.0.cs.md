@@ -118,6 +118,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   protected override void Finalize();
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistListeners?> GetArtistListenersAsync(System.Guid mbid, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteArtistMap?> GetArtistMapAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
@@ -155,6 +157,8 @@ public sealed class ListenBrainz : System.IDisposable {
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteRecordingStatistics?> GetRecordingStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IReleaseGroupListeners?> GetReleaseGroupListenersAsync(System.Guid mbid, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
@@ -417,6 +421,22 @@ public interface IArtistInfo : MetaBrainz.Common.Json.IJsonBasedObject {
 }
 ```
 
+### Type: IArtistListeners
+
+```cs
+public interface IArtistListeners : IListenerInfo, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Guid Id {
+    public abstract get;
+  }
+
+  string Name {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IArtistMap
 
 ```cs
@@ -583,6 +603,26 @@ public interface IListen : MetaBrainz.Common.Json.IJsonBasedObject {
 public interface IListenCount : MetaBrainz.Common.Json.IJsonBasedObject {
 
   long Count {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IListenerInfo
+
+```cs
+public interface IListenerInfo {
+
+  System.Collections.Generic.IReadOnlyList<ITopListener> TopListeners {
+    public abstract get;
+  }
+
+  int TotalListeners {
+    public abstract get;
+  }
+
+  int TotalListens {
     public abstract get;
   }
 
@@ -799,6 +839,38 @@ public interface IReleaseGroupInfo {
   }
 
   int ListenCount {
+    public abstract get;
+  }
+
+  string Name {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IReleaseGroupListeners
+
+```cs
+public interface IReleaseGroupListeners : IListenerInfo, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Collections.Generic.IReadOnlyList<System.Guid>? ArtistIds {
+    public abstract get;
+  }
+
+  string? ArtistName {
+    public abstract get;
+  }
+
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseGroupId {
+    public abstract get;
+  }
+
+  System.Guid Id {
     public abstract get;
   }
 
@@ -1035,6 +1107,22 @@ public interface ITokenValidationResult {
   }
 
   bool? Valid {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: ITopListener
+
+```cs
+public interface ITopListener : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  int ListenCount {
+    public abstract get;
+  }
+
+  string UserName {
     public abstract get;
   }
 

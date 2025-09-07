@@ -57,16 +57,12 @@ internal sealed class SiteArtistMapReader : PayloadReader<SiteArtistMap> {
       }
       reader.Read();
     }
-    if (lastUpdated is null) {
-      throw new JsonException("Expected last-updated timestamp not found or null.");
-    }
-    if (range is null) {
-      throw new JsonException("Expected range not found or null.");
-    }
-    return new SiteArtistMap(lastUpdated.Value, range.Value) {
+    return new SiteArtistMap {
       Countries = countries,
+      LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
       OldestListen = oldestListen,
+      Range = range ?? throw new JsonException("Expected range not found or null."),
       UnhandledProperties = rest,
     };
   }

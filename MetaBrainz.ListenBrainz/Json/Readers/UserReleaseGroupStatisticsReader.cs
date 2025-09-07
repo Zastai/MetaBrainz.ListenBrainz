@@ -73,23 +73,16 @@ internal sealed class UserReleaseGroupStatisticsReader : PayloadReader<UserRelea
       }
       reader.Read();
     }
-    releaseGroups = PayloadReader<UserReleaseGroupStatistics>.VerifyPayloadContents(count, releaseGroups);
-    if (lastUpdated is null) {
-      throw new JsonException("Expected last-updated timestamp not found or null.");
-    }
-    if (range is null) {
-      throw new JsonException("Expected range not found or null.");
-    }
-    if (user is null) {
-      throw new JsonException("Expected user id not found or null.");
-    }
-    return new UserReleaseGroupStatistics(lastUpdated.Value, range.Value, user) {
+    return new UserReleaseGroupStatistics {
+      LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
       Offset = offset,
       OldestListen = oldestListen,
-      ReleaseGroups = releaseGroups,
+      Range = range ?? throw new JsonException("Expected range not found or null."),
+      ReleaseGroups = releaseGroups.VerifyPayloadContents(count),
       TotalCount = totalCount,
       UnhandledProperties = rest,
+      User = user ?? throw new JsonException("Expected user id not found or null."),
     };
   }
 
