@@ -23,6 +23,7 @@ internal static class Converters {
       yield return UserListeningActivityReader.Instance;
       yield return UserRecordingStatisticsReader.Instance;
       yield return UserReleaseStatisticsReader.Instance;
+      yield return UserReleaseGroupStatisticsReader.Instance;
     }
   }
 

@@ -150,6 +150,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task ImportListensAsync(params MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen[] listens);
@@ -709,6 +711,46 @@ public interface IRecordingInfo {
 }
 ```
 
+### Type: IReleaseGroupInfo
+
+```cs
+public interface IReleaseGroupInfo {
+
+  System.Collections.Generic.IReadOnlyList<System.Guid>? ArtistIds {
+    public abstract get;
+  }
+
+  string? ArtistName {
+    public abstract get;
+  }
+
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseGroupId {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IArtistCredit>? Credits {
+    public abstract get;
+  }
+
+  System.Guid? Id {
+    public abstract get;
+  }
+
+  int ListenCount {
+    public abstract get;
+  }
+
+  string Name {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IReleaseInfo
 
 ```cs
@@ -947,6 +989,26 @@ public interface IUserRecordingStatistics : IStatistics, IUserStatistics, MetaBr
   }
 
   System.Collections.Generic.IReadOnlyList<IRecordingInfo>? Recordings {
+    public abstract get;
+  }
+
+  int? TotalCount {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IUserReleaseGroupStatistics
+
+```cs
+public interface IUserReleaseGroupStatistics : IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
+
+  int? Offset {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IReleaseGroupInfo>? ReleaseGroups {
     public abstract get;
   }
 
