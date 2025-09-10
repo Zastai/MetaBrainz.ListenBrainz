@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;

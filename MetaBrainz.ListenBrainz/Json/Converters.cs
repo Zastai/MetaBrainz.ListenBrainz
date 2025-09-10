@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 
 using MetaBrainz.ListenBrainz.Json.Readers;
 using MetaBrainz.ListenBrainz.Json.Writers;
-using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json;
 
