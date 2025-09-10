@@ -7,17 +7,12 @@ namespace MetaBrainz.ListenBrainz.Objects;
 
 internal abstract class Statistics : JsonBasedObject, IStatistics {
 
-  protected Statistics(DateTimeOffset lastUpdated, StatisticsRange range) {
-    this.LastUpdated = lastUpdated;
-    this.Range = range;
-  }
-
-  public DateTimeOffset LastUpdated { get; }
+  public required DateTimeOffset LastUpdated { get; init; }
 
   public DateTimeOffset? NewestListen { get; init; }
 
   public DateTimeOffset? OldestListen { get; init; }
 
-  public StatisticsRange Range { get; }
+  public required StatisticsRange Range { get; init; }
 
 }

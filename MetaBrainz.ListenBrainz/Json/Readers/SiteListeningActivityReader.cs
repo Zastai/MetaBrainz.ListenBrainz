@@ -57,16 +57,12 @@ internal sealed class SiteListeningActivityReader : PayloadReader<SiteListeningA
       }
       reader.Read();
     }
-    if (lastUpdated is null) {
-      throw new JsonException("Expected last-updated timestamp not found or null.");
-    }
-    if (range is null) {
-      throw new JsonException("Expected range not found or null.");
-    }
-    return new SiteListeningActivity(lastUpdated.Value, range.Value) {
+    return new SiteListeningActivity {
       Activity = activity,
+      LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
       OldestListen = oldestListen,
+      Range = range ?? throw new JsonException("Expected range not found or null."),
       UnhandledProperties = rest,
     };
   }

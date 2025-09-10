@@ -12,11 +12,13 @@ internal static class Converters {
   public static IEnumerable<JsonConverter> Readers {
     get {
       yield return ArtistActivityReader.Instance;
+      yield return ArtistListenersReader.Instance;
       yield return ErrorInfoReader.Instance;
       yield return FetchedListensReader.Instance;
       yield return LatestImportReader.Instance;
       yield return ListenCountReader.Instance;
       yield return PlayingNowReader.Instance;
+      yield return ReleaseGroupListenersReader.Instance;
       yield return SiteArtistMapReader.Instance;
       yield return SiteArtistStatisticsReader.Instance;
       yield return SiteListeningActivityReader.Instance;

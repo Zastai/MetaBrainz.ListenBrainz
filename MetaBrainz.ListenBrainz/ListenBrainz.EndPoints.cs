@@ -236,6 +236,62 @@ public sealed partial class ListenBrainz {
 
   #region listeners
 
+  /// <summary>Gets information about the top listeners for a particular artist.</summary>
+  /// <param name="mbid">The MusicBrainz ID for the artist.</param>
+  /// <param name="count">
+  /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
+  /// returned.
+  /// </param>
+  /// <param name="offset">
+  /// The offset (from the start of the results) of the statistics to return for each time range. If not specified (or specified
+  /// as zero or <see langword="null"/>), the top most listened-to artists will be returned. Note that at most 1000 artists will
+  /// be included in the statistics for each time range.
+  /// </param>
+  /// <param name="range">
+  /// The range of data to include in the statistics.<br/>
+  /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
+  /// recorded listen. Otherwise, information is returned about both the current and the previous range.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested listener statistics.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IArtistListeners?> GetArtistListenersAsync(Guid mbid, int? count = null, int? offset = null,
+                                                         StatisticsRange? range = null,
+                                                         CancellationToken cancellationToken = default) {
+    var address = $"stats/artist/{mbid}/listeners";
+    var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
+    return this.GetOptionalAsync<IArtistListeners, ArtistListeners>(address, options, cancellationToken);
+  }
+
+  /// <summary>Gets information about the top listeners for a particular release group.</summary>
+  /// <param name="mbid">The MusicBrainz ID for the release group.</param>
+  /// <param name="count">
+  /// The (maximum) number of entries to return. If not specified (or <see langword="null"/>), all available information will be
+  /// returned.
+  /// </param>
+  /// <param name="offset">
+  /// The offset (from the start of the results) of the statistics to return for each time range. If not specified (or specified
+  /// as zero or <see langword="null"/>), the top most listened-to artists will be returned. Note that at most 1000 artists will
+  /// be included in the statistics for each time range.
+  /// </param>
+  /// <param name="range">
+  /// The range of data to include in the statistics.<br/>
+  /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
+  /// recorded listen. Otherwise, information is returned about both the current and the previous range.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested listener statistics.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IReleaseGroupListeners?> GetReleaseGroupListenersAsync(Guid mbid, int? count = null, int? offset = null,
+                                                                     StatisticsRange? range = null,
+                                                                     CancellationToken cancellationToken = default) {
+    var address = $"stats/release-group/{mbid}/listeners";
+    var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
+    return this.GetOptionalAsync<IReleaseGroupListeners, ReleaseGroupListeners>(address, options, cancellationToken);
+  }
+
   #endregion
 
   #region listening-activity

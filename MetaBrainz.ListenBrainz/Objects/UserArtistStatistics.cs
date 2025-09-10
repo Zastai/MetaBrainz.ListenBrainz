@@ -1,20 +1,17 @@
-using System;
 using System.Collections.Generic;
 
 using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects;
 
-internal sealed class UserArtistStatistics(int count, int totalCount, DateTimeOffset lastUpdated, int offset, StatisticsRange range,
-                                           string user)
-  : UserStatistics(lastUpdated, range, user), IUserArtistStatistics {
+internal sealed class UserArtistStatistics : UserStatistics, IUserArtistStatistics {
 
   public IReadOnlyList<IArtistInfo>? Artists { get; init; }
 
-  public int Count { get; } = count;
+  public required int Count { get; init; }
 
-  public int Offset { get; } = offset;
+  public required int Offset { get; init; }
 
-  public int TotalCount { get; } = totalCount;
+  public required int TotalCount { get; init; }
 
 }
