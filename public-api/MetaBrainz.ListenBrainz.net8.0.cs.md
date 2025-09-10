@@ -118,6 +118,10 @@ public sealed class ListenBrainz : System.IDisposable {
 
   protected override void Finalize();
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistActivity?> GetArtistActivityAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistActivity?> GetArtistActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteArtistMap?> GetArtistMapAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
@@ -339,6 +343,62 @@ public interface IAdditionalInfo {
   }
 
   System.Collections.Generic.IReadOnlyList<System.Guid?>? WorkIds {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IAlbumInfo
+
+```cs
+public interface IAlbumInfo : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Guid? Id {
+    public abstract get;
+  }
+
+  int ListenCount {
+    public abstract get;
+  }
+
+  string Title {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IArtistActivity
+
+```cs
+public interface IArtistActivity : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Collections.Generic.IReadOnlyList<IArtistActivityInfo> Artists {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IArtistActivityInfo
+
+```cs
+public interface IArtistActivityInfo : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Collections.Generic.IReadOnlyList<IAlbumInfo> Albums {
+    public abstract get;
+  }
+
+  System.Guid? Id {
+    public abstract get;
+  }
+
+  int ListenCount {
+    public abstract get;
+  }
+
+  string Name {
     public abstract get;
   }
 

@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 using MetaBrainz.ListenBrainz.Json.Readers;
 using MetaBrainz.ListenBrainz.Json.Writers;
+using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json;
 
@@ -10,6 +11,7 @@ internal static class Converters {
 
   public static IEnumerable<JsonConverter> Readers {
     get {
+      yield return ArtistActivityReader.Instance;
       yield return ErrorInfoReader.Instance;
       yield return FetchedListensReader.Instance;
       yield return LatestImportReader.Instance;
