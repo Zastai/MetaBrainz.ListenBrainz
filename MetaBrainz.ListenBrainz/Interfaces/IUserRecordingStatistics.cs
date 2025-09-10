@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 using JetBrains.Annotations;
 
 namespace MetaBrainz.ListenBrainz.Interfaces;

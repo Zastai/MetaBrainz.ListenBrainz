@@ -89,6 +89,33 @@ public sealed partial class ListenBrainz {
 
   #region artist-activity
 
+  /// <summary>Gets listening statistics for the top artists (and their albums) across all of ListenBrainz.</summary>
+  /// <param name="range">The range of data to include in the statistics.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IArtistActivity?> GetArtistActivityAsync(StatisticsRange? range = null,
+                                                       CancellationToken cancellationToken = default) {
+    var address = $"stats/sitewide/artist-activity";
+    var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
+    return this.GetOptionalAsync<IArtistActivity, ArtistActivity>(address, options, cancellationToken);
+  }
+
+  /// <summary>Gets listening statistics for a user's top artists (and their albums).</summary>
+  /// <param name="user">The user for whom the information is requested.</param>
+  /// <param name="range">The range of data to include in the statistics.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IArtistActivity?> GetArtistActivityAsync(string user, StatisticsRange? range = null,
+                                                       CancellationToken cancellationToken = default) {
+    var address = $"stats/user/{user}/artist-activity";
+    var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
+    return this.GetOptionalAsync<IArtistActivity, ArtistActivity>(address, options, cancellationToken);
+  }
+
   #endregion
 
   #region artist-evolution-activity

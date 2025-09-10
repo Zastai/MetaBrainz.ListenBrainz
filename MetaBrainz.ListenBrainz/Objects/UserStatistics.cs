@@ -1,5 +1,3 @@
-using System;
-
 using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects;
