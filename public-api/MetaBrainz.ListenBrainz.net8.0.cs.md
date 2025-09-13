@@ -152,6 +152,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IEraActivity?> GetEraActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IGenreActivity?> GetGenreActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ILatestImport> GetLatestImportAsync(string user, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IListenCount> GetListenCountAsync(string user, System.Threading.CancellationToken cancellationToken = default);
@@ -662,6 +664,30 @@ public interface IFetchedListens : MetaBrainz.Common.Json.IJsonBasedObject {
   }
 
   string User {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IGenreActivity
+
+```cs
+public interface IGenreActivity : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Collections.Generic.IReadOnlyList<IGenreActivityDetails>? Activity {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IGenreActivityDetails
+
+```cs
+public interface IGenreActivityDetails : IHourlyActivity, MetaBrainz.Common.Json.IJsonBasedObject {
+
+  string Genre {
     public abstract get;
   }
 
