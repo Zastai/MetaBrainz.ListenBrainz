@@ -8,12 +8,12 @@ using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
 
-internal sealed class ArtistEvolutionActivityReader : PayloadReader<ArtistEvolutionActivity> {
+internal sealed class EraActivityReader : PayloadReader<EraActivity> {
 
-  public static readonly ArtistEvolutionActivityReader Instance = new();
+  public static readonly EraActivityReader Instance = new();
 
-  protected override ArtistEvolutionActivity ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-    IReadOnlyList<IArtistTimeRange>? activity = null;
+  protected override EraActivity ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+    IReadOnlyList<IYearlyActivity>? activity = null;
     DateTimeOffset? lastUpdated = null;
     DateTimeOffset? newestListen = null;
     DateTimeOffset? oldestListen = null;
@@ -25,8 +25,8 @@ internal sealed class ArtistEvolutionActivityReader : PayloadReader<ArtistEvolut
       try {
         reader.Read();
         switch (prop) {
-          case "artist_evolution_activity":
-            activity = reader.ReadList(ArtistTimeRangeReader.Instance, options);
+          case "era_activity":
+            activity = reader.ReadList(YearlyActivityReader.Instance, options);
             break;
           case "from_ts": {
             var unixTime = reader.GetOptionalInt64();
@@ -62,7 +62,7 @@ internal sealed class ArtistEvolutionActivityReader : PayloadReader<ArtistEvolut
       }
       reader.Read();
     }
-    return new ArtistEvolutionActivity {
+    return new EraActivity {
       Activity = activity,
       LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
