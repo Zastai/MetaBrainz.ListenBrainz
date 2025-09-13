@@ -61,6 +61,7 @@ internal sealed class ReleaseGroupListenersReader : PayloadReader<ReleaseGroupLi
           case "release_group_name":
             name = reader.GetString();
             break;
+          case "range":
           case "stats_range":
             range = EnumHelper.ParseStatisticsRange(reader.GetString());
             if (range == StatisticsRange.Unknown) {

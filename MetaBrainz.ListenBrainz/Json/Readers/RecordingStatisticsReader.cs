@@ -8,12 +8,12 @@ using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
 
-internal sealed class UserReleaseStatisticsReader : PayloadReader<UserReleaseStatistics> {
+internal sealed class RecordingStatisticsReader : PayloadReader<RecordingStatistics> {
 
-  public static readonly UserReleaseStatisticsReader Instance = new();
+  public static readonly RecordingStatisticsReader Instance = new();
 
-  protected override UserReleaseStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-    IReadOnlyList<IReleaseInfo>? releases = null;
+  protected override RecordingStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+    IReadOnlyList<IRecordingInfo>? recordings = null;
     int? count = null;
     DateTimeOffset? lastUpdated = null;
     DateTimeOffset? newestListen = null;
@@ -28,8 +28,8 @@ internal sealed class UserReleaseStatisticsReader : PayloadReader<UserReleaseSta
       try {
         reader.Read();
         switch (prop) {
-          case "releases":
-            releases = reader.ReadList(ReleaseInfoReader.Instance, options);
+          case "recordings":
+            recordings = reader.ReadList(RecordingInfoReader.Instance, options);
             break;
           case "count":
             count = reader.GetInt32();
@@ -46,6 +46,7 @@ internal sealed class UserReleaseStatisticsReader : PayloadReader<UserReleaseSta
             offset = reader.GetInt32();
             break;
           case "range":
+          case "stats_range":
             range = EnumHelper.ParseStatisticsRange(reader.GetString());
             if (range == StatisticsRange.Unknown) {
               goto default; // also register it as an unhandled property
@@ -56,7 +57,7 @@ internal sealed class UserReleaseStatisticsReader : PayloadReader<UserReleaseSta
             newestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
           }
-          case "total_release_count":
+          case "total_recording_count":
             totalCount = reader.GetInt32();
             break;
           case "user_id":
@@ -73,16 +74,16 @@ internal sealed class UserReleaseStatisticsReader : PayloadReader<UserReleaseSta
       }
       reader.Read();
     }
-    return new UserReleaseStatistics {
+    return new RecordingStatistics{
       LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
       Offset = offset,
       OldestListen = oldestListen,
       Range = range ?? throw new JsonException("Expected range not found or null."),
-      Releases = releases.VerifyPayloadContents(count),
+      Recordings = recordings.VerifyPayloadContents(count),
       TotalCount = totalCount,
       UnhandledProperties = rest,
-      User = user ?? throw new JsonException("Expected user id not found or null."),
+      User = user,
     };
   }
 

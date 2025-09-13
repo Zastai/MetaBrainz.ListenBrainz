@@ -7,14 +7,9 @@ namespace MetaBrainz.ListenBrainz.Objects;
 
 internal sealed class TokenValidationResult : JsonBasedObject, ITokenValidationResult {
 
-  public TokenValidationResult(HttpStatusCode code, string message) {
-    this.Code = code;
-    this.Message = message;
-  }
+  public required HttpStatusCode Code { get; init; }
 
-  public HttpStatusCode Code { get; }
-
-  public string Message { get; }
+  public required string Message { get; init; }
 
   public string? User { get; init; }
 

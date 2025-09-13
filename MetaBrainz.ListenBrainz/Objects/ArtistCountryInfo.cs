@@ -7,18 +7,12 @@ namespace MetaBrainz.ListenBrainz.Objects;
 
 internal sealed class ArtistCountryInfo : JsonBasedObject, IArtistCountryInfo {
 
-  public ArtistCountryInfo(int artistCount, string country, int listenCount) {
-    this.ArtistCount = artistCount;
-    this.Country = country;
-    this.ListenCount = listenCount;
-  }
-
-  public int ArtistCount { get; }
+  public required int ArtistCount { get; init; }
 
   public IReadOnlyList<IArtistInfo>? Artists { get; init; }
 
-  public string Country { get; }
+  public required string Country { get; init; }
 
-  public int ListenCount { get; }
+  public required int ListenCount { get; init; }
 
 }

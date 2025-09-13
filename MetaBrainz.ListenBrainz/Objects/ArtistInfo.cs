@@ -8,19 +8,14 @@ namespace MetaBrainz.ListenBrainz.Objects;
 
 internal sealed class ArtistInfo : JsonBasedObject, IArtistInfo {
 
-  public ArtistInfo(string name, int listenCount) {
-    this.Name = name;
-    this.ListenCount = listenCount;
-  }
-
   public Guid? Id { get; init; }
 
   public IReadOnlyList<Guid>? Ids { get; init; }
 
-  public int ListenCount { get; }
+  public required int ListenCount { get; init; }
 
   public Guid? MessyId { get; init; }
 
-  public string Name { get; }
+  public required string Name { get; init; }
 
 }

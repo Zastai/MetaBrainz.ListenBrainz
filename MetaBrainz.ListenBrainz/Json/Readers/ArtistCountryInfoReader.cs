@@ -47,17 +47,11 @@ internal class ArtistCountryInfoReader : ObjectReader<ArtistCountryInfo> {
       }
       reader.Read();
     }
-    if (artistCount is null) {
-      throw new JsonException("Expected artist count not found or null.");
-    }
-    if (country is null) {
-      throw new JsonException("Expected country code not found or null.");
-    }
-    if (listenCount is null) {
-      throw new JsonException("Expected listen count not found or null.");
-    }
-    return new ArtistCountryInfo(artistCount.Value, country, listenCount.Value) {
+    return new ArtistCountryInfo {
+      ArtistCount = artistCount ?? throw new JsonException("Expected artist count not found or null."),
       Artists = artists,
+      Country = country ?? throw new JsonException("Expected country code not found or null."),
+      ListenCount = listenCount ?? throw new JsonException("Expected listen count not found or null."),
       UnhandledProperties = rest,
     };
   }

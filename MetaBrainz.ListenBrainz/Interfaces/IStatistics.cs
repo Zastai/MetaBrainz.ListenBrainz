@@ -26,4 +26,7 @@ public interface IStatistics : IJsonBasedObject {
   /// </remarks>
   StatisticsRange Range { get; }
 
+  /// <summary>The user for whom the information was computed, or <see langword="null"/> if the information is site-wide.</summary>
+  string? User { get; }
+
 }

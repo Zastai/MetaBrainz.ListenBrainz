@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.Json;
 
 using MetaBrainz.Common.Json;
@@ -32,9 +33,11 @@ internal class ArtistTimeRangeReader : ObjectReader<ArtistTimeRange> {
           case "listen_count":
             listenCount = reader.GetInt32();
             break;
-          case "time_unit":
-            timeUnit = reader.GetString();
+          case "time_unit": {
+            // LB-1833: the sitewide endpoints return integer values (days-of-month or year, so ushort is enough as a range)
+            timeUnit = reader.TryGetUInt16(out var number) ? number.ToString(CultureInfo.InvariantCulture) : reader.GetString();
             break;
+          }
           default:
             rest ??= new Dictionary<string, object?>();
             rest[prop] = reader.GetOptionalObject(options);

@@ -4,7 +4,7 @@ using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects;
 
-internal sealed class UserRecordingStatistics : UserStatistics, IUserRecordingStatistics {
+internal sealed class RecordingStatistics : Statistics, IRecordingStatistics {
 
   public IReadOnlyList<IRecordingInfo>? Recordings { get; init; }
 

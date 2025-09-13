@@ -7,14 +7,9 @@ namespace MetaBrainz.ListenBrainz.Objects;
 
 internal sealed class ListenTimeRange : JsonBasedObject, IListenTimeRange {
 
-  public ListenTimeRange(string description, int listenCount) {
-    this.Description = description;
-    this.ListenCount = listenCount;
-  }
+  public required string Description { get; init; }
 
-  public string Description { get; }
-
-  public int ListenCount { get; }
+  public required int ListenCount { get; init; }
 
   public DateTimeOffset? RangeEnd { get; init; }
 

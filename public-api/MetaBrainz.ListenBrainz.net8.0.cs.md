@@ -18,11 +18,21 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public const int DefaultTimeRange = 3;
 
+  public const int EarliestListen = 1033430400;
+
+  public const int MaxDuration = 2073600;
+
   public const int MaxItemsPerGet = 100;
+
+  public const int MaxListenPayloadSize = 10240000;
 
   public const int MaxListenSize = 10240;
 
+  public const int MaxListensPerRequest = 1000;
+
   public const int MaxTagLength = 64;
+
+  public const int MaxTagSize = 64;
 
   public const int MaxTagsPerListen = 50;
 
@@ -128,13 +138,13 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistListeners?> GetArtistListenersAsync(System.Guid mbid, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteArtistMap?> GetArtistMapAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistMap?> GetArtistMapAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistStatistics?> GetArtistStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserDailyActivity?> GetDailyActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
@@ -142,9 +152,9 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IListenCount> GetListenCountAsync(string user, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteListeningActivity?> GetListeningActivityAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IListeningActivity?> GetListeningActivityAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFetchedListens> GetListensAfterAsync(string user, System.DateTimeOffset after, int? count = default, int? timeRange = default, System.Threading.CancellationToken cancellationToken = default);
 
@@ -162,19 +172,19 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IPlayingNow> GetPlayingNowAsync(string user, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteRecordingStatistics?> GetRecordingStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IRecordingStatistics?> GetRecordingStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IReleaseGroupListeners?> GetReleaseGroupListenersAsync(System.Guid mbid, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteReleaseStatistics?> GetReleaseStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IReleaseStatistics?> GetReleaseStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
-  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task ImportListensAsync(params MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen[] listens);
 
@@ -190,14 +200,18 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task SetNowPlayingAsync(MetaBrainz.ListenBrainz.Interfaces.ISubmittedListenData listen, System.Threading.CancellationToken cancellationToken = default);
 
+  [System.ObsoleteAttribute("Create a SubmittedListenData and pass it to the overload taking an ISubmittedListenData instead.")]
   public System.Threading.Tasks.Task SetNowPlayingAsync(string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task SubmitSingleListenAsync(MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen listen, System.Threading.CancellationToken cancellationToken = default);
 
+  [System.ObsoleteAttribute("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
   public System.Threading.Tasks.Task SubmitSingleListenAsync(System.DateTimeOffset timestamp, string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
 
+  [System.ObsoleteAttribute("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
   public System.Threading.Tasks.Task SubmitSingleListenAsync(long timestamp, string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
 
+  [System.ObsoleteAttribute("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
   public System.Threading.Tasks.Task SubmitSingleListenAsync(string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ITokenValidationResult> ValidateTokenAsync(string token, System.Threading.CancellationToken cancellationToken = default);
@@ -211,10 +225,15 @@ public sealed class ListenBrainz : System.IDisposable {
 public enum StatisticsRange {
 
   AllTime = 0,
+  HalfYearly = 1,
   Month = 2,
-  Unknown = 4,
-  Week = 1,
-  Year = 3,
+  Quarter = 3,
+  ThisMonth = 4,
+  ThisWeek = 5,
+  ThisYear = 6,
+  Unknown = 9,
+  Week = 7,
+  Year = 8,
 
 }
 ```
@@ -466,10 +485,6 @@ public interface IArtistEvolutionActivity : IStatistics, MetaBrainz.Common.Json.
     public abstract get;
   }
 
-  string? User {
-    public abstract get;
-  }
-
 }
 ```
 
@@ -520,7 +535,7 @@ public interface IArtistListeners : IListenerInfo, IStatistics, MetaBrainz.Commo
 ### Type: IArtistMap
 
 ```cs
-public interface IArtistMap {
+public interface IArtistMap : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
   System.Collections.Generic.IReadOnlyList<IArtistCountryInfo>? Countries {
     public abstract get;
@@ -532,7 +547,7 @@ public interface IArtistMap {
 ### Type: IArtistStatistics
 
 ```cs
-public interface IArtistStatistics {
+public interface IArtistStatistics : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
   System.Collections.Generic.IReadOnlyList<IArtistInfo>? Artists {
     public abstract get;
@@ -658,11 +673,11 @@ public interface IHourlyActivity : MetaBrainz.Common.Json.IJsonBasedObject {
 ```cs
 public interface ILatestImport : MetaBrainz.Common.Json.IJsonBasedObject {
 
-  System.DateTimeOffset? Timestamp {
+  System.DateTimeOffset Timestamp {
     public abstract get;
   }
 
-  long? UnixTimestamp {
+  long UnixTimestamp {
     public abstract get;
   }
 
@@ -736,7 +751,7 @@ public interface IListenerInfo {
 ### Type: IListeningActivity
 
 ```cs
-public interface IListeningActivity {
+public interface IListeningActivity : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
   System.Collections.Generic.IReadOnlyList<IListenTimeRange>? Activity {
     public abstract get;
@@ -896,7 +911,7 @@ public interface IRecordingInfo {
 ### Type: IRecordingStatistics
 
 ```cs
-public interface IRecordingStatistics {
+public interface IRecordingStatistics : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
   int? Offset {
     public abstract get;
@@ -988,7 +1003,7 @@ public interface IReleaseGroupListeners : IListenerInfo, IStatistics, MetaBrainz
 ### Type: IReleaseGroupStatistics
 
 ```cs
-public interface IReleaseGroupStatistics {
+public interface IReleaseGroupStatistics : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
   int? Offset {
     public abstract get;
@@ -1056,7 +1071,7 @@ public interface IReleaseInfo {
 ### Type: IReleaseStatistics
 
 ```cs
-public interface IReleaseStatistics {
+public interface IReleaseStatistics : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
   int? Offset {
     public abstract get;
@@ -1069,54 +1084,6 @@ public interface IReleaseStatistics {
   int? TotalCount {
     public abstract get;
   }
-
-}
-```
-
-### Type: ISiteArtistMap
-
-```cs
-public interface ISiteArtistMap : IArtistMap, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-}
-```
-
-### Type: ISiteArtistStatistics
-
-```cs
-public interface ISiteArtistStatistics : IArtistStatistics, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-}
-```
-
-### Type: ISiteListeningActivity
-
-```cs
-public interface ISiteListeningActivity : IListeningActivity, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-}
-```
-
-### Type: ISiteRecordingStatistics
-
-```cs
-public interface ISiteRecordingStatistics : IRecordingStatistics, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-}
-```
-
-### Type: ISiteReleaseGroupStatistics
-
-```cs
-public interface ISiteReleaseGroupStatistics : IReleaseGroupStatistics, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-}
-```
-
-### Type: ISiteReleaseStatistics
-
-```cs
-public interface ISiteReleaseStatistics : IReleaseStatistics, IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
 }
 ```
@@ -1142,6 +1109,10 @@ public interface IStatistics : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
+  string? User {
+    public abstract get;
+  }
+
 }
 ```
 
@@ -1151,6 +1122,10 @@ public interface IStatistics : MetaBrainz.Common.Json.IJsonBasedObject {
 public interface ISubmittedListen : ISubmittedListenData {
 
   System.DateTimeOffset Timestamp {
+    public abstract get;
+  }
+
+  long UnixTimestamp {
     public abstract get;
   }
 
@@ -1261,72 +1236,12 @@ public interface ITrackInfo : MetaBrainz.Common.Json.IJsonBasedObject {
 }
 ```
 
-### Type: IUserArtistMap
-
-```cs
-public interface IUserArtistMap : IArtistMap, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-}
-```
-
-### Type: IUserArtistStatistics
-
-```cs
-public interface IUserArtistStatistics : IArtistStatistics, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-}
-```
-
 ### Type: IUserDailyActivity
 
 ```cs
-public interface IUserDailyActivity : IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
+public interface IUserDailyActivity : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
   IDailyActivity? Activity {
-    public abstract get;
-  }
-
-}
-```
-
-### Type: IUserListeningActivity
-
-```cs
-public interface IUserListeningActivity : IListeningActivity, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-}
-```
-
-### Type: IUserRecordingStatistics
-
-```cs
-public interface IUserRecordingStatistics : IRecordingStatistics, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-}
-```
-
-### Type: IUserReleaseGroupStatistics
-
-```cs
-public interface IUserReleaseGroupStatistics : IReleaseGroupStatistics, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-}
-```
-
-### Type: IUserReleaseStatistics
-
-```cs
-public interface IUserReleaseStatistics : IReleaseStatistics, IStatistics, IUserStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-}
-```
-
-### Type: IUserStatistics
-
-```cs
-public interface IUserStatistics : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
-
-  string User {
     public abstract get;
   }
 
@@ -1345,10 +1260,23 @@ public class SubmittedListen : SubmittedListenData, MetaBrainz.ListenBrainz.Inte
     public set;
   }
 
+  long UnixTimestamp {
+    public sealed override get;
+    public set;
+  }
+
+  public SubmittedListen();
+
+  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
+  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
   public SubmittedListen(System.DateTimeOffset timestamp, string track, string artist, string? release = null);
 
+  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
+  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
   public SubmittedListen(long timestamp, string track, string artist, string? release = null);
 
+  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
+  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
   public SubmittedListen(string track, string artist, string? release = null);
 
 }
@@ -1359,8 +1287,15 @@ public class SubmittedListen : SubmittedListenData, MetaBrainz.ListenBrainz.Inte
 ```cs
 public class SubmittedListenData : MetaBrainz.ListenBrainz.Interfaces.ISubmittedListenData {
 
-  public readonly SubmittedTrackInfo Track;
+  required MetaBrainz.ListenBrainz.Interfaces.ISubmittedTrackInfo Track {
+    public sealed override get;
+    public init;
+  }
 
+  public SubmittedListenData();
+
+  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
+  [System.ObsoleteAttribute("Use an object initializer to set the track info.")]
   public SubmittedListenData(string track, string artist, string? release = null);
 
 }
@@ -1376,12 +1311,12 @@ public class SubmittedTrackInfo : MetaBrainz.ListenBrainz.Interfaces.ISubmittedT
     public set;
   }
 
-  string Artist {
+  required string Artist {
     public sealed override get;
     public set;
   }
 
-  string Name {
+  required string Name {
     public sealed override get;
     public set;
   }
@@ -1391,6 +1326,10 @@ public class SubmittedTrackInfo : MetaBrainz.ListenBrainz.Interfaces.ISubmittedT
     public set;
   }
 
+  public SubmittedTrackInfo();
+
+  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
+  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
   public SubmittedTrackInfo(string name, string artist, string? release = null);
 
 }

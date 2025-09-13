@@ -11,13 +11,13 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 public interface ILatestImport : IJsonBasedObject {
 
   /// <summary>The timestamp of the newest listen submitted in previous imports.</summary>
-  DateTimeOffset? Timestamp { get; }
+  DateTimeOffset Timestamp { get; }
 
   /// <summary>
   /// The timestamp of the newest listen submitted in previous imports, expressed as the number of seconds since
   /// <see cref="DateTimeOffset.UnixEpoch">the Unix time epoch</see>.
   /// </summary>
-  long? UnixTimestamp { get; }
+  long UnixTimestamp { get; }
 
   /// <summary>The MusicBrainz ID of the user.</summary>
   string? User { get; }

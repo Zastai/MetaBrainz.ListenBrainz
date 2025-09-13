@@ -44,11 +44,10 @@ internal sealed class HourlyActivityReader : ObjectReader<HourlyActivity> {
     if (hour is < 0 or > 23) {
       throw new JsonException($"The specified hour ({hour}) is out of range (should be 0-23).");
     }
-    if (listenCount is null) {
-      throw new JsonException("Expected listen count not found or null.");
-    }
-    return new HourlyActivity(hour.Value, listenCount.Value) {
-      UnhandledProperties = rest
+    return new HourlyActivity {
+      Hour = hour.Value,
+      ListenCount = listenCount ?? throw new JsonException("Expected listen count not found or null."),
+      UnhandledProperties = rest,
     };
   }
 

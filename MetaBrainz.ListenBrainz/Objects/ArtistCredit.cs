@@ -7,16 +7,10 @@ namespace MetaBrainz.ListenBrainz.Objects;
 
 internal sealed class ArtistCredit : JsonBasedObject, IArtistCredit {
 
-  public ArtistCredit(string creditedName, Guid id, string joinPhrase) {
-    this.CreditedName = creditedName;
-    this.Id = id;
-    this.JoinPhrase = joinPhrase;
-  }
+  public required string CreditedName { get; init; }
 
-  public string CreditedName { get; }
+  public required Guid Id { get; init; }
 
-  public Guid Id { get; }
-
-  public string JoinPhrase { get; }
+  public required string JoinPhrase { get; init; }
 
 }

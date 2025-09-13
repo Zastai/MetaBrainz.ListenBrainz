@@ -7,11 +7,11 @@ using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Writers;
 
-internal sealed class ListenPayloadWriter : ObjectWriter<SubmissionPayload<ISubmittedListen>> {
+internal sealed class ListenPayloadWriter : ObjectWriter<ListenSubmissionPayload<ISubmittedListen>> {
 
   public static readonly ListenPayloadWriter Instance = new();
 
-  protected override void WriteObjectContents(Utf8JsonWriter writer, SubmissionPayload<ISubmittedListen> value,
+  protected override void WriteObjectContents(Utf8JsonWriter writer, ListenSubmissionPayload<ISubmittedListen> value,
                                               JsonSerializerOptions options) {
     writer.WriteString("listen_type", value.Type);
     switch (value.Type) {

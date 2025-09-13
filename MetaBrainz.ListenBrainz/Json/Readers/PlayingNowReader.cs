@@ -73,15 +73,13 @@ internal sealed class PlayingNowReader : PayloadReader<PlayingNow> {
     if (count == 0 && track is not null) {
       throw new JsonException("Listen data found, but the listen count is 0.");
     }
-    if (user is null) {
-      throw new JsonException("Expected user id not found or null.");
-    }
     if (playingNow is not true) {
       throw new JsonException("Expected 'playing now' flag not found or set incorrectly.");
     }
-    return new PlayingNow(user) {
+    return new PlayingNow {
       Track = track,
-      UnhandledProperties = rest
+      UnhandledProperties = rest,
+      User = user ?? throw new JsonException("Expected user id not found or null."),
     };
   }
 

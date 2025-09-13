@@ -42,16 +42,10 @@ internal class ArtistCreditReader : ObjectReader<ArtistCredit> {
       }
       reader.Read();
     }
-    if (creditedName is null) {
-      throw new JsonException("Expected artist credit name not found or null.");
-    }
-    if (id is null) {
-      throw new JsonException("Expected artist ID not found or null.");
-    }
-    if (joinPhrase is null) {
-      throw new JsonException("Expected join phrase not found or null.");
-    }
-    return new ArtistCredit(creditedName, id.Value, joinPhrase) {
+    return new ArtistCredit {
+      CreditedName = creditedName ?? throw new JsonException("Expected artist credit name not found or null."),
+      Id = id ?? throw new JsonException("Expected artist ID not found or null."),
+      JoinPhrase = joinPhrase ?? throw new JsonException("Expected join phrase not found or null."),
       UnhandledProperties = rest,
     };
   }

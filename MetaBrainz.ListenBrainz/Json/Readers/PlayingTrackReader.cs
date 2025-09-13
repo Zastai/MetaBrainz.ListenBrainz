@@ -35,11 +35,9 @@ internal sealed class PlayingTrackReader : ObjectReader<PlayingTrack> {
       }
       reader.Read();
     }
-    if (track is null) {
-      throw new JsonException("Required track metadata not found.");
-    }
-    return new PlayingTrack(track) {
-      UnhandledProperties = rest
+    return new PlayingTrack {
+      Info = track ?? throw new JsonException("Required track metadata not found."),
+      UnhandledProperties = rest,
     };
   }
 

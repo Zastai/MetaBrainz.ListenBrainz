@@ -6,7 +6,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 
 /// <summary>The most-listened releases in a particular timeframe.</summary>
 [PublicAPI]
-public interface IReleaseStatistics {
+public interface IReleaseStatistics : IStatistics {
 
   /// <summary>Information about the releases.</summary>
   IReadOnlyList<IReleaseInfo>? Releases { get; }

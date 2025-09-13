@@ -8,11 +8,11 @@ using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
 
-internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
+internal sealed class ArtistMapReader : PayloadReader<ArtistMap> {
 
-  public static readonly UserArtistMapReader Instance = new();
+  public static readonly ArtistMapReader Instance = new();
 
-  protected override UserArtistMap ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+  protected override ArtistMap ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     IReadOnlyList<IArtistCountryInfo>? countries = null;
     DateTimeOffset? lastUpdated = null;
     DateTimeOffset? newestListen = null;
@@ -37,6 +37,7 @@ internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
             lastUpdated = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64());
             break;
           case "range":
+          case "stats_range":
             range = EnumHelper.ParseStatisticsRange(reader.GetString());
             if (range == StatisticsRange.Unknown) {
               goto default; // also register it as an unhandled property
@@ -61,14 +62,14 @@ internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
       }
       reader.Read();
     }
-    return new UserArtistMap {
+    return new ArtistMap {
       Countries = countries,
       LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
       OldestListen = oldestListen,
       Range = range ?? throw new JsonException("Expected range not found or null."),
       UnhandledProperties = rest,
-      User = user ?? throw new JsonException("Expected user id not found or null."),
+      User = user,
     };
   }
 

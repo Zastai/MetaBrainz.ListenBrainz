@@ -8,11 +8,6 @@ namespace MetaBrainz.ListenBrainz.Objects;
 
 internal sealed class ReleaseGroupInfo : JsonBasedObject, IReleaseGroupInfo {
 
-  public ReleaseGroupInfo(string name, int listenCount) {
-    this.Name = name;
-    this.ListenCount = listenCount;
-  }
-
   public IReadOnlyList<Guid>? ArtistIds { get; init; }
 
   public string? ArtistName { get; init; }
@@ -25,8 +20,8 @@ internal sealed class ReleaseGroupInfo : JsonBasedObject, IReleaseGroupInfo {
 
   public Guid? Id { get; init; }
 
-  public int ListenCount { get; }
+  public required int ListenCount { get; init; }
 
-  public string Name { get; }
+  public required string Name { get; init; }
 
 }

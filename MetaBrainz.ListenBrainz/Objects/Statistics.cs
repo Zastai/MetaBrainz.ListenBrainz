@@ -15,4 +15,6 @@ internal abstract class Statistics : JsonBasedObject, IStatistics {
 
   public required StatisticsRange Range { get; init; }
 
+  public string? User { get; init; }
+
 }

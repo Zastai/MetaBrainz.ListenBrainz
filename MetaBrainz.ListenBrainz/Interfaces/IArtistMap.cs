@@ -6,7 +6,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 
 /// <summary>Information about artist listen counts, grouped by country.</summary>
 [PublicAPI]
-public interface IArtistMap {
+public interface IArtistMap : IStatistics {
 
   /// <summary>The per-country listen information.</summary>
   IReadOnlyList<IArtistCountryInfo>? Countries { get; }

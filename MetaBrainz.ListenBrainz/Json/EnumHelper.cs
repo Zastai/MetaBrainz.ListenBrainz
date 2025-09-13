@@ -12,8 +12,13 @@ internal static class EnumHelper {
     }
     return text switch {
       "all_time" => StatisticsRange.AllTime,
-      "week" => StatisticsRange.Week,
+      "half_yearly" => StatisticsRange.HalfYearly,
       "month" => StatisticsRange.Month,
+      "quarter" => StatisticsRange.Quarter,
+      "this_month" => StatisticsRange.ThisMonth,
+      "this_week" => StatisticsRange.ThisWeek,
+      "this_year" => StatisticsRange.ThisYear,
+      "week" => StatisticsRange.Week,
       "year" => StatisticsRange.Year,
       _ => StatisticsRange.Unknown,
     };
@@ -21,8 +26,13 @@ internal static class EnumHelper {
 
   public static string ToJson(this StatisticsRange range) => range switch {
     StatisticsRange.AllTime => "all_time",
-    StatisticsRange.Week => "week",
+    StatisticsRange.HalfYearly => "half_yearly",
     StatisticsRange.Month => "month",
+    StatisticsRange.Quarter => "quarter",
+    StatisticsRange.ThisMonth => "this_month",
+    StatisticsRange.ThisWeek => "this_week",
+    StatisticsRange.ThisYear => "this_year",
+    StatisticsRange.Week => "week",
     StatisticsRange.Year => "year",
     _ => throw new ArgumentOutOfRangeException(nameof(range), range, "Invalid statistics range specified.")
   };

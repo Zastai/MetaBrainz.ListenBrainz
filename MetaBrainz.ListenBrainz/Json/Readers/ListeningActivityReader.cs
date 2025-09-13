@@ -8,31 +8,23 @@ using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
 
-internal sealed class SiteRecordingStatisticsReader : PayloadReader<SiteRecordingStatistics> {
+internal sealed class ListeningActivityReader : PayloadReader<ListeningActivity> {
 
-  public static readonly SiteRecordingStatisticsReader Instance = new();
+  public static readonly ListeningActivityReader Instance = new();
 
-  protected override SiteRecordingStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-    IReadOnlyList<IRecordingInfo>? recordings = null;
-    int? count = null;
+  protected override ListeningActivity ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+    IReadOnlyList<IListenTimeRange>? activity = null;
     DateTimeOffset? lastUpdated = null;
     DateTimeOffset? newestListen = null;
-    int? offset = null;
     DateTimeOffset? oldestListen = null;
     StatisticsRange? range = null;
-    int? totalCount = null;
+    string? user = null;
     Dictionary<string, object?>? rest = null;
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
       try {
         reader.Read();
         switch (prop) {
-          case "recordings":
-            recordings = reader.ReadList(RecordingInfoReader.Instance, options);
-            break;
-          case "count":
-            count = reader.GetInt32();
-            break;
           case "from_ts": {
             var unixTime = reader.GetOptionalInt64();
             oldestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
@@ -41,10 +33,11 @@ internal sealed class SiteRecordingStatisticsReader : PayloadReader<SiteRecordin
           case "last_updated":
             lastUpdated = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64());
             break;
-          case "offset":
-            offset = reader.GetInt32();
+          case "listening_activity":
+            activity = reader.ReadList(ListenTimeRangeReader.Instance, options);
             break;
           case "range":
+          case "stats_range":
             range = EnumHelper.ParseStatisticsRange(reader.GetString());
             if (range == StatisticsRange.Unknown) {
               goto default; // also register it as an unhandled property
@@ -55,8 +48,8 @@ internal sealed class SiteRecordingStatisticsReader : PayloadReader<SiteRecordin
             newestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
           }
-          case "total_recording_count":
-            totalCount = reader.GetInt32();
+          case "user_id":
+            user = reader.GetString();
             break;
           default:
             rest ??= new Dictionary<string, object?>();
@@ -69,15 +62,14 @@ internal sealed class SiteRecordingStatisticsReader : PayloadReader<SiteRecordin
       }
       reader.Read();
     }
-    return new SiteRecordingStatistics {
+    return new ListeningActivity {
+      Activity = activity,
       LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
-      Offset = offset,
       OldestListen = oldestListen,
       Range = range ?? throw new JsonException("Expected range not found or null."),
-      Recordings = recordings.VerifyPayloadContents(count),
-      TotalCount = totalCount,
       UnhandledProperties = rest,
+      User = user,
     };
   }
 

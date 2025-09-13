@@ -10,16 +10,10 @@ namespace MetaBrainz.ListenBrainz.Objects;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal sealed class LatestImport : JsonBasedObject, ILatestImport {
 
-  public LatestImport(long ts, string user) {
-    this.Timestamp = DateTimeOffset.FromUnixTimeSeconds(ts);
-    this.UnixTimestamp = ts;
-    this.User = user;
-  }
+  public DateTimeOffset Timestamp => DateTimeOffset.FromUnixTimeSeconds(this.UnixTimestamp);
 
-  public DateTimeOffset? Timestamp { get; }
+  public required long UnixTimestamp { get; init; }
 
-  public long? UnixTimestamp { get; }
-
-  public string? User { get; }
+  public required string? User { get; init; }
 
 }
