@@ -11,7 +11,7 @@ public interface IHourlyActivity : IJsonBasedObject {
   /// <summary>The hour (0-23).</summary>
   int Hour { get; }
 
-  /// <summary>The number of listens recorded this hour.</summary>
+  /// <summary>The number of listens recorded.</summary>
   int ListenCount { get; }
 
 }

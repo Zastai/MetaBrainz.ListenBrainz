@@ -3,7 +3,7 @@ using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects;
 
-internal sealed class HourlyActivity : JsonBasedObject, IHourlyActivity {
+internal class HourlyActivity : JsonBasedObject, IHourlyActivity {
 
   public required int Hour { get; init; }
 
