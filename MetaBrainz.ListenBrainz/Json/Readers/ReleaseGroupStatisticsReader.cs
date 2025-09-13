@@ -8,16 +8,19 @@ using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
 
-internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
+internal sealed class ReleaseGroupStatisticsReader : PayloadReader<ReleaseGroupStatistics> {
 
-  public static readonly UserArtistMapReader Instance = new();
+  public static readonly ReleaseGroupStatisticsReader Instance = new();
 
-  protected override UserArtistMap ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-    IReadOnlyList<IArtistCountryInfo>? countries = null;
+  protected override ReleaseGroupStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+    IReadOnlyList<IReleaseGroupInfo>? releaseGroups = null;
+    int? count = null;
     DateTimeOffset? lastUpdated = null;
     DateTimeOffset? newestListen = null;
+    int? offset = null;
     DateTimeOffset? oldestListen = null;
     StatisticsRange? range = null;
+    int? totalCount = null;
     string? user = null;
     Dictionary<string, object?>? rest = null;
     while (reader.TokenType == JsonTokenType.PropertyName) {
@@ -25,8 +28,11 @@ internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
       try {
         reader.Read();
         switch (prop) {
-          case "artist_map":
-            countries = reader.ReadList(ArtistCountryInfoReader.Instance, options);
+          case "release_groups":
+            releaseGroups = reader.ReadList(ReleaseGroupInfoReader.Instance, options);
+            break;
+          case "count":
+            count = reader.GetInt32();
             break;
           case "from_ts": {
             var unixTime = reader.GetOptionalInt64();
@@ -35,6 +41,9 @@ internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
           }
           case "last_updated":
             lastUpdated = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64());
+            break;
+          case "offset":
+            offset = reader.GetInt32();
             break;
           case "range":
             range = EnumHelper.ParseStatisticsRange(reader.GetString());
@@ -47,6 +56,9 @@ internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
             newestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
           }
+          case "total_release_group_count":
+            totalCount = reader.GetInt32();
+            break;
           case "user_id":
             user = reader.GetString();
             break;
@@ -61,12 +73,14 @@ internal sealed class UserArtistMapReader : PayloadReader<UserArtistMap> {
       }
       reader.Read();
     }
-    return new UserArtistMap {
-      Countries = countries,
+    return new ReleaseGroupStatistics {
       LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
+      Offset = offset,
       OldestListen = oldestListen,
       Range = range ?? throw new JsonException("Expected range not found or null."),
+      ReleaseGroups = releaseGroups.VerifyPayloadContents(count),
+      TotalCount = totalCount,
       UnhandledProperties = rest,
       User = user ?? throw new JsonException("Expected user id not found or null."),
     };

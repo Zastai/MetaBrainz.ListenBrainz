@@ -8,11 +8,11 @@ using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
 
-internal sealed class SiteReleaseStatisticsReader : PayloadReader<SiteReleaseStatistics> {
+internal sealed class ReleaseStatisticsReader : PayloadReader<ReleaseStatistics> {
 
-  public static readonly SiteReleaseStatisticsReader Instance = new();
+  public static readonly ReleaseStatisticsReader Instance = new();
 
-  protected override SiteReleaseStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+  protected override ReleaseStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     IReadOnlyList<IReleaseInfo>? releases = null;
     int? count = null;
     DateTimeOffset? lastUpdated = null;
@@ -21,6 +21,7 @@ internal sealed class SiteReleaseStatisticsReader : PayloadReader<SiteReleaseSta
     DateTimeOffset? oldestListen = null;
     StatisticsRange? range = null;
     int? totalCount = null;
+    string? user = null;
     Dictionary<string, object?>? rest = null;
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
@@ -58,6 +59,9 @@ internal sealed class SiteReleaseStatisticsReader : PayloadReader<SiteReleaseSta
           case "total_release_count":
             totalCount = reader.GetInt32();
             break;
+          case "user_id":
+            user = reader.GetString();
+            break;
           default:
             rest ??= new Dictionary<string, object?>();
             rest[prop] = reader.GetOptionalObject(options);
@@ -69,7 +73,7 @@ internal sealed class SiteReleaseStatisticsReader : PayloadReader<SiteReleaseSta
       }
       reader.Read();
     }
-    return new SiteReleaseStatistics {
+    return new ReleaseStatistics {
       LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
       Offset = offset,
@@ -78,6 +82,7 @@ internal sealed class SiteReleaseStatisticsReader : PayloadReader<SiteReleaseSta
       Releases = releases.VerifyPayloadContents(count),
       TotalCount = totalCount,
       UnhandledProperties = rest,
+      User = user ?? throw new JsonException("Expected user id not found or null."),
     };
   }
 

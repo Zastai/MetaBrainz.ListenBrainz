@@ -4,7 +4,7 @@ using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects;
 
-internal sealed class SiteArtistStatistics : Statistics, ISiteArtistStatistics {
+internal sealed class ArtistStatistics : Statistics, IArtistStatistics {
 
   public IReadOnlyList<IArtistInfo>? Artists { get; init; }
 

@@ -4,7 +4,7 @@ using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects;
 
-internal sealed class UserReleaseStatistics : UserStatistics, IUserReleaseStatistics {
+internal sealed class ReleaseStatistics : Statistics, IReleaseStatistics {
 
   public IReadOnlyList<IReleaseInfo>? Releases { get; init; }
 

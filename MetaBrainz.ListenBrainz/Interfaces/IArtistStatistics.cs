@@ -6,7 +6,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 
 /// <summary>Statistics about how many times particular artists were listened to.</summary>
 [PublicAPI]
-public interface IArtistStatistics {
+public interface IArtistStatistics : IStatistics {
 
   /// <summary>Information about the artists.</summary>
   IReadOnlyList<IArtistInfo>? Artists { get; }

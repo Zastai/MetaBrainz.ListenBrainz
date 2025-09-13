@@ -8,12 +8,12 @@ using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
 
-internal sealed class SiteRecordingStatisticsReader : PayloadReader<SiteRecordingStatistics> {
+internal sealed class ArtistStatisticsReader : PayloadReader<ArtistStatistics> {
 
-  public static readonly SiteRecordingStatisticsReader Instance = new();
+  public static readonly ArtistStatisticsReader Instance = new();
 
-  protected override SiteRecordingStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-    IReadOnlyList<IRecordingInfo>? recordings = null;
+  protected override ArtistStatistics ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+    IReadOnlyList<IArtistInfo>? artists = null;
     int? count = null;
     DateTimeOffset? lastUpdated = null;
     DateTimeOffset? newestListen = null;
@@ -21,14 +21,15 @@ internal sealed class SiteRecordingStatisticsReader : PayloadReader<SiteRecordin
     DateTimeOffset? oldestListen = null;
     StatisticsRange? range = null;
     int? totalCount = null;
+    string? user = null;
     Dictionary<string, object?>? rest = null;
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
       try {
         reader.Read();
         switch (prop) {
-          case "recordings":
-            recordings = reader.ReadList(RecordingInfoReader.Instance, options);
+          case "artists":
+            artists = reader.ReadList(ArtistInfoReader.Instance, options);
             break;
           case "count":
             count = reader.GetInt32();
@@ -55,8 +56,11 @@ internal sealed class SiteRecordingStatisticsReader : PayloadReader<SiteRecordin
             newestListen = unixTime is null ? null : DateTimeOffset.FromUnixTimeSeconds(unixTime.Value);
             break;
           }
-          case "total_recording_count":
+          case "total_artist_count":
             totalCount = reader.GetInt32();
+            break;
+          case "user_id":
+            user = reader.GetString();
             break;
           default:
             rest ??= new Dictionary<string, object?>();
@@ -69,15 +73,18 @@ internal sealed class SiteRecordingStatisticsReader : PayloadReader<SiteRecordin
       }
       reader.Read();
     }
-    return new SiteRecordingStatistics {
+    artists = artists.VerifyPayloadContents(count);
+    return new ArtistStatistics {
+      Artists = artists,
+      Count = count ?? 0,
       LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
-      Offset = offset,
+      Offset = offset ?? throw new JsonException("Expected offset not found or null."),
       OldestListen = oldestListen,
       Range = range ?? throw new JsonException("Expected range not found or null."),
-      Recordings = recordings.VerifyPayloadContents(count),
-      TotalCount = totalCount,
+      TotalCount = totalCount ?? throw new JsonException("Expected total count not found or null."),
       UnhandledProperties = rest,
+      User = user ?? throw new JsonException("Expected user id not found or null."),
     };
   }
 

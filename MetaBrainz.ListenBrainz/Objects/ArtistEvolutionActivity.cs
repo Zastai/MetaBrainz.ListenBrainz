@@ -8,6 +8,4 @@ internal sealed class ArtistEvolutionActivity : Statistics, IArtistEvolutionActi
 
   public IReadOnlyList<IArtistTimeRange>? Activity { get; init; }
 
-  public string? User { get; init; }
-
 }

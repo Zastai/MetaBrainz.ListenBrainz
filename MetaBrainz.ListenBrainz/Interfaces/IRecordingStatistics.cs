@@ -6,7 +6,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 
 /// <summary>Information about the most-listened recordings ("tracks").</summary>
 [PublicAPI]
-public interface IRecordingStatistics {
+public interface IRecordingStatistics : IStatistics {
 
   /// <summary>Information about the recordings.</summary>
   IReadOnlyList<IRecordingInfo>? Recordings { get; }

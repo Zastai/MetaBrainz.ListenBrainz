@@ -163,9 +163,9 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested information, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<ISiteArtistMap?> GetArtistMapAsync(StatisticsRange? range = null, CancellationToken cancellationToken = default) {
+  public Task<IArtistMap?> GetArtistMapAsync(StatisticsRange? range = null, CancellationToken cancellationToken = default) {
     var options = ListenBrainz.OptionsForGetArtistMap(range);
-    return this.GetOptionalAsync<ISiteArtistMap, SiteArtistMap>("stats/sitewide/artist-map", options, cancellationToken);
+    return this.GetOptionalAsync<IArtistMap, ArtistMap>("stats/sitewide/artist-map", options, cancellationToken);
   }
 
   /// <summary>Gets information about the number of artists a user has listened to, grouped by their country.</summary>
@@ -175,10 +175,10 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested information, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null,
-                                                 CancellationToken cancellationToken = default) {
+  public Task<IArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null,
+                                             CancellationToken cancellationToken = default) {
     var options = ListenBrainz.OptionsForGetArtistMap(range);
-    return this.GetOptionalAsync<IUserArtistMap, UserArtistMap>($"stats/user/{user}/artist-map", options, cancellationToken);
+    return this.GetOptionalAsync<IArtistMap, ArtistMap>($"stats/user/{user}/artist-map", options, cancellationToken);
   }
 
   #endregion
@@ -204,12 +204,11 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested artist statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = null, int? offset = null,
-                                                               StatisticsRange? range = null,
-                                                               CancellationToken cancellationToken = default) {
+  public Task<IArtistStatistics?> GetArtistStatisticsAsync(int? count = null, int? offset = null, StatisticsRange? range = null,
+                                                           CancellationToken cancellationToken = default) {
     const string address = "stats/sitewide/artists";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    return this.GetOptionalAsync<ISiteArtistStatistics, SiteArtistStatistics>(address, options, cancellationToken);
+    return this.GetOptionalAsync<IArtistStatistics, ArtistStatistics>(address, options, cancellationToken);
   }
 
   /// <summary>Gets statistics about a user's most listened-to artists.</summary>
@@ -227,12 +226,12 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested artist statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IUserArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = null, int? offset = null,
-                                                               StatisticsRange? range = null,
-                                                               CancellationToken cancellationToken = default) {
+  public Task<IArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = null, int? offset = null,
+                                                           StatisticsRange? range = null,
+                                                           CancellationToken cancellationToken = default) {
     var address = $"stats/user/{user}/artists";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    return this.GetOptionalAsync<IUserArtistStatistics, UserArtistStatistics>(address, options, cancellationToken);
+    return this.GetOptionalAsync<IArtistStatistics, ArtistStatistics>(address, options, cancellationToken);
   }
 
   #endregion
@@ -335,11 +334,11 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested listening activity, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<ISiteListeningActivity?> GetListeningActivityAsync(StatisticsRange? range = null,
-                                                                 CancellationToken cancellationToken = default) {
+  public Task<IListeningActivity?> GetListeningActivityAsync(StatisticsRange? range = null,
+                                                             CancellationToken cancellationToken = default) {
     const string address = "stats/sitewide/listening-activity";
     var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
-    return this.GetOptionalAsync<ISiteListeningActivity, SiteListeningActivity>(address, options, cancellationToken);
+    return this.GetOptionalAsync<IListeningActivity, ListeningActivity>(address, options, cancellationToken);
   }
 
   /// <summary>Gets information about how many listens a user has submitted to ListenBrainz over a period of time.</summary>
@@ -353,11 +352,11 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested listening activity, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IUserListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = null,
-                                                                 CancellationToken cancellationToken = default) {
+  public Task<IListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = null,
+                                                             CancellationToken cancellationToken = default) {
     var address = $"stats/user/{user}/listening-activity";
     var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
-    return this.GetOptionalAsync<IUserListeningActivity, UserListeningActivity>(address, options, cancellationToken);
+    return this.GetOptionalAsync<IListeningActivity, ListeningActivity>(address, options, cancellationToken);
   }
 
   #endregion
@@ -378,12 +377,12 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested recording statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<ISiteRecordingStatistics?> GetRecordingStatisticsAsync(int? count = null, int? offset = null,
-                                                                     StatisticsRange? range = null,
-                                                                     CancellationToken cancellationToken = default) {
+  public Task<IRecordingStatistics?> GetRecordingStatisticsAsync(int? count = null, int? offset = null,
+                                                                 StatisticsRange? range = null,
+                                                                 CancellationToken cancellationToken = default) {
     const string address = "stats/sitewide/recordings";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    return this.GetOptionalAsync<ISiteRecordingStatistics, SiteRecordingStatistics>(address, options, cancellationToken);
+    return this.GetOptionalAsync<IRecordingStatistics, RecordingStatistics>(address, options, cancellationToken);
   }
 
   /// <summary>Gets statistics about a user's most listened-to recordings ("tracks").</summary>
@@ -401,12 +400,12 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested recording statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = null, int? offset = null,
-                                                                     StatisticsRange? range = null,
-                                                                     CancellationToken cancellationToken = default) {
+  public Task<IRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = null, int? offset = null,
+                                                                 StatisticsRange? range = null,
+                                                                 CancellationToken cancellationToken = default) {
     var address = $"stats/user/{user}/recordings";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    return this.GetOptionalAsync<IUserRecordingStatistics, UserRecordingStatistics>(address, options, cancellationToken);
+    return this.GetOptionalAsync<IRecordingStatistics, RecordingStatistics>(address, options, cancellationToken);
   }
 
   #endregion
@@ -429,12 +428,12 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested releases statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<ISiteReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(int? count = null, int? offset = null,
-                                                                           StatisticsRange? range = null,
-                                                                           CancellationToken cancellationToken = default) {
+  public Task<IReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(int? count = null, int? offset = null,
+                                                                       StatisticsRange? range = null,
+                                                                       CancellationToken cancellationToken = default) {
     const string address = "stats/sitewide/release-groups";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    return this.GetOptionalAsync<ISiteReleaseGroupStatistics, SiteReleaseGroupStatistics>(address, options, cancellationToken);
+    return this.GetOptionalAsync<IReleaseGroupStatistics, ReleaseGroupStatistics>(address, options, cancellationToken);
   }
 
   /// <summary>Gets statistics about a user's most listened-to release groups (sets of all editions of an "album").</summary>
@@ -452,12 +451,12 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested releases statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IUserReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(string user, int? count = null, int? offset = null,
-                                                                           StatisticsRange? range = null,
-                                                                           CancellationToken cancellationToken = default) {
+  public Task<IReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(string user, int? count = null, int? offset = null,
+                                                                       StatisticsRange? range = null,
+                                                                       CancellationToken cancellationToken = default) {
     var address = $"stats/user/{user}/release-groups";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    return this.GetOptionalAsync<IUserReleaseGroupStatistics, UserReleaseGroupStatistics>(address, options, cancellationToken);
+    return this.GetOptionalAsync<IReleaseGroupStatistics, ReleaseGroupStatistics>(address, options, cancellationToken);
   }
 
   #endregion
@@ -478,12 +477,12 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested releases statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<ISiteReleaseStatistics?> GetReleaseStatisticsAsync(int? count = null, int? offset = null,
+  public Task<IReleaseStatistics?> GetReleaseStatisticsAsync(int? count = null, int? offset = null,
                                                                  StatisticsRange? range = null,
                                                                  CancellationToken cancellationToken = default) {
     const string address = "stats/sitewide/releases";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    return this.GetOptionalAsync<ISiteReleaseStatistics, SiteReleaseStatistics>(address, options, cancellationToken);
+    return this.GetOptionalAsync<IReleaseStatistics, ReleaseStatistics>(address, options, cancellationToken);
   }
 
   /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
@@ -501,12 +500,12 @@ public sealed partial class ListenBrainz {
   /// <returns>The requested releases statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task<IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = null, int? offset = null,
+  public Task<IReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = null, int? offset = null,
                                                                  StatisticsRange? range = null,
                                                                  CancellationToken cancellationToken = default) {
     var address = $"stats/user/{user}/releases";
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
-    return this.GetOptionalAsync<IUserReleaseStatistics, UserReleaseStatistics>(address, options, cancellationToken);
+    return this.GetOptionalAsync<IReleaseStatistics, ReleaseStatistics>(address, options, cancellationToken);
   }
 
   #endregion
@@ -1053,9 +1052,7 @@ public sealed partial class ListenBrainz {
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ITokenValidationResult> ValidateTokenAsync(string token, CancellationToken cancellationToken = default) {
-    var options = new Dictionary<string, string> {
-      ["token"] = token
-    };
+    var options = new Dictionary<string, string> { ["token"] = token };
     return this.GetAsync<ITokenValidationResult, TokenValidationResult>("validate-token", options, cancellationToken);
   }
 
