@@ -57,17 +57,13 @@ internal class ListenReader : ObjectReader<Listen> {
     if (listened is null) {
       throw new JsonException("Expected listened-at timestamp not found or null.");
     }
-    if (msid is null) {
-      throw new JsonException("Expected MessyBrainz recording id not found or null.");
-    }
-    if (track is null) {
-      throw new JsonException("Expected track metadata not found or null.");
-    }
-    if (user is null) {
-      throw new JsonException("Expected user name not found or null.");
-    }
-    return new Listen(inserted.Value, listened.Value, msid.Value, track, user) {
-      UnhandledProperties = rest
+    return new Listen {
+      InsertedAt = DateTimeOffset.FromUnixTimeSeconds(inserted.Value),
+      ListenedAt = DateTimeOffset.FromUnixTimeSeconds(listened.Value),
+      MessyRecordingId = msid ?? throw new JsonException("Expected MessyBrainz recording id not found or null."),
+      Track = track ?? throw new JsonException("Expected track metadata not found or null."),
+      UnhandledProperties = rest,
+      User = user ?? throw new JsonException("Expected user name not found or null."),
     };
   }
 

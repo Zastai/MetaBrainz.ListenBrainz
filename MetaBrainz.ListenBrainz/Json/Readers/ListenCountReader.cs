@@ -33,11 +33,9 @@ internal sealed class ListenCountReader : PayloadReader<ListenCount> {
       }
       reader.Read();
     }
-    if (count is null) {
-      throw new JsonException("Expected listen count not found or null.");
-    }
-    return new ListenCount(count.Value) {
-      UnhandledProperties = rest
+    return new ListenCount {
+      Count = count ?? throw new JsonException("Expected listen count not found or null."),
+      UnhandledProperties = rest,
     };
   }
 

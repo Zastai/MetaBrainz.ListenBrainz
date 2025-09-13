@@ -5,13 +5,8 @@ namespace MetaBrainz.ListenBrainz.Objects;
 
 internal sealed class HourlyActivity : JsonBasedObject, IHourlyActivity {
 
-  public HourlyActivity(int hour, int listenCount) {
-    this.Hour = hour;
-    this.ListenCount = listenCount;
-  }
+  public required int Hour { get; init; }
 
-  public int Hour { get; }
-
-  public int ListenCount { get; }
+  public required int ListenCount { get; init; }
 
 }

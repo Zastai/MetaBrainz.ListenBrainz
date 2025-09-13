@@ -38,14 +38,10 @@ internal sealed class LatestImportReader : ObjectReader<LatestImport> {
       }
       reader.Read();
     }
-    if (ts is null) {
-      throw new JsonException("Expected latest-import timestamp not found or null.");
-    }
-    if (user is null) {
-      throw new JsonException("Expected user id not found or null.");
-    }
-    return new LatestImport(ts.Value, user) {
-      UnhandledProperties = rest
+    return new LatestImport {
+      UnixTimestamp = ts ?? throw new JsonException("Expected latest-import timestamp not found or null."),
+      User = user ?? throw new JsonException("Expected user id not found or null."),
+      UnhandledProperties = rest,
     };
   }
 

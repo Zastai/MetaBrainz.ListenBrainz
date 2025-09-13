@@ -7,13 +7,9 @@ using MetaBrainz.ListenBrainz.Interfaces;
 namespace MetaBrainz.ListenBrainz.Objects;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-internal abstract class SubmissionPayload {
+internal abstract class SubmissionPayload(string type) {
 
-  protected SubmissionPayload(string type) {
-    this.Type = type;
-  }
-
-  public string Type { get; }
+  public string Type { get; } = type;
 
   public static SubmissionPayload<ISubmittedListen> CreateImport() => new("import");
 
@@ -32,11 +28,8 @@ internal abstract class SubmissionPayload {
 }
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-internal sealed class SubmissionPayload<T> : SubmissionPayload where T : ISubmittedListenData {
+internal sealed class SubmissionPayload<T>(string type) : SubmissionPayload(type) where T : ISubmittedListenData {
 
-  public SubmissionPayload(string type) : base(type) {
-  }
-
-  public List<T> Listens { get; } = new();
+  public List<T> Listens { get; } = [ ];
 
 }

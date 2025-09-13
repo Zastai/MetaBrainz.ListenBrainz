@@ -71,13 +71,7 @@ internal class ReleaseInfoReader : ObjectReader<ReleaseInfo> {
       }
       reader.Read();
     }
-    if (listenCount is null) {
-      throw new JsonException("Expected listen count not found or null.");
-    }
-    if (name is null) {
-      throw new JsonException("Expected release name not found or null.");
-    }
-    return new ReleaseInfo(name, listenCount.Value) {
+    return new ReleaseInfo {
       ArtistIds = artistMbids,
       ArtistMessyId = artistMsid,
       ArtistName = artistName,
@@ -85,7 +79,9 @@ internal class ReleaseInfoReader : ObjectReader<ReleaseInfo> {
       CoverArtId = caaId,
       CoverArtReleaseId = caaRelease,
       Id = mbid,
+      ListenCount = listenCount ?? throw new JsonException("Expected listen count not found or null."),
       MessyId = msid,
+      Name = name ?? throw new JsonException("Expected release name not found or null."),
       UnhandledProperties = rest,
     };
   }

@@ -731,8 +731,17 @@ public sealed partial class ListenBrainz {
   /// </remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
-  public Task SetNowPlayingAsync(string track, string artist, string? release = null, CancellationToken cancellationToken = default)
-    => this.SetNowPlayingAsync(new SubmittedListenData(track, artist, release), cancellationToken);
+  [Obsolete("Create a SubmittedListenData and pass it to the overload taking an ISubmittedListenData instead.")]
+  public Task SetNowPlayingAsync(string track, string artist, string? release = null,
+                                 CancellationToken cancellationToken = default) {
+    return this.SetNowPlayingAsync(new SubmittedListenData {
+      Track = new SubmittedTrackInfo {
+        Artist = artist,
+        Name = track,
+        Release = release,
+      },
+    }, cancellationToken);
+  }
 
   #endregion
 
@@ -770,9 +779,18 @@ public sealed partial class ListenBrainz {
   /// </remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  [Obsolete("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
   public Task SubmitSingleListenAsync(DateTimeOffset timestamp, string track, string artist, string? release = null,
-                                      CancellationToken cancellationToken = default)
-    => this.SubmitSingleListenAsync(new SubmittedListen(timestamp, track, artist, release), cancellationToken);
+                                      CancellationToken cancellationToken = default) {
+    return this.SubmitSingleListenAsync(new SubmittedListen {
+      Timestamp = timestamp,
+      Track = new SubmittedTrackInfo {
+        Artist = artist,
+        Name = track,
+        Release = release,
+      },
+    }, cancellationToken);
+  }
 
   /// <summary>
   /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.
@@ -793,9 +811,18 @@ public sealed partial class ListenBrainz {
   /// </remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  [Obsolete("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
   public Task SubmitSingleListenAsync(long timestamp, string track, string artist, string? release = null,
-                                      CancellationToken cancellationToken = default)
-    => this.SubmitSingleListenAsync(new SubmittedListen(timestamp, track, artist, release), cancellationToken);
+                                      CancellationToken cancellationToken = default) {
+    return this.SubmitSingleListenAsync(new SubmittedListen {
+      Track = new SubmittedTrackInfo {
+        Artist = artist,
+        Name = track,
+        Release = release,
+      },
+      UnixTimestamp = timestamp,
+    }, cancellationToken);
+  }
 
   /// <summary>
   /// Submits a single listen for the user whose token is set in <see cref="UserToken"/>, using the current (UTC) date and time as
@@ -812,9 +839,17 @@ public sealed partial class ListenBrainz {
   /// </remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  [Obsolete("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
   public Task SubmitSingleListenAsync(string track, string artist, string? release = null,
-                                      CancellationToken cancellationToken = default)
-    => this.SubmitSingleListenAsync(new SubmittedListen(track, artist, release), cancellationToken);
+                                      CancellationToken cancellationToken = default) {
+    return this.SubmitSingleListenAsync(new SubmittedListen {
+      Track = new SubmittedTrackInfo {
+        Artist = artist,
+        Name = track,
+        Release = release,
+      }
+    }, cancellationToken);
+  }
 
   #endregion
 

@@ -67,7 +67,7 @@ internal sealed class DailyActivityReader : ObjectReader<DailyActivity> {
       Friday = friday,
       Saturday = saturday,
       Sunday = sunday,
-      UnhandledProperties = rest
+      UnhandledProperties = rest,
     };
   }
 

@@ -38,14 +38,10 @@ internal sealed class ErrorInfoReader : ObjectReader<ErrorInfo> {
       }
       reader.Read();
     }
-    if (code is null) {
-      throw new JsonException("Expected error code not found or null.");
-    }
-    if (error is null) {
-      throw new JsonException("Expected error message not found or null.");
-    }
-    return new ErrorInfo(code.Value, error) {
-      UnhandledProperties = rest
+    return new ErrorInfo {
+      Code = code ?? throw new JsonException("Expected error code not found or null."),
+      Error = error ?? throw new JsonException("Expected error message not found or null."),
+      UnhandledProperties = rest,
     };
   }
 

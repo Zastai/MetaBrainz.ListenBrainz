@@ -47,13 +47,9 @@ internal sealed class TokenValidationResultReader : ObjectReader<TokenValidation
       }
       reader.Read();
     }
-    if (code is null) {
-      throw new JsonException("Expected status code not found or null.");
-    }
-    if (message is null) {
-      throw new JsonException("Expected message not found or null.");
-    }
-    return new TokenValidationResult((HttpStatusCode) code.Value, message) {
+    return new TokenValidationResult {
+      Code = (HttpStatusCode) (code ?? throw new JsonException("Expected status code not found or null.")),
+      Message = message ?? throw new JsonException("Expected message not found or null."),
       UnhandledProperties = rest,
       User = user,
       Valid = valid,

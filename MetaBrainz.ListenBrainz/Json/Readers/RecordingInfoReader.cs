@@ -83,13 +83,7 @@ internal class RecordingInfoReader : ObjectReader<RecordingInfo> {
       }
       reader.Read();
     }
-    if (listenCount is null) {
-      throw new JsonException("Expected listen count not found or null.");
-    }
-    if (name is null) {
-      throw new JsonException("Expected recording name not found or null.");
-    }
-    return new RecordingInfo(name, listenCount.Value) {
+    return new RecordingInfo {
       ArtistIds = artistMbids,
       ArtistMessyId = artistMsid,
       ArtistName = artistName,
@@ -97,7 +91,9 @@ internal class RecordingInfoReader : ObjectReader<RecordingInfo> {
       CoverArtId = caaId,
       CoverArtReleaseId = caaRelease,
       Id = mbid,
+      ListenCount = listenCount ?? throw new JsonException("Expected listen count not found or null."),
       MessyId = msid,
+      Name = name ?? throw new JsonException("Expected recording name not found or null."),
       ReleaseId = releaseMbid,
       ReleaseMessyId = releaseMsid,
       ReleaseName = releaseName,

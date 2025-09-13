@@ -67,7 +67,7 @@ internal sealed class MusicBrainzIdMappingsReader : ObjectReader<MusicBrainzIdMa
       RecordingId = recording,
       RecordingName = name,
       ReleaseId = release,
-      UnhandledProperties = rest
+      UnhandledProperties = rest,
     };
   }
 

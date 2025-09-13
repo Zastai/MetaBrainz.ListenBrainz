@@ -51,19 +51,13 @@ internal sealed class TrackInfoReader : ObjectReader<TrackInfo> {
       }
       reader.Read();
     }
-    if (name is null) {
-      throw new JsonException("Expected track name not found or null.");
-    }
-    if (artist is null) {
-      throw new JsonException("Expected artist name not found or null.");
-    }
-    if (info is null) {
-      throw new JsonException("Expected additional info not found or null.");
-    }
-    return new TrackInfo(name, artist, info) {
+    return new TrackInfo {
+      AdditionalInfo = info ?? throw new JsonException("Expected additional info not found or null."),
+      Artist = artist ?? throw new JsonException("Expected artist name not found or null."),
+      Name = name ?? throw new JsonException("Expected track name not found or null."),
       MusicBrainzIdMappings = mapping,
       Release = release,
-      UnhandledProperties = rest
+      UnhandledProperties = rest,
     };
   }
 

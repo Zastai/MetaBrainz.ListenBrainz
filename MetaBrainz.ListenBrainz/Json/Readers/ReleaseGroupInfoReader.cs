@@ -64,19 +64,15 @@ internal class ReleaseGroupInfoReader : ObjectReader<ReleaseGroupInfo> {
       }
       reader.Read();
     }
-    if (listenCount is null) {
-      throw new JsonException("Expected listen count not found or null.");
-    }
-    if (name is null) {
-      throw new JsonException("Expected release group name not found or null.");
-    }
-    return new ReleaseGroupInfo(name, listenCount.Value) {
+    return new ReleaseGroupInfo {
       ArtistIds = artistMbids,
       ArtistName = artistName,
       Credits = credits,
       CoverArtId = caaId,
       CoverArtReleaseGroupId = caaRelease,
       Id = mbid,
+      ListenCount = listenCount ?? throw new JsonException("Expected listen count not found or null."),
+      Name = name ?? throw new JsonException("Expected release group name not found or null."),
       UnhandledProperties = rest,
     };
   }

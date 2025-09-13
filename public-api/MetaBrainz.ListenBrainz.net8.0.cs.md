@@ -190,14 +190,18 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task SetNowPlayingAsync(MetaBrainz.ListenBrainz.Interfaces.ISubmittedListenData listen, System.Threading.CancellationToken cancellationToken = default);
 
+  [System.ObsoleteAttribute("Create a SubmittedListenData and pass it to the overload taking an ISubmittedListenData instead.")]
   public System.Threading.Tasks.Task SetNowPlayingAsync(string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task SubmitSingleListenAsync(MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen listen, System.Threading.CancellationToken cancellationToken = default);
 
+  [System.ObsoleteAttribute("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
   public System.Threading.Tasks.Task SubmitSingleListenAsync(System.DateTimeOffset timestamp, string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
 
+  [System.ObsoleteAttribute("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
   public System.Threading.Tasks.Task SubmitSingleListenAsync(long timestamp, string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
 
+  [System.ObsoleteAttribute("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
   public System.Threading.Tasks.Task SubmitSingleListenAsync(string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ITokenValidationResult> ValidateTokenAsync(string token, System.Threading.CancellationToken cancellationToken = default);
@@ -654,11 +658,11 @@ public interface IHourlyActivity : MetaBrainz.Common.Json.IJsonBasedObject {
 ```cs
 public interface ILatestImport : MetaBrainz.Common.Json.IJsonBasedObject {
 
-  System.DateTimeOffset? Timestamp {
+  System.DateTimeOffset Timestamp {
     public abstract get;
   }
 
-  long? UnixTimestamp {
+  long UnixTimestamp {
     public abstract get;
   }
 
@@ -1106,6 +1110,10 @@ public interface ISubmittedListen : ISubmittedListenData {
     public abstract get;
   }
 
+  long UnixTimestamp {
+    public abstract get;
+  }
+
 }
 ```
 
@@ -1237,10 +1245,23 @@ public class SubmittedListen : SubmittedListenData, MetaBrainz.ListenBrainz.Inte
     public set;
   }
 
+  long UnixTimestamp {
+    public sealed override get;
+    public set;
+  }
+
+  public SubmittedListen();
+
+  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
+  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
   public SubmittedListen(System.DateTimeOffset timestamp, string track, string artist, string? release = null);
 
+  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
+  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
   public SubmittedListen(long timestamp, string track, string artist, string? release = null);
 
+  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
+  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
   public SubmittedListen(string track, string artist, string? release = null);
 
 }
@@ -1251,8 +1272,15 @@ public class SubmittedListen : SubmittedListenData, MetaBrainz.ListenBrainz.Inte
 ```cs
 public class SubmittedListenData : MetaBrainz.ListenBrainz.Interfaces.ISubmittedListenData {
 
-  public readonly SubmittedTrackInfo Track;
+  required MetaBrainz.ListenBrainz.Interfaces.ISubmittedTrackInfo Track {
+    public sealed override get;
+    public init;
+  }
 
+  public SubmittedListenData();
+
+  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
+  [System.ObsoleteAttribute("Use an object initializer to set the track info.")]
   public SubmittedListenData(string track, string artist, string? release = null);
 
 }
@@ -1268,12 +1296,12 @@ public class SubmittedTrackInfo : MetaBrainz.ListenBrainz.Interfaces.ISubmittedT
     public set;
   }
 
-  string Artist {
+  required string Artist {
     public sealed override get;
     public set;
   }
 
-  string Name {
+  required string Name {
     public sealed override get;
     public set;
   }
@@ -1283,6 +1311,10 @@ public class SubmittedTrackInfo : MetaBrainz.ListenBrainz.Interfaces.ISubmittedT
     public set;
   }
 
+  public SubmittedTrackInfo();
+
+  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
+  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
   public SubmittedTrackInfo(string name, string artist, string? release = null);
 
 }
