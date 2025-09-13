@@ -92,7 +92,7 @@ public sealed partial class ListenBrainz {
   /// <summary>Gets listening statistics for the top artists (and their albums) across all of ListenBrainz.</summary>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+  /// <returns>The requested information, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IArtistActivity?> GetArtistActivityAsync(StatisticsRange? range = null,
@@ -106,7 +106,7 @@ public sealed partial class ListenBrainz {
   /// <param name="user">The user for whom the information is requested.</param>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+  /// <returns>The requested information, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IArtistActivity?> GetArtistActivityAsync(string user, StatisticsRange? range = null,
@@ -120,6 +120,37 @@ public sealed partial class ListenBrainz {
 
   #region artist-evolution-activity
 
+  /// <summary>Gets listening statistics for artists over time across all of ListenBrainz.</summary>
+  /// <param name="range">
+  /// The range of data to include in the statistics. This impacts the time units used by the returned information.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested information, if available.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IArtistEvolutionActivity?> GetArtistEvolutionActivityAsync(StatisticsRange? range = null,
+                                                                         CancellationToken cancellationToken = default) {
+    var address = $"stats/sitewide/artist-evolution-activity";
+    var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
+    return this.GetOptionalAsync<IArtistEvolutionActivity, ArtistEvolutionActivity>(address, options, cancellationToken);
+  }
+
+  /// <summary>Gets a user's listening statistics for artists over time.</summary>
+  /// <param name="user">The user for whom the information is requested.</param>
+  /// <param name="range">
+  /// The range of data to include in the statistics. This impacts the time units used by the returned information.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested information, if available.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IArtistEvolutionActivity?> GetArtistEvolutionActivityAsync(string user, StatisticsRange? range = null,
+                                                                         CancellationToken cancellationToken = default) {
+    var address = $"stats/user/{user}/artist-evolution-activity";
+    var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
+    return this.GetOptionalAsync<IArtistEvolutionActivity, ArtistEvolutionActivity>(address, options, cancellationToken);
+  }
+
   #endregion
 
   #region artist-map
@@ -129,7 +160,7 @@ public sealed partial class ListenBrainz {
   /// </summary>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+  /// <returns>The requested information, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ISiteArtistMap?> GetArtistMapAsync(StatisticsRange? range = null, CancellationToken cancellationToken = default) {
@@ -141,7 +172,7 @@ public sealed partial class ListenBrainz {
   /// <param name="user">The user for whom the information is requested.</param>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested information, or <see langword="null"/> if it has not yet been computed for the user.</returns>
+  /// <returns>The requested information, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserArtistMap?> GetArtistMapAsync(string user, StatisticsRange? range = null,
@@ -170,7 +201,7 @@ public sealed partial class ListenBrainz {
   /// recorded listen. Otherwise, information is returned about both the current and the previous range.
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested artist statistics.</returns>
+  /// <returns>The requested artist statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ISiteArtistStatistics?> GetArtistStatisticsAsync(int? count = null, int? offset = null,
@@ -193,9 +224,7 @@ public sealed partial class ListenBrainz {
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>
-  /// The requested artist statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
-  /// </returns>
+  /// <returns>The requested artist statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = null, int? offset = null,
@@ -214,7 +243,7 @@ public sealed partial class ListenBrainz {
   /// <param name="user">The user for whom the information is requested.</param>
   /// <param name="range">The range of data to include in the information.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested daily activity.</returns>
+  /// <returns>The requested daily activity, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserDailyActivity?> GetDailyActivityAsync(string user, StatisticsRange? range = null,
@@ -253,7 +282,7 @@ public sealed partial class ListenBrainz {
   /// recorded listen. Otherwise, information is returned about both the current and the previous range.
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested listener statistics.</returns>
+  /// <returns>The requested listener statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IArtistListeners?> GetArtistListenersAsync(Guid mbid, int? count = null, int? offset = null,
@@ -281,7 +310,7 @@ public sealed partial class ListenBrainz {
   /// recorded listen. Otherwise, information is returned about both the current and the previous range.
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested listener statistics.</returns>
+  /// <returns>The requested listener statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IReleaseGroupListeners?> GetReleaseGroupListenersAsync(Guid mbid, int? count = null, int? offset = null,
@@ -303,7 +332,7 @@ public sealed partial class ListenBrainz {
   /// recorded listen. Otherwise, information is returned about both the current and the previous range.
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested listening activity.</returns>
+  /// <returns>The requested listening activity, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ISiteListeningActivity?> GetListeningActivityAsync(StatisticsRange? range = null,
@@ -321,7 +350,7 @@ public sealed partial class ListenBrainz {
   /// recorded listen. Otherwise, information is returned about both the current and the previous range.
   /// </param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>The requested listening activity.</returns>
+  /// <returns>The requested listening activity, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserListeningActivity?> GetListeningActivityAsync(string user, StatisticsRange? range = null,
@@ -346,9 +375,7 @@ public sealed partial class ListenBrainz {
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>
-  /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
-  /// </returns>
+  /// <returns>The requested recording statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ISiteRecordingStatistics?> GetRecordingStatisticsAsync(int? count = null, int? offset = null,
@@ -371,9 +398,7 @@ public sealed partial class ListenBrainz {
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>
-  /// The requested recording statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
-  /// </returns>
+  /// <returns>The requested recording statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserRecordingStatistics?> GetRecordingStatisticsAsync(string user, int? count = null, int? offset = null,
@@ -401,9 +426,7 @@ public sealed partial class ListenBrainz {
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>
-  /// The requested releases statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
-  /// </returns>
+  /// <returns>The requested releases statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ISiteReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(int? count = null, int? offset = null,
@@ -426,9 +449,7 @@ public sealed partial class ListenBrainz {
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>
-  /// The requested releases statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
-  /// </returns>
+  /// <returns>The requested releases statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserReleaseGroupStatistics?> GetReleaseGroupStatisticsAsync(string user, int? count = null, int? offset = null,
@@ -454,9 +475,7 @@ public sealed partial class ListenBrainz {
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>
-  /// The requested releases statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
-  /// </returns>
+  /// <returns>The requested releases statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<ISiteReleaseStatistics?> GetReleaseStatisticsAsync(int? count = null, int? offset = null,
@@ -479,9 +498,7 @@ public sealed partial class ListenBrainz {
   /// </param>
   /// <param name="range">The range of data to include in the statistics.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <returns>
-  /// The requested releases statistics, or <see langword="null"/> if statistics have not yet been computed for the user.
-  /// </returns>
+  /// <returns>The requested releases statistics, if available.</returns>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task<IUserReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = null, int? offset = null,
