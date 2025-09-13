@@ -85,7 +85,7 @@ internal sealed class ArtistStatisticsReader : PayloadReader<ArtistStatistics> {
       Range = range ?? throw new JsonException("Expected range not found or null."),
       TotalCount = totalCount ?? throw new JsonException("Expected total count not found or null."),
       UnhandledProperties = rest,
-      User = user ?? throw new JsonException("Expected user id not found or null."),
+      User = user,
     };
   }
 

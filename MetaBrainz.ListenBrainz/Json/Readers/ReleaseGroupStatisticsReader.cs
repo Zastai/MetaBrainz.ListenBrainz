@@ -83,7 +83,7 @@ internal sealed class ReleaseGroupStatisticsReader : PayloadReader<ReleaseGroupS
       ReleaseGroups = releaseGroups.VerifyPayloadContents(count),
       TotalCount = totalCount,
       UnhandledProperties = rest,
-      User = user ?? throw new JsonException("Expected user id not found or null."),
+      User = user,
     };
   }
 

@@ -69,7 +69,7 @@ internal sealed class ListeningActivityReader : PayloadReader<ListeningActivity>
       OldestListen = oldestListen,
       Range = range ?? throw new JsonException("Expected range not found or null."),
       UnhandledProperties = rest,
-      User = user ?? throw new JsonException("Expected user id not found or null."),
+      User = user,
     };
   }
 
