@@ -148,6 +148,10 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserDailyActivity?> GetDailyActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IEraActivity?> GetEraActivityAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IEraActivity?> GetEraActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ILatestImport> GetLatestImportAsync(string user, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IListenCount> GetListenCountAsync(string user, System.Threading.CancellationToken cancellationToken = default);
@@ -622,6 +626,18 @@ public interface IDailyActivity : MetaBrainz.Common.Json.IJsonBasedObject {
   }
 
   System.Collections.Generic.IReadOnlyList<IHourlyActivity>? Wednesday {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IEraActivity
+
+```cs
+public interface IEraActivity : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Collections.Generic.IReadOnlyList<IYearlyActivity>? Activity {
     public abstract get;
   }
 
@@ -1242,6 +1258,22 @@ public interface ITrackInfo : MetaBrainz.Common.Json.IJsonBasedObject {
 public interface IUserDailyActivity : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
   IDailyActivity? Activity {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IYearlyActivity
+
+```cs
+public interface IYearlyActivity : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  int ListenCount {
+    public abstract get;
+  }
+
+  int Year {
     public abstract get;
   }
 

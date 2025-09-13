@@ -256,6 +256,42 @@ public sealed partial class ListenBrainz {
 
   #region era-activity
 
+  /// <summary>
+  /// Gets information about how many listens have been recorded across all of ListenBrainz, grouped by their release year.
+  /// </summary>
+  /// <param name="range">
+  /// The range of data to include in the information.<br/>
+  /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
+  /// recorded listen. Otherwise, information is returned about both the current and the previous range.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested listening activity, if available.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IEraActivity?> GetEraActivityAsync(StatisticsRange? range = null, CancellationToken cancellationToken = default) {
+    const string address = "stats/sitewide/era-activity";
+    var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
+    return this.GetOptionalAsync<IEraActivity, EraActivity>(address, options, cancellationToken);
+  }
+
+  /// <summary>Gets information about how many listens have been recorded for a user, grouped by their release year.</summary>
+  /// <param name="user">The user for whom the information is requested.</param>
+  /// <param name="range">
+  /// The range of data to include in the information.<br/>
+  /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one
+  /// recorded listen. Otherwise, information is returned about both the current and the previous range.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The requested listening activity, if available.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IEraActivity?> GetEraActivityAsync(string user, StatisticsRange? range = null,
+                                                 CancellationToken cancellationToken = default) {
+    var address = $"stats/user/{user}/era-activity";
+    var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
+    return this.GetOptionalAsync<IEraActivity, EraActivity>(address, options, cancellationToken);
+  }
+
   #endregion
 
   #region genre-activity
@@ -324,7 +360,7 @@ public sealed partial class ListenBrainz {
 
   #region listening-activity
 
-  /// <summary>Gets information about how many listens have been submitted across to ListenBrainz over a period of time.</summary>
+  /// <summary>Gets information about how many listens have been submitted to ListenBrainz over a period of time.</summary>
   /// <param name="range">
   /// The range of data to include in the information.<br/>
   /// If this is unspecified or <see cref="StatisticsRange.AllTime"/>, information is returned about all years with at least one

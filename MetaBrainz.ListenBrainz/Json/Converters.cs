@@ -15,6 +15,7 @@ internal static class Converters {
       yield return ArtistListenersReader.Instance;
       yield return ArtistMapReader.Instance;
       yield return ArtistStatisticsReader.Instance;
+      yield return EraActivityReader.Instance;
       yield return ErrorInfoReader.Instance;
       yield return FetchedListensReader.Instance;
       yield return LatestImportReader.Instance;
