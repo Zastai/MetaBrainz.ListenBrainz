@@ -557,52 +557,30 @@ public sealed partial class ListenBrainz {
 
   #region Import Listens
 
-  /// <summary>The maximum number of listens that can fit into a single API request.</summary>
-  /// <remarks>
-  /// A JSON listen payload contains:
-  /// <list type="bullet">
-  /// <item>
-  ///   <term>a minimum of 37 characters of fixed overhead: </term>
-  ///   <description><c>{"listen_type":"import","payload":[]}</c></description>
-  /// </item>
-  /// <item>
-  ///   <term>a minimum of 71 characters for the listen data: </term>
-  ///   <description><c>{"listened_at":0,"track_metadata":{"artist_name":"?","track_name":"?"}}</c></description>
-  /// </item>
-  /// </list>
-  /// The listens are comma-separated, so we need to add one to the listen size and subtract one from the fixed overhead.<br/>
-  /// So the maximum listens that can be submitted at once is <c>(<see cref="MaxListenSize"/> - 36) / 72</c> (currently 141).
-  /// </remarks>
-  private const int MaxListensInOnePayload = (ListenBrainz.MaxListenSize - 36) / 72;
-
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="listens">The listens to import.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
-  /// Submissions will happen every <see cref="MaxListensInOnePayload"/> listens, and if a submission's listen data would exceed
-  /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
-  /// call to this method may result in multiple web service requests, which may affect rate limiting.
+  /// Users can find their token on <a href="https://listenbrainz.org/profile/">their profile page</a>.<br/>
+  /// Submissions will happen every <see cref="MaxListensPerRequest"/> listens. As such, one call to this method may result in
+  /// multiple web service requests, which may affect rate limiting.
   /// </remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public async Task ImportListensAsync(IAsyncEnumerable<ISubmittedListen> listens, CancellationToken cancellationToken = default) {
-    var payload = SubmissionPayload.CreateImport();
+    var payload = new ImportPayload();
     await foreach (var listen in listens.ConfigureAwait(false).WithCancellation(cancellationToken)) {
       payload.Listens.Add(listen);
-      if (payload.Listens.Count < ListenBrainz.MaxListensInOnePayload) {
-        continue;
+      if (payload.Listens.Count >= ListenBrainz.MaxListensPerRequest) {
+        await this.ImportListensAsync(this.SerializeImport(payload), cancellationToken).ConfigureAwait(false);
+        payload.Listens.Clear();
       }
+    }
+    if (payload.Listens.Count != 0) {
       await this.ImportListensAsync(this.SerializeImport(payload), cancellationToken).ConfigureAwait(false);
-      payload.Listens.Clear();
     }
-    if (payload.Listens.Count == 0) {
-      return;
-    }
-    await this.ImportListensAsync(this.SerializeImport(payload), cancellationToken).ConfigureAwait(false);
   }
 
   /// <summary>Imports a set of listens for the user whose token is set in <see cref="UserToken"/>.</summary>
@@ -611,28 +589,24 @@ public sealed partial class ListenBrainz {
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
-  /// Submissions will happen every <see cref="MaxListensInOnePayload"/> listens, and if a submission's listen data would exceed
-  /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
-  /// call to this method may result in multiple web service requests, which may affect rate limiting.
+  /// Users can find their token on <a href="https://listenbrainz.org/profile/">their profile page</a>.<br/>
+  /// Submissions will happen every <see cref="MaxListensPerRequest"/> listens. As such, one call to this method may result in
+  /// multiple web service requests, which may affect rate limiting.
   /// </remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public async Task ImportListensAsync(IEnumerable<ISubmittedListen> listens, CancellationToken cancellationToken = default) {
-    var payload = SubmissionPayload.CreateImport();
+    var payload = new ImportPayload();
     foreach (var listen in listens) {
       payload.Listens.Add(listen);
-      if (payload.Listens.Count < ListenBrainz.MaxListensInOnePayload) {
-        continue;
+      if (payload.Listens.Count >= ListenBrainz.MaxListensPerRequest) {
+        await this.ImportListensAsync(this.SerializeImport(payload), cancellationToken).ConfigureAwait(false);
+        payload.Listens.Clear();
       }
+    }
+    if (payload.Listens.Count != 0) {
       await this.ImportListensAsync(this.SerializeImport(payload), cancellationToken).ConfigureAwait(false);
-      payload.Listens.Clear();
     }
-    if (payload.Listens.Count == 0) {
-      return;
-    }
-    await this.ImportListensAsync(this.SerializeImport(payload), cancellationToken).ConfigureAwait(false);
   }
 
   private async Task ImportListensAsync(IEnumerable<string> serializedListens, CancellationToken cancellationToken = default) {
@@ -647,11 +621,9 @@ public sealed partial class ListenBrainz {
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
-  /// Submissions will happen every <see cref="MaxListensInOnePayload"/> listens, and if a submission's listen data would exceed
-  /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
-  /// call to this method may result in multiple web service requests, which may affect rate limiting.
+  /// Users can find their token on <a href="https://listenbrainz.org/profile/">their profile page</a>.<br/>
+  /// Submissions will happen every <see cref="MaxListensPerRequest"/> listens. As such, one call to this method may result in
+  /// multiple web service requests, which may affect rate limiting.
   /// </remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
@@ -663,37 +635,36 @@ public sealed partial class ListenBrainz {
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
   /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.<br/>
-  /// Submissions will happen every <see cref="MaxListensInOnePayload"/> listens, and if a submission's listen data would exceed
-  /// <see cref="MaxListenSize"/>, this will split them up and submit them in chunks to avoid hitting that limit. As such, one
-  /// call to this method may result in multiple web service requests, which may affect rate limiting.
+  /// Users can find their token on <a href="https://listenbrainz.org/profile/">their profile page</a>.<br/>
+  /// Submissions will happen every <see cref="MaxListensPerRequest"/> listens. As such, one call to this method may result in
+  /// multiple web service requests, which may affect rate limiting.
   /// </remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task ImportListensAsync(params ISubmittedListen[] listens)
     => this.ImportListensAsync((IEnumerable<ISubmittedListen>) listens);
 
-  private IEnumerable<string> SerializeImport(SubmissionPayload<ISubmittedListen> payload) {
+  private IEnumerable<string> SerializeImport(ListenSubmissionPayload<ISubmittedListen> payload) {
     var json = JsonSerializer.Serialize(payload, ListenBrainz.JsonWriterOptions);
-    // If it's small enough, or we can't split up the listens, we're done
-    if (json.Length <= ListenBrainz.MaxListenSize || payload.Listens.Count <= 1) {
+    // If it's small enough, or we can't split up the listens, we're done.
+    if (json.Length <= ListenBrainz.MaxListenPayloadSize || payload.Listens.Count <= 1) {
       yield return json;
       yield break;
     }
-    // Otherwise, split the list of listens in half
-    var firstHalf = payload.Listens.Count / 2;
-    var secondHalf = payload.Listens.Count - firstHalf;
-    { // Recurse over first half
-      var partialPayload = SubmissionPayload.CreateImport();
-      partialPayload.Listens.AddRange(payload.Listens.GetRange(0, firstHalf));
+    // Otherwise, split the list of listens in half.
+    var halfWayPoint = payload.Listens.Count / 2;
+    { // Recurse over first half.
+      var partialPayload = new ImportPayload {
+        Listens = payload.Listens[..halfWayPoint],
+      };
       foreach (var part in this.SerializeImport(partialPayload)) {
         yield return part;
       }
     }
-    { // Recurse over second half
-      var partialPayload = SubmissionPayload.CreateImport();
-      partialPayload.Listens.AddRange(payload.Listens.GetRange(firstHalf, secondHalf));
+    { // Recurse over second half.
+      var partialPayload = new ImportPayload {
+        Listens = payload.Listens[halfWayPoint..],
+      };
       foreach (var part in this.SerializeImport(partialPayload)) {
         yield return part;
       }
@@ -716,7 +687,7 @@ public sealed partial class ListenBrainz {
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SetNowPlayingAsync(ISubmittedListenData listen, CancellationToken cancellationToken = default)
-    => this.SubmitListensAsync(SubmissionPayload.CreatePlayingNow(listen), cancellationToken);
+    => this.SubmitListensAsync(new PlayingNowPayload(listen), cancellationToken);
 
   /// <summary>Sets the "now playing" information for the user whose token is set in <see cref="UserToken"/>.</summary>
   /// <param name="track">The name of the track being listened to.</param>
@@ -761,7 +732,7 @@ public sealed partial class ListenBrainz {
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SubmitSingleListenAsync(ISubmittedListen listen, CancellationToken cancellationToken = default)
-    => this.SubmitListensAsync(SubmissionPayload.CreateSingle(listen), cancellationToken);
+    => this.SubmitListensAsync(new SingleListenPayload(listen), cancellationToken);
 
   /// <summary>
   /// Submits a single listen (typically one that has just completed) for the user whose token is set in <see cref="UserToken"/>.

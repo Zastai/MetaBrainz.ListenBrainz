@@ -26,8 +26,15 @@ public sealed partial class ListenBrainz : IDisposable {
   /// <summary>The maximum number of listens returned in a single GET request.</summary>
   public const int MaxItemsPerGet = 100;
 
+  /// <summary>The maximum size of a payload in bytes.</summary>
+  /// <remarks>This corresponds to <see cref="MaxListenSize"/> multiplied by <see cref="MaxListensPerRequest"/>.</remarks>
+  public const int MaxListenPayloadSize = ListenBrainz.MaxListenSize * ListenBrainz.MaxListensPerRequest;
+
   /// <summary>Maximum overall listen size in bytes, to prevent egregious spamming.</summary>
   public const int MaxListenSize = 10240;
+
+  /// <summary>The maximum number of listens in a request.</summary>
+  public const int MaxListensPerRequest = 1000;
 
   /// <summary>The maximum length of a tag.</summary>
   public const int MaxTagLength = 64;
