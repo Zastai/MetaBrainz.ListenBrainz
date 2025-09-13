@@ -37,6 +37,7 @@ internal sealed class ListeningActivityReader : PayloadReader<ListeningActivity>
             activity = reader.ReadList(ListenTimeRangeReader.Instance, options);
             break;
           case "range":
+          case "stats_range":
             range = EnumHelper.ParseStatisticsRange(reader.GetString());
             if (range == StatisticsRange.Unknown) {
               goto default; // also register it as an unhandled property

@@ -46,6 +46,7 @@ internal sealed class ArtistStatisticsReader : PayloadReader<ArtistStatistics> {
             offset = reader.GetInt32();
             break;
           case "range":
+          case "stats_range":
             range = EnumHelper.ParseStatisticsRange(reader.GetString());
             if (range == StatisticsRange.Unknown) {
               goto default; // also register it as an unhandled property

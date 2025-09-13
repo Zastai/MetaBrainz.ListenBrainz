@@ -45,6 +45,7 @@ internal sealed class ArtistListenersReader : PayloadReader<ArtistListeners> {
           case "listeners":
             topListeners = reader.ReadList(TopListenerReader.Instance, options);
             break;
+          case "range":
           case "stats_range":
             range = EnumHelper.ParseStatisticsRange(reader.GetString());
             if (range == StatisticsRange.Unknown) {
