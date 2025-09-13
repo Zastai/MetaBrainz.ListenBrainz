@@ -18,11 +18,21 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public const int DefaultTimeRange = 3;
 
+  public const int EarliestListen = 1033430400;
+
+  public const int MaxDuration = 2073600;
+
   public const int MaxItemsPerGet = 100;
+
+  public const int MaxListenPayloadSize = 10240000;
 
   public const int MaxListenSize = 10240;
 
+  public const int MaxListensPerRequest = 1000;
+
   public const int MaxTagLength = 64;
+
+  public const int MaxTagSize = 64;
 
   public const int MaxTagsPerListen = 50;
 
@@ -215,10 +225,15 @@ public sealed class ListenBrainz : System.IDisposable {
 public enum StatisticsRange {
 
   AllTime = 0,
+  HalfYearly = 1,
   Month = 2,
-  Unknown = 4,
-  Week = 1,
-  Year = 3,
+  Quarter = 3,
+  ThisMonth = 4,
+  ThisWeek = 5,
+  ThisYear = 6,
+  Unknown = 9,
+  Week = 7,
+  Year = 8,
 
 }
 ```
