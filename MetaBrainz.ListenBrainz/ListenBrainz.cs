@@ -8,6 +8,7 @@ using System.Threading;
 using JetBrains.Annotations;
 
 using MetaBrainz.Common;
+using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz;
 
@@ -22,6 +23,12 @@ public sealed partial class ListenBrainz : IDisposable {
 
   /// <summary>The default time range for a request for listen data, in sets of 5 days.</summary>
   public const int DefaultTimeRange = 3;
+
+  /// <summary>The minimum acceptable value for <see cref="IListen.ListenedAt"/> (October 1st, 2002).</summary>
+  public const int EarliestListen = 1033430400;
+
+  /// <summary>The maximum value for a duration (24 days), expressed in seconds.</summary>
+  public const int MaxDuration = 24 * 24 * 60 * 60;
 
   /// <summary>The maximum number of listens returned in a single GET request.</summary>
   public const int MaxItemsPerGet = 100;
@@ -41,6 +48,9 @@ public sealed partial class ListenBrainz : IDisposable {
 
   /// <summary>The maximum number of tags per listen.</summary>
   public const int MaxTagsPerListen = 50;
+
+  /// <summary>The maximum length of a tag.</summary>
+  public const int MaxTagSize = 64;
 
   /// <summary>The maximum time range for a request for listen data, in sets of 5 days.</summary>
   public const int MaxTimeRange = 73;
