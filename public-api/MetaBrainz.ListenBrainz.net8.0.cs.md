@@ -122,6 +122,10 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistActivity?> GetArtistActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistEvolutionActivity?> GetArtistEvolutionActivityAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistEvolutionActivity?> GetArtistEvolutionActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistListeners?> GetArtistListenersAsync(System.Guid mbid, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ISiteArtistMap?> GetArtistMapAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
@@ -453,6 +457,22 @@ public interface IArtistCredit {
 }
 ```
 
+### Type: IArtistEvolutionActivity
+
+```cs
+public interface IArtistEvolutionActivity : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Collections.Generic.IReadOnlyList<IArtistTimeRange>? Activity {
+    public abstract get;
+  }
+
+  string? User {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IArtistInfo
 
 ```cs
@@ -527,6 +547,30 @@ public interface IArtistStatistics {
   }
 
   int TotalCount {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IArtistTimeRange
+
+```cs
+public interface IArtistTimeRange {
+
+  System.Guid? Id {
+    public abstract get;
+  }
+
+  int ListenCount {
+    public abstract get;
+  }
+
+  string Name {
+    public abstract get;
+  }
+
+  string TimeUnit {
     public abstract get;
   }
 
