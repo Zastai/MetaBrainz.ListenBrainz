@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,7 +36,7 @@ public sealed partial class ListenBrainz {
     return options;
   }
 
-  #region /1/stats/.../artist-activity
+  #region /1/stats/sitewide/artist-activity
 
   /// <summary>Gets listening statistics for the top artists (and their albums) across all of ListenBrainz.</summary>
   /// <param name="range">The range of data to include in the statistics.</param>
@@ -50,6 +49,10 @@ public sealed partial class ListenBrainz {
     var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
     return this.GetOptionalAsync<IArtistActivity, ArtistActivity>("stats/sitewide/artist-activity", options, cancellationToken);
   }
+
+  #endregion
+
+  #region /1/stats/user/xxx/artist-activity
 
   /// <summary>Gets listening statistics for a user's top artists (and their albums).</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -66,7 +69,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../artist-evolution-activity
+  #region /1/stats/sitewide/artist-evolution-activity
 
   /// <summary>Gets listening statistics for artists over time across all of ListenBrainz.</summary>
   /// <param name="range">
@@ -82,6 +85,10 @@ public sealed partial class ListenBrainz {
     var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
     return this.GetOptionalAsync<IArtistEvolutionActivity, ArtistEvolutionActivity>(address, options, cancellationToken);
   }
+
+  #endregion
+
+  #region /1/stats/user/xxx/artist-evolution-activity
 
   /// <summary>Gets a user's listening statistics for artists over time.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -101,7 +108,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../artist-map
+  #region /1/stats/sitewide/artist-map
 
   /// <summary>
   /// Gets information about the number of times artists are listened to across all of ListenBrainz, grouped by their country.
@@ -115,6 +122,10 @@ public sealed partial class ListenBrainz {
     var options = ListenBrainz.OptionsForGetArtistMap(range);
     return this.GetOptionalAsync<IArtistMap, ArtistMap>("stats/sitewide/artist-map", options, cancellationToken);
   }
+
+  #endregion
+
+  #region /1/stats/user/xxx/artist-map
 
   /// <summary>Gets information about the number of artists a user has listened to, grouped by their country.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -131,7 +142,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../artists
+  #region /1/stats/sitewide/artists
 
   /// <summary>Gets statistics about the most listened-to artists across all of ListenBrainz.</summary>
   /// <param name="count">
@@ -158,6 +169,10 @@ public sealed partial class ListenBrainz {
     return this.GetOptionalAsync<IArtistStatistics, ArtistStatistics>("stats/sitewide/artists", options, cancellationToken);
   }
 
+  #endregion
+
+  #region /1/stats/user/xxx/artists
+
   /// <summary>Gets statistics about a user's most listened-to artists.</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
   /// <param name="count">
@@ -182,7 +197,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../daily-activity
+  #region /1/stats/user/xxx/daily-activity
 
   /// <summary>Gets information about how a user's listens are spread across the days of the week.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -200,7 +215,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../era-activity
+  #region /1/stats/sitewide/era-activity
 
   /// <summary>
   /// Gets information about how many listens have been recorded across all of ListenBrainz, grouped by their release year.
@@ -218,6 +233,10 @@ public sealed partial class ListenBrainz {
     var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
     return this.GetOptionalAsync<IEraActivity, EraActivity>("stats/sitewide/era-activity", options, cancellationToken);
   }
+
+  #endregion
+
+  #region /1/stats/user/xxx/era-activity
 
   /// <summary>Gets information about how many listens have been recorded for a user, grouped by their release year.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -238,7 +257,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../genre-activity
+  #region /1/stats/user/xxx/genre-activity
 
   /// <summary>
   /// Gets information about how many listens have been recorded for a user, grouped by the genre and the hour of the day.
@@ -257,7 +276,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../listeners
+  #region /1/stats/artist/xxx/listeners
 
   /// <summary>Gets information about the top listeners for a particular artist.</summary>
   /// <param name="mbid">The MusicBrainz ID for the artist.</param>
@@ -285,6 +304,10 @@ public sealed partial class ListenBrainz {
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
     return this.GetOptionalAsync<IArtistListeners, ArtistListeners>($"stats/artist/{mbid}/listeners", options, cancellationToken);
   }
+
+  #endregion
+
+  #region /1/stats/release-group/xxx/listeners
 
   /// <summary>Gets information about the top listeners for a particular release group.</summary>
   /// <param name="mbid">The MusicBrainz ID for the release group.</param>
@@ -316,7 +339,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../listening-activity
+  #region /1/stats/sitewide/listening-activity
 
   /// <summary>Gets information about how many listens have been submitted to ListenBrainz over a period of time.</summary>
   /// <param name="range">
@@ -334,6 +357,10 @@ public sealed partial class ListenBrainz {
     var options = ListenBrainz.OptionsForGetStatistics(null, null, range);
     return this.GetOptionalAsync<IListeningActivity, ListeningActivity>(address, options, cancellationToken);
   }
+
+  #endregion
+
+  #region /1/stats/user/xxx/listening-activity
 
   /// <summary>Gets information about how many listens a user has submitted to ListenBrainz over a period of time.</summary>
   /// <param name="user">The user for whom the information is requested.</param>
@@ -355,7 +382,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../recordings
+  #region /1/stats/sitewide/recordings
 
   /// <summary>Gets statistics about the most listened-to recordings ("tracks") across all of ListenBrainz.</summary>
   /// <param name="count">
@@ -378,6 +405,10 @@ public sealed partial class ListenBrainz {
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
     return this.GetOptionalAsync<IRecordingStatistics, RecordingStatistics>(address, options, cancellationToken);
   }
+
+  #endregion
+
+  #region /1/stats/user/xxx/recordings
 
   /// <summary>Gets statistics about a user's most listened-to recordings ("tracks").</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
@@ -404,7 +435,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../release-groups
+  #region /1/stats/sitewide/release-groups
 
   /// <summary>
   /// Gets statistics about the most listened-to release groups (sets of all editions of an "album") across all of ListenBrainz.
@@ -429,6 +460,10 @@ public sealed partial class ListenBrainz {
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
     return this.GetOptionalAsync<IReleaseGroupStatistics, ReleaseGroupStatistics>(address, options, cancellationToken);
   }
+
+  #endregion
+
+  #region /1/stats/user/xxx/release-groups
 
   /// <summary>Gets statistics about a user's most listened-to release groups (sets of all editions of an "album").</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
@@ -455,7 +490,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../releases
+  #region /1/stats/sitewide/releases
 
   /// <summary>Gets statistics about the most listened-to releases ("albums") across all of ListenBrainz.</summary>
   /// <param name="count">
@@ -477,6 +512,10 @@ public sealed partial class ListenBrainz {
     var options = ListenBrainz.OptionsForGetStatistics(count, offset, range);
     return this.GetOptionalAsync<IReleaseStatistics, ReleaseStatistics>("stats/sitewide/releases", options, cancellationToken);
   }
+
+  #endregion
+
+  #region /1/stats/user/xxx/releases
 
   /// <summary>Gets statistics about a user's most listened-to releases ("albums").</summary>
   /// <param name="user">The user for whom the statistics are requested.</param>
@@ -502,7 +541,7 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
-  #region /1/stats/.../year-in-music
+  #region /1/stats/user/xxx/year-in-music
 
   // While the endpoint is listed in the docs, its payload is not.
   // The top level has:
