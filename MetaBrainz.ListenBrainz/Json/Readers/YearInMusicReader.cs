@@ -3,25 +3,29 @@ using System.Collections.Generic;
 using System.Text.Json;
 
 using MetaBrainz.Common.Json;
-using MetaBrainz.Common.Json.Converters;
+using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
 
-internal class ArtistActivityReader : ObjectReader<ArtistActivity> {
+internal class YearInMusicReader : PayloadReader<YearInMusic> {
 
-  public static readonly ArtistActivityReader Instance = new();
+  public static readonly YearInMusicReader Instance = new();
 
-  protected override ArtistActivity ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-    IReadOnlyList<ArtistActivityInfo>? artists = null;
+  protected override YearInMusic ReadPayload(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+    IYearInMusicData? data = null;
+    string? user = null;
     Dictionary<string, object?>? rest = null;
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
       try {
         reader.Read();
         switch (prop) {
-          case "result":
-            artists = reader.ReadList(ArtistActivityInfoReader.Instance, options);
+          case "data":
+            data = reader.GetObject(YearInMusicDataReader.Instance, options);
+            break;
+          case "user_name":
+            user = reader.GetString();
             break;
           default:
             rest ??= new Dictionary<string, object?>();
@@ -34,8 +38,9 @@ internal class ArtistActivityReader : ObjectReader<ArtistActivity> {
       }
       reader.Read();
     }
-    return new ArtistActivity {
-      Artists = artists ?? throw new JsonException("Expected result set not found or null."),
+    return new YearInMusic {
+      Data = data ?? throw new MissingField("data"),
+      User = user ?? throw new MissingField("user_name"),
       UnhandledProperties = rest,
     };
   }

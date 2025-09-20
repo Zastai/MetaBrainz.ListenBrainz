@@ -4,41 +4,36 @@ using System.Text.Json;
 
 using MetaBrainz.Common.Json;
 using MetaBrainz.Common.Json.Converters;
-using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
 
-internal class ArtistActivityInfoReader : ObjectReader<ArtistActivityInfo> {
+internal class TopArtistReader : ObjectReader<TopArtist> {
 
-  public static readonly ArtistActivityInfoReader Instance = new();
+  public static readonly TopArtistReader Instance = new();
 
-  protected override ArtistActivityInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
-    IReadOnlyList<IAlbumInfo>? albums = null;
+  protected override TopArtist ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     int? listenCount = null;
     Guid? mbid = null;
+    IReadOnlyList<Guid>? mbids = null;
     string? name = null;
-    string? artistName = null;
     Dictionary<string, object?>? rest = null;
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
       try {
         reader.Read();
         switch (prop) {
-          case "albums":
-            albums = reader.ReadList(AlbumInfoReader.Instance, options);
-            break;
           case "artist_mbid":
             mbid = reader.GetOptionalGuid();
             break;
+          case "artist_mbids":
+            mbids = reader.ReadList<Guid>(options);
+            break;
           case "artist_name":
-            artistName = reader.GetString();
+            name = reader.GetString();
             break;
           case "listen_count":
             listenCount = reader.GetInt32();
-            break;
-          case "name":
-            name = reader.GetString();
             break;
           default:
             rest ??= new Dictionary<string, object?>();
@@ -51,13 +46,21 @@ internal class ArtistActivityInfoReader : ObjectReader<ArtistActivityInfo> {
       }
       reader.Read();
     }
-    // Retain artist_name (as unhandled) only if it's not a duplicate of the name
-    if (artistName is not null && artistName != name) {
-      rest ??= new Dictionary<string, object?>();
-      rest["artist_name"] = artistName;
+    if (mbids is not null) {
+      if (mbids.Count == 0) {
+        mbids = null;
+      }
+      else if (mbids.Count == 1 && (mbid is null || mbid.Value == mbids[0])) {
+        mbid = mbids[0];
+        mbids = null;
+      }
     }
-    return new ArtistActivityInfo {
-      Albums = albums ?? [ ],
+    // if we did not use a non-empty artist_mbids to populate artist_mbid, retain it as an unhandled property
+    if (mbids is not null) {
+      rest ??= new Dictionary<string, object?>();
+      rest["artist_mbids"] = mbids;
+    }
+    return new TopArtist {
       Id = mbid,
       ListenCount = listenCount ?? throw new JsonException("Expected listen count not found or null."),
       Name = name ?? throw new JsonException("Expected artist name not found or null."),

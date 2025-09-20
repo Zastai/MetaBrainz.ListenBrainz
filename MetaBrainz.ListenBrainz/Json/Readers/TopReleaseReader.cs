@@ -9,16 +9,15 @@ using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
 
-internal class ReleaseGroupInfoReader : ObjectReader<ReleaseGroupInfo> {
+internal class TopReleaseReader : ObjectReader<TopRelease> {
 
-  public static readonly ReleaseGroupInfoReader Instance = new();
+  public static readonly TopReleaseReader Instance = new();
 
-  protected override ReleaseGroupInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+  protected override TopRelease ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     IReadOnlyList<Guid>? artistMbids = null;
     string? artistName = null;
     long? caaId = null;
     Guid? caaRelease = null;
-    IReadOnlyList<IArtistCredit>? credits = null;
     int? listenCount = null;
     Guid? mbid = null;
     string? name = null;
@@ -34,9 +33,6 @@ internal class ReleaseGroupInfoReader : ObjectReader<ReleaseGroupInfo> {
           case "artist_name":
             artistName = reader.GetString();
             break;
-          case "artists":
-            credits = reader.ReadList(ArtistCreditReader.Instance, options);
-            break;
           case "caa_id":
             caaId = reader.GetOptionalInt64();
             break;
@@ -46,10 +42,10 @@ internal class ReleaseGroupInfoReader : ObjectReader<ReleaseGroupInfo> {
           case "listen_count":
             listenCount = reader.GetInt32();
             break;
-          case "release_group_mbid":
+          case "release_mbid":
             mbid = reader.GetOptionalGuid();
             break;
-          case "release_group_name":
+          case "release_name":
             name = reader.GetString();
             break;
           default:
@@ -63,15 +59,14 @@ internal class ReleaseGroupInfoReader : ObjectReader<ReleaseGroupInfo> {
       }
       reader.Read();
     }
-    return new ReleaseGroupInfo {
+    return new TopRelease {
       ArtistIds = artistMbids,
       ArtistName = artistName,
-      Credits = credits,
       CoverArtId = caaId,
       CoverArtReleaseGroupId = caaRelease,
       Id = mbid,
       ListenCount = listenCount ?? throw new JsonException("Expected listen count not found or null."),
-      Name = name ?? throw new JsonException("Expected release group name not found or null."),
+      Name = name ?? throw new JsonException("Expected release name not found or null."),
       UnhandledProperties = rest,
     };
   }
