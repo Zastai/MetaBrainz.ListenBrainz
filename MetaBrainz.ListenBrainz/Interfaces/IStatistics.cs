@@ -13,10 +13,10 @@ public interface IStatistics : IJsonBasedObject {
   /// <summary>The timestamp at which the statistics were last updated.</summary>
   DateTimeOffset LastUpdated { get; }
 
-  /// <summary>The most recent listen timestamp used for these statistics, if available.</summary>
+  /// <summary>The most recent listen timestamp used for these statistics.</summary>
   DateTimeOffset? NewestListen { get; }
 
-  /// <summary>The oldest listen timestamp used for these statistics, if available.</summary>
+  /// <summary>The oldest listen timestamp used for these statistics.</summary>
   DateTimeOffset? OldestListen { get; }
 
   /// <summary>The range of data used when computing the statistics.</summary>

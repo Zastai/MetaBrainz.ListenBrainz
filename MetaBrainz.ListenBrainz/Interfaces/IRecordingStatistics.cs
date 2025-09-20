@@ -14,7 +14,7 @@ public interface IRecordingStatistics : IStatistics {
   /// <summary>The offset of these statistics from the start of the full set.</summary>
   int? Offset { get; }
 
-  /// <summary>The total number of (distinct) recordings listened to, if available.</summary>
+  /// <summary>The total number of (distinct) recordings listened to.</summary>
   int? TotalCount { get; }
 
 }

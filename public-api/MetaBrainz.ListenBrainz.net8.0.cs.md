@@ -192,6 +192,10 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IReleaseStatistics?> GetReleaseStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IYearInMusic?> GetYearInMusicAsync(string user, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IYearInMusic?> GetYearInMusicAsync(string user, int year, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task ImportListensAsync(params MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen[] listens);
 
   public System.Threading.Tasks.Task ImportListensAsync(System.Collections.Generic.IAsyncEnumerable<MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen> listens, System.Threading.CancellationToken cancellationToken = default);
@@ -862,6 +866,58 @@ public interface IMusicBrainzIdMappings {
 }
 ```
 
+### Type: INewRelease
+
+```cs
+public interface INewRelease {
+
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseId {
+    public abstract get;
+  }
+
+  string? CreditedArtist {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<System.Guid>? CreditedArtistIds {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<string>? CreditedArtistNames {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IArtistCredit>? CreditedArtists {
+    public abstract get;
+  }
+
+  string? FirstReleaseDate {
+    public abstract get;
+  }
+
+  System.Guid? ReleaseGroupId {
+    public abstract get;
+  }
+
+  System.Guid? ReleaseId {
+    public abstract get;
+  }
+
+  string Title {
+    public abstract get;
+  }
+
+  string? Type {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IPlayingNow
 
 ```cs
@@ -973,7 +1029,7 @@ public interface IRecordingStatistics : IStatistics, MetaBrainz.Common.Json.IJso
 ### Type: IReleaseGroupInfo
 
 ```cs
-public interface IReleaseGroupInfo {
+public interface IReleaseGroupInfo : MetaBrainz.Common.Json.IJsonBasedObject {
 
   System.Collections.Generic.IReadOnlyList<System.Guid>? ArtistIds {
     public abstract get;
@@ -987,7 +1043,7 @@ public interface IReleaseGroupInfo {
     public abstract get;
   }
 
-  System.Guid? CoverArtReleaseGroupId {
+  System.Guid? CoverArtReleaseId {
     public abstract get;
   }
 
@@ -1027,7 +1083,7 @@ public interface IReleaseGroupListeners : IListenerInfo, IStatistics, MetaBrainz
     public abstract get;
   }
 
-  System.Guid? CoverArtReleaseGroupId {
+  System.Guid? CoverArtReleaseId {
     public abstract get;
   }
 
@@ -1124,6 +1180,22 @@ public interface IReleaseStatistics : IStatistics, MetaBrainz.Common.Json.IJsonB
   }
 
   int? TotalCount {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: ISimilarUser
+
+```cs
+public interface ISimilarUser : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  string Name {
+    public abstract get;
+  }
+
+  decimal Similarity {
     public abstract get;
   }
 
@@ -1234,6 +1306,46 @@ public interface ITokenValidationResult {
 }
 ```
 
+### Type: ITopArtist
+
+```cs
+public interface ITopArtist : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Guid? Id {
+    public abstract get;
+  }
+
+  int ListenCount {
+    public abstract get;
+  }
+
+  string Name {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: ITopGenre
+
+```cs
+public interface ITopGenre : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  string Genre {
+    public abstract get;
+  }
+
+  int ListenCount {
+    public abstract get;
+  }
+
+  decimal Percentage {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: ITopListener
 
 ```cs
@@ -1244,6 +1356,90 @@ public interface ITopListener : MetaBrainz.Common.Json.IJsonBasedObject {
   }
 
   string UserName {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: ITopRecording
+
+```cs
+public interface ITopRecording : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Collections.Generic.IReadOnlyList<System.Guid>? ArtistIds {
+    public abstract get;
+  }
+
+  string? ArtistName {
+    public abstract get;
+  }
+
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseId {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IArtistCredit>? Credits {
+    public abstract get;
+  }
+
+  System.Guid? Id {
+    public abstract get;
+  }
+
+  int ListenCount {
+    public abstract get;
+  }
+
+  string Name {
+    public abstract get;
+  }
+
+  System.Guid? ReleaseId {
+    public abstract get;
+  }
+
+  string? ReleaseName {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: ITopRelease
+
+```cs
+public interface ITopRelease : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Collections.Generic.IReadOnlyList<System.Guid>? ArtistIds {
+    public abstract get;
+  }
+
+  string? ArtistName {
+    public abstract get;
+  }
+
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseId {
+    public abstract get;
+  }
+
+  System.Guid? Id {
+    public abstract get;
+  }
+
+  int ListenCount {
+    public abstract get;
+  }
+
+  string Name {
     public abstract get;
   }
 
@@ -1290,6 +1486,142 @@ public interface IUserDailyActivity : IStatistics, MetaBrainz.Common.Json.IJsonB
 }
 ```
 
+### Type: IYearInMusic
+
+```cs
+public interface IYearInMusic : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  IYearInMusicData Data {
+    public abstract get;
+  }
+
+  string User {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IYearInMusicData
+
+```cs
+public interface IYearInMusicData : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  int? ArtistCount {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IArtistCountryInfo>? ArtistMap {
+    public abstract get;
+  }
+
+  string? DayOfWeek {
+    public abstract get;
+  }
+
+  int? ListenCount {
+    public abstract get;
+  }
+
+  System.TimeSpan? ListeningTime {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IListenTimeRange>? ListensPerDay {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<string, int>? MostListenedYear {
+    public abstract get;
+  }
+
+  string? MostProminentColor {
+    public abstract get;
+  }
+
+  int? NewArtistsDiscovered {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<INewRelease>? NewReleasesOfTopArtists {
+    public abstract get;
+  }
+
+  int? RecordingCount {
+    public abstract get;
+  }
+
+  int? ReleaseCount {
+    public abstract get;
+  }
+
+  int? ReleaseGroupCount {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<string, decimal>? SimilarUsers {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<ITopArtist>? TopArtists {
+    public abstract get;
+  }
+
+  MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist? TopDiscoveriesPlaylist {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<string, System.Uri>? TopDiscoveriesPlaylistCoverArt {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<ITopGenre>? TopGenres {
+    public abstract get;
+  }
+
+  MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist? TopMissedRecordingsPlaylist {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<string, System.Uri>? TopMissedRecordingsPlaylistCoverArt {
+    public abstract get;
+  }
+
+  MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist? TopNewRecordingsPlaylist {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<string, System.Uri>? TopNewRecordingsPlaylistCoverArt {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<ITopRecording>? TopRecordings {
+    public abstract get;
+  }
+
+  MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist? TopRecordingsPlaylist {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<string, System.Uri>? TopRecordingsPlaylistCoverArt {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IReleaseGroupInfo>? TopReleaseGroups {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<ITopRelease>? TopReleases {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<string, System.Uri>? TopReleasesCoverArt {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IYearlyActivity
 
 ```cs
@@ -1300,6 +1632,284 @@ public interface IYearlyActivity : MetaBrainz.Common.Json.IJsonBasedObject {
   }
 
   int Year {
+    public abstract get;
+  }
+
+}
+```
+
+## Namespace: MetaBrainz.ListenBrainz.Interfaces.JSPF
+
+### Type: ILink
+
+```cs
+public interface ILink {
+
+  System.Uri Id {
+    public abstract get;
+  }
+
+  System.Uri Value {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IMeta
+
+```cs
+public interface IMeta {
+
+  System.Uri Id {
+    public abstract get;
+  }
+
+  string Value {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IMusicBrainzPlaylist
+
+```cs
+public interface IMusicBrainzPlaylist {
+
+  System.Collections.Generic.IReadOnlyDictionary<string, object?>? AdditionalMetadata {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<string>? Collaborators {
+    public abstract get;
+  }
+
+  System.Uri? CopiedFrom {
+    public abstract get;
+  }
+
+  bool? CopiedFromDeleted {
+    public abstract get;
+  }
+
+  string? CreatedFor {
+    public abstract get;
+  }
+
+  string? Creator {
+    public abstract get;
+  }
+
+  System.DateTimeOffset? LastModified {
+    public abstract get;
+  }
+
+  bool? Public {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IMusicBrainzRecording
+
+```cs
+public interface IMusicBrainzRecording {
+
+  System.Collections.Generic.IReadOnlyList<System.Guid>? ArtistIds {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IMusicBrainzTrack
+
+```cs
+public interface IMusicBrainzTrack : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.DateTimeOffset? Added {
+    public abstract get;
+  }
+
+  string? AddedBy {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<string, object?>? AdditionalMetadata {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<System.Uri>? ArtistIds {
+    public abstract get;
+  }
+
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseId {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<MetaBrainz.ListenBrainz.Interfaces.IArtistCredit>? Credits {
+    public abstract get;
+  }
+
+  System.Uri? ReleaseId {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: INamedUri
+
+```cs
+public interface INamedUri {
+
+  string Name {
+    public abstract get;
+  }
+
+  System.Uri Uri {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IPlaylist
+
+```cs
+public interface IPlaylist : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  string? Annotation {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<INamedUri>? Attribution {
+    public abstract get;
+  }
+
+  string? Creator {
+    public abstract get;
+  }
+
+  System.DateTimeOffset? Date {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<System.Uri, System.Collections.Generic.IReadOnlyList<object?>?>? Extensions {
+    public abstract get;
+  }
+
+  System.Uri? Identifier {
+    public abstract get;
+  }
+
+  System.Uri? Image {
+    public abstract get;
+  }
+
+  System.Uri? Info {
+    public abstract get;
+  }
+
+  System.Uri? License {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<ILink>? Links {
+    public abstract get;
+  }
+
+  System.Uri? Location {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IMeta>? Metadata {
+    public abstract get;
+  }
+
+  IMusicBrainzPlaylist? MusicBrainz {
+    public abstract get;
+  }
+
+  string? Title {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<ITrack> Tracks {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: ITrack
+
+```cs
+public interface ITrack : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  string? Album {
+    public abstract get;
+  }
+
+  string? Annotation {
+    public abstract get;
+  }
+
+  string? Creator {
+    public abstract get;
+  }
+
+  System.TimeSpan? Duration {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<System.Uri, System.Collections.Generic.IReadOnlyList<object?>?>? Extensions {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<System.Uri>? Identifiers {
+    public abstract get;
+  }
+
+  System.Uri? Image {
+    public abstract get;
+  }
+
+  System.Uri? Info {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<ILink>? Links {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<System.Uri>? Locations {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IMeta>? Metadata {
+    public abstract get;
+  }
+
+  IMusicBrainzTrack? MusicBrainz {
+    public abstract get;
+  }
+
+  IMusicBrainzRecording? MusicBrainzRecording {
+    public abstract get;
+  }
+
+  string? Title {
+    public abstract get;
+  }
+
+  uint? TrackNumber {
     public abstract get;
   }
 

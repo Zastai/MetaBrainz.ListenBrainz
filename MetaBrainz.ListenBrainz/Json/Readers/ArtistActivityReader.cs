@@ -24,7 +24,7 @@ internal class ArtistActivityReader : ObjectReader<ArtistActivity> {
             artists = reader.ReadList(ArtistActivityInfoReader.Instance, options);
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }
@@ -34,11 +34,8 @@ internal class ArtistActivityReader : ObjectReader<ArtistActivity> {
       }
       reader.Read();
     }
-    if (artists is null) {
-      throw new JsonException("Expected result set not found or null.");
-    }
     return new ArtistActivity {
-      Artists = artists,
+      Artists = artists ?? throw new JsonException("Expected result set not found or null."),
       UnhandledProperties = rest,
     };
   }

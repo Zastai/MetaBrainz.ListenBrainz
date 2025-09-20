@@ -13,7 +13,6 @@ internal class ReleaseGroupInfoReader : ObjectReader<ReleaseGroupInfo> {
 
   public static readonly ReleaseGroupInfoReader Instance = new();
 
-
   protected override ReleaseGroupInfo ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     IReadOnlyList<Guid>? artistMbids = null;
     string? artistName = null;
@@ -54,7 +53,7 @@ internal class ReleaseGroupInfoReader : ObjectReader<ReleaseGroupInfo> {
             name = reader.GetString();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }
@@ -69,7 +68,7 @@ internal class ReleaseGroupInfoReader : ObjectReader<ReleaseGroupInfo> {
       ArtistName = artistName,
       Credits = credits,
       CoverArtId = caaId,
-      CoverArtReleaseGroupId = caaRelease,
+      CoverArtReleaseId = caaRelease,
       Id = mbid,
       ListenCount = listenCount ?? throw new JsonException("Expected listen count not found or null."),
       Name = name ?? throw new JsonException("Expected release group name not found or null."),

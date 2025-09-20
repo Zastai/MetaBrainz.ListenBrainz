@@ -49,7 +49,7 @@ internal sealed class DailyActivityReader : ObjectReader<DailyActivity> {
             sunday = reader.ReadList(HourlyActivityReader.Instance, options);
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

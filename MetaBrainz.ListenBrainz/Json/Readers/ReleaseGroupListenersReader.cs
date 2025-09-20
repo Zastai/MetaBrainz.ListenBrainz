@@ -80,7 +80,7 @@ internal sealed class ReleaseGroupListenersReader : PayloadReader<ReleaseGroupLi
             totalListeners = reader.GetInt32();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }
@@ -94,7 +94,7 @@ internal sealed class ReleaseGroupListenersReader : PayloadReader<ReleaseGroupLi
       ArtistIds = artistMbids,
       ArtistName = artistName,
       CoverArtId = caaId,
-      CoverArtReleaseGroupId = caaRelease,
+      CoverArtReleaseId = caaRelease,
       Id = mbid ?? throw new JsonException("Expected release group MBID not found or null."),
       LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       Name = name ?? throw new JsonException("Expected release group name not found or null."),

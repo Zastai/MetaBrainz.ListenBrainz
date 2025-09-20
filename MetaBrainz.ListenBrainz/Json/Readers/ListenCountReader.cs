@@ -23,7 +23,7 @@ internal sealed class ListenCountReader : PayloadReader<ListenCount> {
             count = reader.GetInt64();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

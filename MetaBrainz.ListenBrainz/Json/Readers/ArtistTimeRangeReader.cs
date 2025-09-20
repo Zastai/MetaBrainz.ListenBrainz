@@ -39,7 +39,7 @@ internal class ArtistTimeRangeReader : ObjectReader<ArtistTimeRange> {
             break;
           }
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

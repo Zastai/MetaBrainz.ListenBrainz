@@ -37,7 +37,7 @@ internal sealed class TokenValidationResultReader : ObjectReader<TokenValidation
             valid = reader.GetBoolean();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

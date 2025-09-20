@@ -25,7 +25,7 @@ internal sealed class PlayingTrackReader : ObjectReader<PlayingTrack> {
             track = reader.GetObject(TrackInfoReader.Instance, options);
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

@@ -32,7 +32,7 @@ internal class AlbumInfoReader : ObjectReader<AlbumInfo> {
             mbid = reader.GetOptionalGuid();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

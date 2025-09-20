@@ -29,6 +29,7 @@ internal static class Converters {
       yield return ReleaseStatisticsReader.Instance;
       yield return TokenValidationResultReader.Instance;
       yield return UserDailyActivityReader.Instance;
+      yield return YearInMusicReader.Instance;
     }
   }
 

@@ -7,7 +7,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 /// <summary>Listening statistics for an album.</summary>
 public interface IAlbumInfo : IJsonBasedObject {
 
-  /// <summary>The MusicBrainz ID for the album's release group, if available.</summary>
+  /// <summary>The MusicBrainz ID for the album's release group.</summary>
   Guid? Id { get; }
 
   /// <summary>The number of times the album was listened to.</summary>

@@ -49,7 +49,7 @@ internal sealed class MusicBrainzIdMappingsReader : ObjectReader<MusicBrainzIdMa
             release= reader.GetOptionalGuid();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }
