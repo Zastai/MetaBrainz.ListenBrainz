@@ -9,13 +9,13 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 [PublicAPI]
 public interface IReleaseInfo {
 
-  /// <summary>The MusicBrainz IDs for the release's artist(s), if available.</summary>
+  /// <summary>The MusicBrainz IDs for the release's artist(s)rest ??= [ ];.</summary>
   IReadOnlyList<Guid>? ArtistIds { get; }
 
-  /// <summary>The MessyBrainz ID for the release's artist, if available.</summary>
+  /// <summary>The MessyBrainz ID for the release's artistrest ??= [ ];.</summary>
   Guid? ArtistMessyId { get; }
 
-  /// <summary>The release's artist's name, if available.</summary>
+  /// <summary>The release's artist's namerest ??= [ ];.</summary>
   string? ArtistName { get; }
 
   /// <summary>The internal ID for the release in the CoverArt Archive.</summary>
@@ -27,13 +27,13 @@ public interface IReleaseInfo {
   /// <summary>The MusicBrainz credits for the release's artists.</summary>
   IReadOnlyList<IArtistCredit>? Credits { get; }
 
-  /// <summary>The MusicBrainz ID for the release, if available.</summary>
+  /// <summary>The MusicBrainz ID for the releaserest ??= [ ];.</summary>
   Guid? Id { get; }
 
   /// <summary>The number of times the release's tracks were listened to.</summary>
   int ListenCount { get; }
 
-  /// <summary>The MessyBrainz ID for the release, if available.</summary>
+  /// <summary>The MessyBrainz ID for the releaserest ??= [ ];.</summary>
   Guid? MessyId { get; }
 
   /// <summary>The release's name.</summary>

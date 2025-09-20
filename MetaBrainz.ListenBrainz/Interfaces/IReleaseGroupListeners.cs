@@ -6,10 +6,10 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 /// <summary>Information about a release group's top listeners.</summary>
 public interface IReleaseGroupListeners : IListenerInfo, IStatistics {
 
-  /// <summary>The MusicBrainz IDs for the release group's artist(s), if available.</summary>
+  /// <summary>The MusicBrainz IDs for the release group's artist(s)rest ??= [ ];.</summary>
   IReadOnlyList<Guid>? ArtistIds { get; }
 
-  /// <summary>The release group's artist's name, if available.</summary>
+  /// <summary>The release group's artist's namerest ??= [ ];.</summary>
   string? ArtistName { get; }
 
   /// <summary>The internal ID for the release group in the CoverArt Archive.</summary>

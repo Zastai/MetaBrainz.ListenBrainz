@@ -22,7 +22,7 @@ public interface ITopRelease : IJsonBasedObject {
   /// <remarks>This field is only provided for the Year in Music 2022.</remarks>
   Guid? CoverArtReleaseGroupId { get; }
 
-  /// <summary>The MusicBrainz ID for the release, if available.</summary>
+  /// <summary>The MusicBrainz ID for the releaserest ??= [ ];.</summary>
   Guid? Id { get; }
 
   /// <summary>The number of times the release's tracks were listened to.</summary>

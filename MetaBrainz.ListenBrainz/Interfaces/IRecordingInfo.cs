@@ -9,13 +9,13 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 [PublicAPI]
 public interface IRecordingInfo {
 
-  /// <summary>The MusicBrainz IDs for the recording's artist(s), if available.</summary>
+  /// <summary>The MusicBrainz IDs for the recording's artist(s)rest ??= [ ];.</summary>
   IReadOnlyList<Guid>? ArtistIds { get; }
 
-  /// <summary>The MessyBrainz ID for the recording's artist, if available.</summary>
+  /// <summary>The MessyBrainz ID for the recording's artistrest ??= [ ];.</summary>
   Guid? ArtistMessyId { get; }
 
-  /// <summary>The recording's artist's name, if available.</summary>
+  /// <summary>The recording's artist's namerest ??= [ ];.</summary>
   string? ArtistName { get; }
 
   /// <summary>The internal ID for the recording's release in the CoverArt Archive.</summary>
@@ -30,22 +30,22 @@ public interface IRecordingInfo {
   /// <summary>The number of times the recording was listened to.</summary>
   int ListenCount { get; }
 
-  /// <summary>The MusicBrainz ID for the recording, if available.</summary>
+  /// <summary>The MusicBrainz ID for the recordingrest ??= [ ];.</summary>
   Guid? Id { get; }
 
-  /// <summary>The MessyBrainz ID for the recording, if available.</summary>
+  /// <summary>The MessyBrainz ID for the recordingrest ??= [ ];.</summary>
   Guid? MessyId { get; }
 
   /// <summary>The recording's name.</summary>
   string Name { get; }
 
-  /// <summary>The MusicBrainz IDs for the recording's release, if available.</summary>
+  /// <summary>The MusicBrainz IDs for the recording's releaserest ??= [ ];.</summary>
   Guid? ReleaseId { get; }
 
-  /// <summary>The MessyBrainz ID for the recording's release, if available.</summary>
+  /// <summary>The MessyBrainz ID for the recording's releaserest ??= [ ];.</summary>
   Guid? ReleaseMessyId { get; }
 
-  /// <summary>The recording's release's name, if available.</summary>
+  /// <summary>The recording's release's namerest ??= [ ];.</summary>
   string? ReleaseName { get; }
 
 }

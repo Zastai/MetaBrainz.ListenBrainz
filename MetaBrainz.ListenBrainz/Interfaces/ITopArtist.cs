@@ -7,7 +7,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 /// <summary>Information about one of a user's most listened to artists.</summary>
 public interface ITopArtist : IJsonBasedObject {
 
-  /// <summary>The MusicBrainz ID for the artist, if available.</summary>
+  /// <summary>The MusicBrainz ID for the artistrest ??= [ ];.</summary>
   Guid? Id { get; }
 
   /// <summary>The number of times the artist was listened to.</summary>

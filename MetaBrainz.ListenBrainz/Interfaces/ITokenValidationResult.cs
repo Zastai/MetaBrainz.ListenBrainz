@@ -14,7 +14,7 @@ public interface ITokenValidationResult {
   /// <summary>The message for the request.</summary>
   public string Message { get; }
 
-  /// <summary>The user name associated with the token, if available.</summary>
+  /// <summary>The user name associated with the tokenrest ??= [ ];.</summary>
   public string? User { get; }
 
   /// <summary>

@@ -5,7 +5,7 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 /// <summary>Artist listening information over a given period of time.</summary>
 public interface IArtistTimeRange {
 
-  /// <summary>The MusicBrainz ID for the artist, if available.</summary>
+  /// <summary>The MusicBrainz ID for the artistrest ??= [ ];.</summary>
   Guid? Id { get; }
 
   /// <summary>The number of times the artist's tracks were listened to.</summary>
