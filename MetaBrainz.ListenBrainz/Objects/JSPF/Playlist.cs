@@ -32,6 +32,8 @@ internal sealed class Playlist : JsonBasedObject, IPlaylist {
 
   public IReadOnlyList<IMeta>? Metadata { get; init; }
 
+  public IMusicBrainzPlaylist? MusicBrainz { get; init; }
+
   public string? Title { get; init; }
 
   public required IReadOnlyList<ITrack> Tracks { get; init; }

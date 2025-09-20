@@ -1672,6 +1672,98 @@ public interface IMeta {
 }
 ```
 
+### Type: IMusicBrainzPlaylist
+
+```cs
+public interface IMusicBrainzPlaylist {
+
+  System.Collections.Generic.IReadOnlyDictionary<string, object?>? AdditionalMetadata {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<string>? Collaborators {
+    public abstract get;
+  }
+
+  System.Uri? CopiedFrom {
+    public abstract get;
+  }
+
+  bool? CopiedFromDeleted {
+    public abstract get;
+  }
+
+  string? CreatedFor {
+    public abstract get;
+  }
+
+  string? Creator {
+    public abstract get;
+  }
+
+  System.DateTimeOffset? LastModified {
+    public abstract get;
+  }
+
+  bool? Public {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IMusicBrainzRecording
+
+```cs
+public interface IMusicBrainzRecording {
+
+  System.Collections.Generic.IReadOnlyList<System.Guid>? ArtistIds {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IMusicBrainzTrack
+
+```cs
+public interface IMusicBrainzTrack : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.DateTimeOffset? Added {
+    public abstract get;
+  }
+
+  string? AddedBy {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<string, object?>? AdditionalMetadata {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<System.Uri>? ArtistIds {
+    public abstract get;
+  }
+
+  long? CoverArtId {
+    public abstract get;
+  }
+
+  System.Guid? CoverArtReleaseId {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<MetaBrainz.ListenBrainz.Interfaces.IArtistCredit>? Credits {
+    public abstract get;
+  }
+
+  System.Uri? ReleaseId {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: INamedUri
 
 ```cs
@@ -1741,6 +1833,10 @@ public interface IPlaylist : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
+  IMusicBrainzPlaylist? MusicBrainz {
+    public abstract get;
+  }
+
   string? Title {
     public abstract get;
   }
@@ -1798,6 +1894,14 @@ public interface ITrack : MetaBrainz.Common.Json.IJsonBasedObject {
   }
 
   System.Collections.Generic.IReadOnlyList<IMeta>? Metadata {
+    public abstract get;
+  }
+
+  IMusicBrainzTrack? MusicBrainz {
+    public abstract get;
+  }
+
+  IMusicBrainzRecording? MusicBrainzRecording {
     public abstract get;
   }
 

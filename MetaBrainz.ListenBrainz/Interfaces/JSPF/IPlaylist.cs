@@ -47,6 +47,9 @@ public interface IPlaylist : IJsonBasedObject {
   /// <summary>Metadata associated with the playlist.</summary>
   IReadOnlyList<IMeta>? Metadata { get; }
 
+  /// <summary>MusicBrainz-specific information about the playlist.</summary>
+  IMusicBrainzPlaylist? MusicBrainz { get; }
+
   /// <summary>The playlist's title.</summary>
   string? Title { get; }
 

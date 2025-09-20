@@ -11,7 +11,10 @@ using ExtensionData = IReadOnlyDictionary<Uri, IReadOnlyList<object?>?>;
 
 internal static class Helpers {
 
-  public static ExtensionData? ReadExtensions(this ref Utf8JsonReader reader, JsonSerializerOptions options) {
+  public delegate bool ReadExtensionData(ref Utf8JsonReader reader, JsonSerializerOptions options);
+
+  public static ExtensionData? ReadExtensions(this ref Utf8JsonReader reader, JsonSerializerOptions options,
+                                              IReadOnlyDictionary<Uri, ReadExtensionData>? knownExtensions = null) {
     if (reader.TokenType == JsonTokenType.Null) {
       return null;
     }
@@ -19,7 +22,7 @@ internal static class Helpers {
       throw new JsonException("Expected start of extension data not found.");
     }
     reader.Read();
-    Dictionary<Uri, IReadOnlyList<object?>?> extensions = [ ];
+    Dictionary<Uri, IReadOnlyList<object?>?>? extensions = null;
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
       try {
@@ -27,6 +30,14 @@ internal static class Helpers {
           throw new JsonException($"The extension application identifier ({prop}) is not a valid URI.");
         }
         reader.Read();
+        if (knownExtensions is not null && knownExtensions.TryGetValue(id, out var readExtensionData)) {
+          if (readExtensionData.Invoke(ref reader, options)) {
+            // The supplied delegate has fully handled the extension data.
+            reader.Read();
+            continue;
+          }
+        }
+        extensions ??= [ ];
         if (reader.TokenType == JsonTokenType.StartObject) {
           // LB-1836: this is a violation of the JSPF spec, but it's what ListenBrainz currently does.
           extensions.Add(id, [reader.GetOptionalObject(options)]);

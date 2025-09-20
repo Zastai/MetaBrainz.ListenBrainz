@@ -74,9 +74,9 @@ internal class TopRecordingReader : ObjectReader<TopRecording> {
     return new TopRecording {
       ArtistIds = artistMbids,
       ArtistName = artistName,
-      Credits = credits,
       CoverArtId = caaId,
       CoverArtReleaseGroupId = caaRelease,
+      Credits = credits,
       Id = mbid,
       ListenCount = listenCount ?? throw new JsonException("Expected listen count not found or null."),
       Name = name ?? throw new JsonException("Expected release group name not found or null."),

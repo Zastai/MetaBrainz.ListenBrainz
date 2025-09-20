@@ -11,7 +11,11 @@ namespace MetaBrainz.ListenBrainz.Json.Readers.JSPF;
 
 internal class TrackReader : ObjectReader<Track> {
 
+  private static readonly Uri ExtensionDataUri = new("https://musicbrainz.org/doc/jspf#track");
+
   public static readonly TrackReader Instance = new();
+
+  private static readonly Uri OldExtensionDataUri = new("https://musicbrainz.org/recording/");
 
   protected override Track ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
     string? album = null;
@@ -25,9 +29,15 @@ internal class TrackReader : ObjectReader<Track> {
     IReadOnlyList<ILink>? links = null;
     IReadOnlyList<Uri>? locations = null;
     IReadOnlyList<IMeta>? meta = null;
+    IMusicBrainzTrack? musicBrainz = null;
+    IMusicBrainzRecording? musicBrainzRecording = null;
     string? title = null;
     uint? trackNumber = null;
     Dictionary<string, object?>? rest = null;
+    Dictionary<Uri, Helpers.ReadExtensionData> knownExtensions = new() {
+      { TrackReader.ExtensionDataUri, ReadExtensionData },
+      { TrackReader.OldExtensionDataUri, ReadOldExtensionData },
+    };
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
       try {
@@ -52,7 +62,7 @@ internal class TrackReader : ObjectReader<Track> {
             info = reader.GetOptionalUri();
             break;
           case "extension":
-            extensions = reader.ReadExtensions(options);
+            extensions = reader.ReadExtensions(options, knownExtensions);
             break;
           case "identifier":
             if (reader.TokenType == JsonTokenType.String) {
@@ -101,10 +111,20 @@ internal class TrackReader : ObjectReader<Track> {
       Links = links,
       Locations = locations,
       Metadata = meta,
+      MusicBrainz = musicBrainz,
+      MusicBrainzRecording = musicBrainzRecording,
       Title = title,
       TrackNumber = trackNumber,
       UnhandledProperties = rest,
     };
+    bool ReadExtensionData(ref Utf8JsonReader r, JsonSerializerOptions o) {
+      musicBrainz = r.GetOptionalObject(MusicBrainzTrackReader.Instance, o);
+      return true;
+    }
+    bool ReadOldExtensionData(ref Utf8JsonReader r, JsonSerializerOptions o) {
+      musicBrainzRecording = r.GetOptionalObject(MusicBrainzRecordingReader.Instance, o);
+      return true;
+    }
   }
 
 }

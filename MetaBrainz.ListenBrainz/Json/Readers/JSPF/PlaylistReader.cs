@@ -11,6 +11,8 @@ namespace MetaBrainz.ListenBrainz.Json.Readers.JSPF;
 
 internal class PlaylistReader : ObjectReader<Playlist> {
 
+  private static readonly Uri ExtensionDataUri = new("https://musicbrainz.org/doc/jspf#playlist");
+
   public static readonly PlaylistReader Instance = new();
 
   protected override Playlist ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
@@ -97,8 +99,12 @@ internal class PlaylistReader : ObjectReader<Playlist> {
     IReadOnlyList<ILink>? links = null;
     Uri? location = null;
     IReadOnlyList<IMeta>? meta = null;
+    IMusicBrainzPlaylist? musicBrainz = null;
     string? title = null;
     IReadOnlyList<ITrack>? tracks = null;
+    Dictionary<Uri, Helpers.ReadExtensionData> knownExtensions = new() {
+      { PlaylistReader.ExtensionDataUri, ReadExtensionData },
+    };
     while (reader.TokenType == JsonTokenType.PropertyName) {
       var prop = reader.GetPropertyName();
       try {
@@ -117,7 +123,7 @@ internal class PlaylistReader : ObjectReader<Playlist> {
             date = reader.GetDateTimeOffset();
             break;
           case "extension":
-            extensions = reader.ReadExtensions(options);
+            extensions = reader.ReadExtensions(options, knownExtensions);
             break;
           case "identifier":
             identifier = reader.GetOptionalUri();
@@ -170,10 +176,15 @@ internal class PlaylistReader : ObjectReader<Playlist> {
       Links = links,
       Location = location,
       Metadata = meta,
+      MusicBrainz = musicBrainz,
       Title = title,
       Tracks = tracks ?? [ ],
       UnhandledProperties = rest,
     };
+    bool ReadExtensionData(ref Utf8JsonReader r, JsonSerializerOptions o) {
+      musicBrainz = r.GetOptionalObject(MusicBrainzPlaylistReader.Instance, o);
+      return true;
+    }
   }
 
 }

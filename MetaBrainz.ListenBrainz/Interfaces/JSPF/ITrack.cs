@@ -46,6 +46,13 @@ public interface ITrack : IJsonBasedObject {
   /// <summary>Metadata associated with the track.</summary>
   IReadOnlyList<IMeta>? Metadata { get; }
 
+  /// <summary>MusicBrainz-specific information about the track.</summary>
+  IMusicBrainzTrack? MusicBrainz { get; }
+
+  /// <summary>MusicBrainz-specific information about the track.</summary>
+  /// <remarks>This is only returned for old playlists, like those that are part of the Year in Music data for 2021.</remarks>
+  IMusicBrainzRecording? MusicBrainzRecording { get; }
+
   /// <summary>The track title.</summary>
   string? Title { get; }
 

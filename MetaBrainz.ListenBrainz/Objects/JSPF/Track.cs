@@ -30,6 +30,10 @@ internal sealed class Track : JsonBasedObject, ITrack {
 
   public IReadOnlyList<IMeta>? Metadata { get; init; }
 
+  public IMusicBrainzTrack? MusicBrainz { get; init; }
+
+  public IMusicBrainzRecording? MusicBrainzRecording { get; init; }
+
   public string? Title { get; init; }
 
   public uint? TrackNumber { get; init; }
