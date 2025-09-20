@@ -75,7 +75,7 @@ internal class MusicBrainzPlaylistReader : ObjectReader<MusicBrainzPlaylist> {
         additionalMetadata = new Dictionary<string, object?> { { "algorithm_metadata", algorithmMetadata } };
       }
       else {
-        rest ??= [];
+        rest ??= [ ];
         rest["algorithm_metadata"] = algorithmMetadata;
       }
     }

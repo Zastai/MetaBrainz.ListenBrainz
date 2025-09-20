@@ -18,9 +18,9 @@ public interface ITopRelease : IJsonBasedObject {
   /// <remarks>This field is only provided for the Year in Music 2022.</remarks>
   long? CoverArtId { get; }
 
-  /// <summary>The MusicBrainz ID for the release in the CoverArt Archive.</summary>
+  /// <summary>The MusicBrainz release ID for the release in the CoverArt Archive.</summary>
   /// <remarks>This field is only provided for the Year in Music 2022.</remarks>
-  Guid? CoverArtReleaseGroupId { get; }
+  Guid? CoverArtReleaseId { get; }
 
   /// <summary>The MusicBrainz ID for the release.</summary>
   Guid? Id { get; }

@@ -21,7 +21,7 @@ public interface IReleaseInfo {
   /// <summary>The internal ID for the release in the CoverArt Archive.</summary>
   long? CoverArtId { get; }
 
-  /// <summary>The MusicBrainz ID for the release in the CoverArt Archive.</summary>
+  /// <summary>The MusicBrainz release ID for the release in the CoverArt Archive.</summary>
   Guid? CoverArtReleaseId { get; }
 
   /// <summary>The MusicBrainz credits for the release's artists.</summary>

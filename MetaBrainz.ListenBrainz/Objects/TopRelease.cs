@@ -14,7 +14,7 @@ internal sealed class TopRelease : JsonBasedObject, ITopRelease {
 
   public long? CoverArtId { get; init; }
 
-  public Guid? CoverArtReleaseGroupId { get; init; }
+  public Guid? CoverArtReleaseId { get; init; }
 
   public Guid? Id { get; init; }
 

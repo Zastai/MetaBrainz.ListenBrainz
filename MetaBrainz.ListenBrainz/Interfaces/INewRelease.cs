@@ -10,7 +10,7 @@ public interface INewRelease {
   /// <remarks>This field is only provided for the Year in Music 2022 and later.</remarks>
   long? CoverArtId { get; }
 
-  /// <summary>The MusicBrainz ID for the release in the CoverArt Archive.</summary>
+  /// <summary>The MusicBrainz release ID for the release in the CoverArt Archive.</summary>
   /// <remarks>This field is only provided for the Year in Music 2022 and later.</remarks>
   Guid? CoverArtReleaseId { get; }
 

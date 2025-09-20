@@ -1043,7 +1043,7 @@ public interface IReleaseGroupInfo : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
-  System.Guid? CoverArtReleaseGroupId {
+  System.Guid? CoverArtReleaseId {
     public abstract get;
   }
 
@@ -1083,7 +1083,7 @@ public interface IReleaseGroupListeners : IListenerInfo, IStatistics, MetaBrainz
     public abstract get;
   }
 
-  System.Guid? CoverArtReleaseGroupId {
+  System.Guid? CoverArtReleaseId {
     public abstract get;
   }
 
@@ -1379,7 +1379,7 @@ public interface ITopRecording : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
-  System.Guid? CoverArtReleaseGroupId {
+  System.Guid? CoverArtReleaseId {
     public abstract get;
   }
 
@@ -1427,7 +1427,7 @@ public interface ITopRelease : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
-  System.Guid? CoverArtReleaseGroupId {
+  System.Guid? CoverArtReleaseId {
     public abstract get;
   }
 

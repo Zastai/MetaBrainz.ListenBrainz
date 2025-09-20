@@ -14,7 +14,7 @@ internal sealed class ReleaseGroupInfo : JsonBasedObject, IReleaseGroupInfo {
 
   public long? CoverArtId { get; init; }
 
-  public Guid? CoverArtReleaseGroupId { get; init; }
+  public Guid? CoverArtReleaseId { get; init; }
 
   public IReadOnlyList<IArtistCredit>? Credits { get; init; }
 

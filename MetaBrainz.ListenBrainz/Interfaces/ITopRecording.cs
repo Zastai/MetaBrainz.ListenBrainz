@@ -17,13 +17,13 @@ public interface ITopRecording : IJsonBasedObject {
   /// </summary>
   string? ArtistName { get; }
 
-  /// <summary>The internal ID for the recording's release in the CoverArt Archive.</summary>
+  /// <summary>The internal ID for the recording in the CoverArt Archive.</summary>
   /// <remarks>This field is only provided for the Year in Music 2022 and later.</remarks>
   long? CoverArtId { get; }
 
-  /// <summary>The MusicBrainz ID for the recording's release in the CoverArt Archive.</summary>
+  /// <summary>The MusicBrainz release ID for the recording in the CoverArt Archive.</summary>
   /// <remarks>This field is only provided for the Year in Music 2022 and later.</remarks>
-  Guid? CoverArtReleaseGroupId { get; }
+  Guid? CoverArtReleaseId { get; }
 
   /// <summary>The MusicBrainz credits for the recording's artists.</summary>
   /// <remarks>This field is only provided for the Year in Music 2023 and later.</remarks>

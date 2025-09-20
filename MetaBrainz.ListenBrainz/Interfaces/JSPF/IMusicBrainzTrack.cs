@@ -24,10 +24,10 @@ public interface IMusicBrainzTrack : IJsonBasedObject {
   /// <summary>MusicBrainz artist URIs that identify the track's credited artist(s).</summary>
   IReadOnlyList<Uri>? ArtistIds { get; }
 
-  /// <summary>The internal ID for the track's release in the CoverArt Archive.</summary>
+  /// <summary>The internal ID for the track in the CoverArt Archive.</summary>
   long? CoverArtId { get; }
 
-  /// <summary>The MusicBrainz ID for the track's release in the CoverArt Archive.</summary>
+  /// <summary>The MusicBrainz release ID for the track in the CoverArt Archive.</summary>
   Guid? CoverArtReleaseId { get; }
 
   /// <summary>The MusicBrainz credits for the track's artists.</summary>

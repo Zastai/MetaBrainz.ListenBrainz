@@ -13,7 +13,7 @@ internal sealed class ReleaseGroupListeners : ListenerInfo, IReleaseGroupListene
 
   public long? CoverArtId { get; init; }
 
-  public Guid? CoverArtReleaseGroupId { get; init; }
+  public Guid? CoverArtReleaseId { get; init; }
 
   public required Guid Id { get; init; }
 

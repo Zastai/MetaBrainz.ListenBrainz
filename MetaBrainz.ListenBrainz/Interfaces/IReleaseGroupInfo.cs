@@ -23,8 +23,8 @@ public interface IReleaseGroupInfo : IJsonBasedObject {
   /// <summary>The internal ID for the release group in the CoverArt Archive.</summary>
   long? CoverArtId { get; }
 
-  /// <summary>The MusicBrainz ID for the release group in the CoverArt Archive.</summary>
-  Guid? CoverArtReleaseGroupId { get; }
+  /// <summary>The MusicBrainz release ID for the release group in the CoverArt Archive.</summary>
+  Guid? CoverArtReleaseId { get; }
 
   /// <summary>The MusicBrainz credits for the release group's artists.</summary>
   IReadOnlyList<IArtistCredit>? Credits { get; }

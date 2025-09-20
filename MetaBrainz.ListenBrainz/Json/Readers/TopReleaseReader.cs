@@ -63,7 +63,7 @@ internal class TopReleaseReader : ObjectReader<TopRelease> {
       ArtistIds = artistMbids,
       ArtistName = artistName,
       CoverArtId = caaId,
-      CoverArtReleaseGroupId = caaRelease,
+      CoverArtReleaseId = caaRelease,
       Id = mbid,
       ListenCount = listenCount ?? throw new JsonException("Expected listen count not found or null."),
       Name = name ?? throw new JsonException("Expected release name not found or null."),
