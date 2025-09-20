@@ -32,7 +32,7 @@ internal sealed class GenreActivityDetailsReader : ObjectReader<GenreActivityDet
             listenCount = reader.GetInt32();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

@@ -49,7 +49,7 @@ internal class TopReleaseReader : ObjectReader<TopRelease> {
             name = reader.GetString();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

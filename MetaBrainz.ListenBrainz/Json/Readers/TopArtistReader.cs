@@ -36,7 +36,7 @@ internal class TopArtistReader : ObjectReader<TopArtist> {
             listenCount = reader.GetInt32();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }
@@ -57,7 +57,7 @@ internal class TopArtistReader : ObjectReader<TopArtist> {
     }
     // if we did not use a non-empty artist_mbids to populate artist_mbid, retain it as an unhandled property
     if (mbids is not null) {
-      rest ??= new Dictionary<string, object?>();
+      rest ??= [ ];
       rest["artist_mbids"] = mbids;
     }
     return new TopArtist {

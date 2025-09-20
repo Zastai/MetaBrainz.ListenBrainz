@@ -41,7 +41,7 @@ internal class ArtistActivityInfoReader : ObjectReader<ArtistActivityInfo> {
             name = reader.GetString();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }
@@ -53,7 +53,7 @@ internal class ArtistActivityInfoReader : ObjectReader<ArtistActivityInfo> {
     }
     // Retain artist_name (as unhandled) only if it's not a duplicate of the name
     if (artistName is not null && artistName != name) {
-      rest ??= new Dictionary<string, object?>();
+      rest ??= [ ];
       rest["artist_name"] = artistName;
     }
     return new ArtistActivityInfo {

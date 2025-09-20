@@ -52,7 +52,7 @@ internal sealed class EraActivityReader : PayloadReader<EraActivity> {
             user = reader.GetString();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

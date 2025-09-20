@@ -24,7 +24,7 @@ internal class ArtistActivityReader : ObjectReader<ArtistActivity> {
             artists = reader.ReadList(ArtistActivityInfoReader.Instance, options);
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

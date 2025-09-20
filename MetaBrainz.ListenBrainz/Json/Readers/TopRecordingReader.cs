@@ -61,7 +61,7 @@ internal class TopRecordingReader : ObjectReader<TopRecording> {
             name = reader.GetString();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

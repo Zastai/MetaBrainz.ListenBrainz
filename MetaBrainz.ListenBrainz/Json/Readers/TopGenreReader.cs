@@ -32,7 +32,7 @@ internal sealed class TopGenreReader : ObjectReader<TopGenre> {
             percentage = reader.GetDecimal();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }

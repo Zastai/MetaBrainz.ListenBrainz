@@ -80,7 +80,7 @@ internal sealed class ReleaseGroupListenersReader : PayloadReader<ReleaseGroupLi
             totalListeners = reader.GetInt32();
             break;
           default:
-            rest ??= new Dictionary<string, object?>();
+            rest ??= [ ];
             rest[prop] = reader.GetOptionalObject(options);
             break;
         }
