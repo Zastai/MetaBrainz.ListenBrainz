@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using MetaBrainz.Common.Json;
+using MetaBrainz.ListenBrainz.Interfaces.JSPF;
 
 namespace MetaBrainz.ListenBrainz.Interfaces;
 
@@ -69,7 +70,7 @@ public interface IYearInMusicData : IJsonBasedObject {
   IReadOnlyList<ITopArtist>? TopArtists { get; }
 
   /// <summary>Playlist for the "top discoveries for this year".</summary>
-  object? TopDiscoveriesPlaylist { get; }
+  IPlaylist? TopDiscoveriesPlaylist { get; }
 
   /// <summary>
   /// Mappings to CAA URLs for the recordings in <see cref="TopDiscoveriesPlaylist"/>.<br/>
@@ -83,7 +84,7 @@ public interface IYearInMusicData : IJsonBasedObject {
   IReadOnlyList<ITopGenre>? TopGenres { get; }
 
   /// <summary>Playlist for the "top missed recordings for this year".</summary>
-  object? TopMissedRecordingsPlaylist { get; }
+  IPlaylist? TopMissedRecordingsPlaylist { get; }
 
   /// <summary>
   /// Mappings to CAA URLs for the recordings in <see cref="TopMissedRecordingsPlaylist"/>.<br/>
@@ -94,7 +95,7 @@ public interface IYearInMusicData : IJsonBasedObject {
 
   /// <summary>Playlist for the "top new recordings for this year".</summary>
   /// <remarks>This field is only provided for the Year in Music 2021.</remarks>
-  object? TopNewRecordingsPlaylist { get; }
+  IPlaylist? TopNewRecordingsPlaylist { get; }
 
   /// <summary>
   /// Mappings to CAA URLs for the recordings in <see cref="TopNewRecordingsPlaylist"/>.<br/>
@@ -108,7 +109,7 @@ public interface IYearInMusicData : IJsonBasedObject {
 
   /// <summary>Playlist for the "top recordings for this year".</summary>
   /// <remarks>This field is only provided for the Year in Music 2021.</remarks>
-  object? TopRecordingsPlaylist { get; }
+  IPlaylist? TopRecordingsPlaylist { get; }
 
   /// <summary>
   /// Mappings to CAA URLs for the recordings in <see cref="TopRecordingsPlaylist"/>.<br/>

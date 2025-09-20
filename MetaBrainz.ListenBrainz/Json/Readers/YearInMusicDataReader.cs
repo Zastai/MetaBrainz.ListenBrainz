@@ -5,6 +5,8 @@ using System.Text.Json;
 using MetaBrainz.Common.Json;
 using MetaBrainz.Common.Json.Converters;
 using MetaBrainz.ListenBrainz.Interfaces;
+using MetaBrainz.ListenBrainz.Interfaces.JSPF;
+using MetaBrainz.ListenBrainz.Json.Readers.JSPF;
 using MetaBrainz.ListenBrainz.Objects;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers;
@@ -18,21 +20,21 @@ internal sealed class YearInMusicDataReader : ObjectReader<YearInMusicData> {
     IReadOnlyList<IArtistCountryInfo>? artistMap = null;
     string? dayOfWeek = null;
     IReadOnlyDictionary<string, Uri>? discoveriesCoverArt = null;
-    object? discoveriesPlaylist = null;
+    IPlaylist? discoveriesPlaylist = null;
     int? listenCount = null;
     double? listenedMinutes = null;
     IReadOnlyList<IListenTimeRange>? listensPerDay = null;
     IReadOnlyDictionary<string, Uri>? missedRecordingsCoverArt = null;
-    object? missedRecordingsPlaylist = null;
+    IPlaylist? missedRecordingsPlaylist = null;
     IReadOnlyDictionary<string, int>? mostListenedYear = null;
     string? mostProminentColor = null;
     int? newArtistsDiscovered = null;
     IReadOnlyDictionary<string, Uri>? newRecordingsCoverArt = null;
-    object? newRecordingsPlaylist = null;
+    IPlaylist? newRecordingsPlaylist = null;
     IReadOnlyList<INewRelease>? newReleasesOfTopArtists = null;
     int? recordingCount = null;
     IReadOnlyDictionary<string, Uri>? recordingsCoverArt = null;
-    object? recordingsPlaylist = null;
+    IPlaylist? recordingsPlaylist = null;
     int? releaseCount = null;
     int? releaseGroupCount = null;
     IReadOnlyDictionary<string, decimal>? similarUsers = null;
@@ -67,25 +69,25 @@ internal sealed class YearInMusicDataReader : ObjectReader<YearInMusicData> {
             newReleasesOfTopArtists = reader.ReadList(NewReleaseReader.Instance, options);
             break;
           case "playlist-top-discoveries-for-year":
-            discoveriesPlaylist = reader.GetOptionalObject(options);
+            discoveriesPlaylist = reader.GetOptionalObject(PlaylistReader.Instance, options);
             break;
           case "playlist-top-discoveries-for-year-coverart":
             discoveriesCoverArt = reader.ReadDictionary<Uri>(options);
             break;
           case "playlist-top-missed-recordings-for-year":
-            missedRecordingsPlaylist = reader.GetOptionalObject(options);
+            missedRecordingsPlaylist = reader.GetOptionalObject(PlaylistReader.Instance, options);
             break;
           case "playlist-top-missed-recordings-for-year-coverart":
             missedRecordingsCoverArt = reader.ReadDictionary<Uri>(options);
             break;
           case "playlist-top-new-recordings-for-year":
-            newRecordingsPlaylist = reader.GetOptionalObject(options);
+            newRecordingsPlaylist = reader.GetOptionalObject(PlaylistReader.Instance, options);
             break;
           case "playlist-top-new-recordings-for-year-coverart":
             newRecordingsCoverArt = reader.ReadDictionary<Uri>(options);
             break;
           case "playlist-top-recordings-for-year":
-            recordingsPlaylist = reader.GetOptionalObject(options);
+            recordingsPlaylist = reader.GetOptionalObject(PlaylistReader.Instance, options);
             break;
           case "playlist-top-recordings-for-year-coverart":
             recordingsCoverArt = reader.ReadDictionary<Uri>(options);

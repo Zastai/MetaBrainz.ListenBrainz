@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
+using MetaBrainz.ListenBrainz.Interfaces.JSPF;
 
 namespace MetaBrainz.ListenBrainz.Objects;
 
@@ -36,23 +37,23 @@ internal sealed class YearInMusicData : JsonBasedObject, IYearInMusicData {
 
   public IReadOnlyList<ITopArtist>? TopArtists { get; init; }
 
-  public object? TopDiscoveriesPlaylist { get; init; }
+  public IPlaylist? TopDiscoveriesPlaylist { get; init; }
 
   public IReadOnlyDictionary<string, Uri>? TopDiscoveriesPlaylistCoverArt { get; init; }
 
   public IReadOnlyList<ITopGenre>? TopGenres { get; init; }
 
-  public object? TopMissedRecordingsPlaylist { get; init; }
+  public IPlaylist? TopMissedRecordingsPlaylist { get; init; }
 
   public IReadOnlyDictionary<string, Uri>? TopMissedRecordingsPlaylistCoverArt { get; init; }
 
-  public object? TopNewRecordingsPlaylist { get; init; }
+  public IPlaylist? TopNewRecordingsPlaylist { get; init; }
 
   public IReadOnlyDictionary<string, Uri>? TopNewRecordingsPlaylistCoverArt { get; init; }
 
   public IReadOnlyList<ITopRecording>? TopRecordings { get; init; }
 
-  public object? TopRecordingsPlaylist { get; init; }
+  public IPlaylist? TopRecordingsPlaylist { get; init; }
 
   public IReadOnlyDictionary<string, Uri>? TopRecordingsPlaylistCoverArt { get; init; }
 

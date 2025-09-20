@@ -1567,7 +1567,7 @@ public interface IYearInMusicData : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
-  object? TopDiscoveriesPlaylist {
+  MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist? TopDiscoveriesPlaylist {
     public abstract get;
   }
 
@@ -1579,7 +1579,7 @@ public interface IYearInMusicData : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
-  object? TopMissedRecordingsPlaylist {
+  MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist? TopMissedRecordingsPlaylist {
     public abstract get;
   }
 
@@ -1587,7 +1587,7 @@ public interface IYearInMusicData : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
-  object? TopNewRecordingsPlaylist {
+  MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist? TopNewRecordingsPlaylist {
     public abstract get;
   }
 
@@ -1599,7 +1599,7 @@ public interface IYearInMusicData : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
-  object? TopRecordingsPlaylist {
+  MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist? TopRecordingsPlaylist {
     public abstract get;
   }
 
@@ -1632,6 +1632,180 @@ public interface IYearlyActivity : MetaBrainz.Common.Json.IJsonBasedObject {
   }
 
   int Year {
+    public abstract get;
+  }
+
+}
+```
+
+## Namespace: MetaBrainz.ListenBrainz.Interfaces.JSPF
+
+### Type: ILink
+
+```cs
+public interface ILink {
+
+  System.Uri Id {
+    public abstract get;
+  }
+
+  System.Uri Value {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IMeta
+
+```cs
+public interface IMeta {
+
+  System.Uri Id {
+    public abstract get;
+  }
+
+  string Value {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: INamedUri
+
+```cs
+public interface INamedUri {
+
+  string Name {
+    public abstract get;
+  }
+
+  System.Uri Uri {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IPlaylist
+
+```cs
+public interface IPlaylist : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  string? Annotation {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<INamedUri>? Attribution {
+    public abstract get;
+  }
+
+  string? Creator {
+    public abstract get;
+  }
+
+  System.DateTimeOffset? Date {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<System.Uri, System.Collections.Generic.IReadOnlyList<object?>?>? Extensions {
+    public abstract get;
+  }
+
+  System.Uri? Identifier {
+    public abstract get;
+  }
+
+  System.Uri? Image {
+    public abstract get;
+  }
+
+  System.Uri? Info {
+    public abstract get;
+  }
+
+  System.Uri? License {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<ILink>? Links {
+    public abstract get;
+  }
+
+  System.Uri? Location {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IMeta>? Metadata {
+    public abstract get;
+  }
+
+  string? Title {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<ITrack> Tracks {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: ITrack
+
+```cs
+public interface ITrack : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  string? Album {
+    public abstract get;
+  }
+
+  string? Annotation {
+    public abstract get;
+  }
+
+  string? Creator {
+    public abstract get;
+  }
+
+  System.TimeSpan? Duration {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyDictionary<System.Uri, System.Collections.Generic.IReadOnlyList<object?>?>? Extensions {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<System.Uri>? Identifiers {
+    public abstract get;
+  }
+
+  System.Uri? Image {
+    public abstract get;
+  }
+
+  System.Uri? Info {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<ILink>? Links {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<System.Uri>? Locations {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IMeta>? Metadata {
+    public abstract get;
+  }
+
+  string? Title {
+    public abstract get;
+  }
+
+  uint? TrackNumber {
     public abstract get;
   }
 
