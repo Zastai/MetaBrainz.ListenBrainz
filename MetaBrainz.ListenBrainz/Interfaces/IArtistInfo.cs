@@ -11,10 +11,10 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 [PublicAPI]
 public interface IArtistInfo : IJsonBasedObject {
 
-  /// <summary>The MusicBrainz ID for the artistrest ??= [ ];.</summary>
+  /// <summary>The MusicBrainz ID for the artist.</summary>
   Guid? Id { get; }
 
-  /// <summary>The MusicBrainz IDs for the artistrest ??= [ ];.</summary>
+  /// <summary>The MusicBrainz IDs for the artist.</summary>
   /// <remarks>
   /// This may be obsolete; the current API only ever seems to return a single ID, which will be available in <see cref="Id"/>.
   /// </remarks>
@@ -23,7 +23,7 @@ public interface IArtistInfo : IJsonBasedObject {
   /// <summary>The number of times the artist's tracks were listened to.</summary>
   int ListenCount { get; }
 
-  /// <summary>The MessyBrainz ID for the artistrest ??= [ ];.</summary>
+  /// <summary>The MessyBrainz ID for the artist.</summary>
   Guid? MessyId { get; }
 
   /// <summary>The artist's name.</summary>

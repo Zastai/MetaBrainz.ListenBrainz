@@ -11,7 +11,7 @@ public interface IArtistActivityInfo : IJsonBasedObject {
   /// <summary>Listening statistics for the artist's albums.</summary>
   IReadOnlyList<IAlbumInfo> Albums { get; }
 
-  /// <summary>The MusicBrainz ID for the artistrest ??= [ ];.</summary>
+  /// <summary>The MusicBrainz ID for the artist.</summary>
   Guid? Id { get; }
 
   /// <summary>The number of times the artist was listened to.</summary>
