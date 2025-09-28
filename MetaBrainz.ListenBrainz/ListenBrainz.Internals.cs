@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -49,6 +50,17 @@ public sealed partial class ListenBrainz {
     }
     var task = JsonUtils.GetJsonContentAsync<TObject>(response, ListenBrainz.JsonReaderOptions, cancellationToken);
     return await task.ConfigureAwait(false);
+  }
+
+  private static Dictionary<string, string> OptionsForPageableResource(int capacity, int? count, int? offset) {
+    var options = new Dictionary<string, string>(capacity);
+    if (count is not null) {
+      options.Add("count", count.Value.ToString(CultureInfo.InvariantCulture));
+    }
+    if (offset is not null) {
+      options.Add("offset", offset.Value.ToString(CultureInfo.InvariantCulture));
+    }
+    return options;
   }
 
   private async Task<HttpResponseMessage> PerformRequestAsync(string endPoint, HttpMethod method, HttpContent? body,

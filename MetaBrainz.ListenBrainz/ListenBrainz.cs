@@ -18,7 +18,7 @@ public sealed partial class ListenBrainz : IDisposable {
 
   #region Constants
 
-  /// <summary>The default number of listens returned in a single GET request.</summary>
+  /// <summary>The default number of items returned in a single GET request.</summary>
   public const int DefaultItemsPerGet = 25;
 
   /// <summary>The default time range for a request for listen data, in sets of 5 days.</summary>
@@ -30,7 +30,7 @@ public sealed partial class ListenBrainz : IDisposable {
   /// <summary>The maximum value for a duration (24 days), expressed in seconds.</summary>
   public const int MaxDuration = 24 * 24 * 60 * 60;
 
-  /// <summary>The maximum number of listens returned in a single GET request.</summary>
+  /// <summary>The maximum number of items returned in a single GET request.</summary>
   public const int MaxItemsPerGet = 100;
 
   /// <summary>The maximum size of a payload in bytes.</summary>

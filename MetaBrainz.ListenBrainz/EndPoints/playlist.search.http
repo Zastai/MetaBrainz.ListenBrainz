@@ -1,2 +1,8 @@
 ﻿### Find Sexy Playlists
-GET https://api.listenbrainz.org/1/playlist/search?query=Sexy
+GET https://api.listenbrainz.org/1/playlist/search
+  ?query=Sexy
+
+### Find Sexy Playlists (subset)
+GET https://api.listenbrainz.org/1/playlist/search
+  ?query=Sexy
+  &count=69

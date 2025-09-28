@@ -14,7 +14,7 @@ namespace MetaBrainz.ListenBrainz;
 
 public sealed partial class ListenBrainz {
 
-  private static IDictionary<string, string> OptionsForGetArtistMap(StatisticsRange? range) {
+  private static Dictionary<string, string> OptionsForGetArtistMap(StatisticsRange? range) {
     var options = new Dictionary<string, string>(1);
     if (range is not null) {
       options.Add("range", range.Value.ToJson());
@@ -22,14 +22,8 @@ public sealed partial class ListenBrainz {
     return options;
   }
 
-  private static IDictionary<string, string> OptionsForGetStatistics(int? count, int? offset, StatisticsRange? range) {
-    var options = new Dictionary<string, string>(3);
-    if (count is not null) {
-      options.Add("count", count.Value.ToString(CultureInfo.InvariantCulture));
-    }
-    if (offset is not null) {
-      options.Add("offset", offset.Value.ToString(CultureInfo.InvariantCulture));
-    }
+  private static Dictionary<string, string> OptionsForGetStatistics(int? count, int? offset, StatisticsRange? range) {
+    var options = ListenBrainz.OptionsForPageableResource(3, count, offset);
     if (range is not null) {
       options.Add("range", range.Value.ToJson());
     }
