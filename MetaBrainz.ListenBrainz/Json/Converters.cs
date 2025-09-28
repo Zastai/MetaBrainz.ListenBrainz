@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 using MetaBrainz.ListenBrainz.Json.Readers;
+using MetaBrainz.ListenBrainz.Json.Readers.JSPF;
 using MetaBrainz.ListenBrainz.Json.Writers;
 
 namespace MetaBrainz.ListenBrainz.Json;
@@ -18,12 +19,14 @@ internal static class Converters {
       yield return EraActivityReader.Instance;
       yield return ErrorInfoReader.Instance;
       yield return FetchedListensReader.Instance;
+      yield return FoundPlaylistsReader.Instance;
       yield return GenreActivityReader.Instance;
       yield return LBRadioPlaylistReader.Instance;
       yield return LatestImportReader.Instance;
       yield return ListenCountReader.Instance;
       yield return ListeningActivityReader.Instance;
       yield return PlayingNowReader.Instance;
+      yield return PlaylistReader.Instance;
       yield return RecordingStatisticsReader.Instance;
       yield return ReleaseGroupListenersReader.Instance;
       yield return ReleaseGroupStatisticsReader.Instance;

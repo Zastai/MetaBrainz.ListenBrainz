@@ -142,6 +142,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   protected override void Finalize();
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFoundPlaylists> FindPlaylistsAsync(string query, int? count = default, int? offset = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistActivity?> GetArtistActivityAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistActivity?> GetArtistActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
@@ -191,6 +193,8 @@ public sealed class ListenBrainz : System.IDisposable {
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFetchedListens> GetListensBetweenAsync(string user, long after, long before, int? count = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IPlayingNow> GetPlayingNowAsync(string user, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist> GetPlaylistAsync(System.Guid id, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IRecordingStatistics?> GetRecordingStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
@@ -682,6 +686,31 @@ public interface IFetchedListens : MetaBrainz.Common.Json.IJsonBasedObject {
   }
 
   string User {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IFoundPlaylists
+
+```cs
+public interface IFoundPlaylists : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  int Count {
+    public abstract get;
+  }
+
+  int Offset {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist> Playlists {
+    public abstract get;
+    public abstract init;
+  }
+
+  int TotalCount {
     public abstract get;
   }
 
