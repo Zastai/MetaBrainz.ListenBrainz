@@ -1,0 +1,5 @@
+﻿### Provide a MusicBrainz ID for a recording given its MessyBrainz ID.
+# This seems always to return 401 instead of 404.
+GET https://api.listenbrainz.org/1/metadata/get_manual_mapping
+  ?recording_msid=d23f4719-9212-49f0-ad08-ddbfbfc50d6f
+Authorization: Token {{lb-user-token}}

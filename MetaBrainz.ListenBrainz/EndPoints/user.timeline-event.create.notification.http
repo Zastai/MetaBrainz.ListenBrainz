@@ -1,0 +1,17 @@
+﻿### Post a message.
+# Apparently only bots are allowed to do this, even to a user's own timeline.
+# Normal users get 403 'Only approved users are allowed to post a message on a user's timeline.'
+POST https://api.listenbrainz.org/1/user/{{lb-user-name}}/timeline-event/create/notification
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "metadata": {
+    "message": "Please ignore, just testing the LB API."
+  }
+}
+
+> {%
+  client.global.set("last-created-event-type", response.body.event_type)
+  client.global.set("last-created-event-id", response.body.id)
+%}

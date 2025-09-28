@@ -1,0 +1,13 @@
+﻿# Note: If a layout is picked that is not available for the given dimension, an error is returned as a plain text message, with
+#       content type set as text/html.
+### Art for My Listens This Week (2x2, layout 0)
+GET https://api.listenbrainz.org/1/art/grid-stats/{{lb-user-name}}/this_week/2/0/666
+
+### Art for My Listens This Month (3x3, layout 0)
+GET https://api.listenbrainz.org/1/art/grid-stats/{{lb-user-name}}/this_month/3/0/666
+
+### Art for My Listens This Year (4x4, layout 2)
+GET https://api.listenbrainz.org/1/art/grid-stats/{{lb-user-name}}/this_year/4/2/666
+
+### Art for All My Listens Ever (5x5, layout 2)
+GET https://api.listenbrainz.org/1/art/grid-stats/{{lb-user-name}}/all_time/5/0/666

@@ -1,0 +1,12 @@
+﻿### Retrieve Latest Import Timestamp
+GET https://api.listenbrainz.org/1/latest-import
+  ?user_name={{lb-user-name}}
+
+### Set Latest Import Timestamp
+POST https://api.listenbrainz.org/1/latest-import
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "ts": {{$timestamp}}
+}

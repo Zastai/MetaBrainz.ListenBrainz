@@ -1,0 +1,7 @@
+﻿### Me
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/playlists
+
+### Rob (subset)
+GET https://api.listenbrainz.org/1/user/rob/playlists
+  ?count=13
+  &offset=42

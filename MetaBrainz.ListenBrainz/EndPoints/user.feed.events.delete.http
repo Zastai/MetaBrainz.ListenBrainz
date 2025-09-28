@@ -1,0 +1,9 @@
+﻿### Delete an Event We Created
+POST https://api.listenbrainz.org/1/user/{{lb-user-name}}/feed/events/delete
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "event_type": "{{last-created-event-type}}",
+  "id": {{last-created-event-id}}
+}

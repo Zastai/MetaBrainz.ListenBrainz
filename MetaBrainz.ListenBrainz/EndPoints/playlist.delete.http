@@ -1,0 +1,7 @@
+﻿### Delete the Last Created Playlist
+POST https://api.listenbrainz.org/1/playlist/{{last-created-playlist}}/delete
+Authorization: Token {{lb-user-token}}
+
+### Delete the Last Copied Playlist
+POST https://api.listenbrainz.org/1/playlist/{{last-copied-playlist}}/delete
+Authorization: Token {{lb-user-token}}

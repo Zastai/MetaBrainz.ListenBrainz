@@ -1,0 +1,20 @@
+﻿# Response Documentation: https://listenbrainz.readthedocs.io/en/latest/users/feedback-json.html#fetching-feedback-json
+
+### GET Version
+GET https://api.listenbrainz.org/1/feedback/user/{{lb-user-name}}/get-feedback-for-recordings
+  ?recording_mbids=
+  6d61e3d4-0298-4da2-ab5a-74604b7cc6c7,
+  cd4caaa7-1ac6-488c-a198-501c80994db7,
+  93d73271-7d5c-41e1-8bf3-2f3b00e86557
+
+### POST Version
+POST https://api.listenbrainz.org/1/feedback/user/{{lb-user-name}}/get-feedback-for-recordings
+Content-Type: application/json
+
+{
+  "recording_mbids": [
+    "6d61e3d4-0298-4da2-ab5a-74604b7cc6c7",
+    "cd4caaa7-1ac6-488c-a198-501c80994db7",
+    "93d73271-7d5c-41e1-8bf3-2f3b00e86557"
+  ]
+}

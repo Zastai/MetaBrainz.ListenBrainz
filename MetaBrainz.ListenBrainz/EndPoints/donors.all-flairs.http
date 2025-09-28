@@ -1,0 +1,3 @@
+﻿# This returns `{ "name": "flair-name", ... }`, which does not match the API example.
+### Donors With Their Active Flair
+GET https://api.listenbrainz.org/1/donors/all-flairs

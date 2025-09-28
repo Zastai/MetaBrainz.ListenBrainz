@@ -1,0 +1,15 @@
+﻿### Very Popular Harp Tracks
+GET https://api.listenbrainz.org/1/lb-radio/tags
+  ?tag=harp
+  &pop_begin=90
+  &pop_end=100
+  &count=42
+
+### Obscure Portuguese Metal
+GET https://api.listenbrainz.org/1/lb-radio/tags
+  ?tag=portuguese
+  &tag=metal
+  &operator=and
+  &pop_begin=0
+  &pop_end=33
+  &count=13

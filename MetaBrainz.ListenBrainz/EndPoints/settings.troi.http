@@ -1,0 +1,19 @@
+﻿# The body contents are not documented!
+
+### Disable Export of Generated Playlists to Spotify
+POST https://api.listenbrainz.org/1/settings/troi
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "export_to_spotify": false
+}
+
+### Enable Export of Generated Playlists to Spotify
+POST https://api.listenbrainz.org/1/settings/troi
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "export_to_spotify": true
+}

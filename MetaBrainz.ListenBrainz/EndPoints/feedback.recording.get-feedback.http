@@ -1,0 +1,4 @@
+﻿# Body Content Documentation: https://listenbrainz.readthedocs.io/en/latest/users/feedback-json.html#feedback-json-doc
+
+### Money - Pink Floyd
+GET https://api.listenbrainz.org/1/feedback/recording/0709110a-07b9-4ad8-93bf-519cb415a549/get-feedback

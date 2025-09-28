@@ -1,0 +1,5 @@
+﻿### The Latest Data Dump
+GET https://api.listenbrainz.org/1/status/get-dump-info
+
+### Data Dump #69
+GET https://api.listenbrainz.org/1/status/get-dump-info?id=69

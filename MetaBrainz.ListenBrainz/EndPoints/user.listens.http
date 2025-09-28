@@ -1,0 +1,9 @@
+﻿### Last 13
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/listens
+  ?count=13
+
+### First 42 from 2021-01-06
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/listens
+  ?min_ts=1609891200
+  &max_ts=1609977600
+  &count=42

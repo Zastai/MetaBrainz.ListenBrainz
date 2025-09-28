@@ -1,0 +1,33 @@
+﻿# The body content is not documented.
+# The data source names in the list match the prefix of the "xxxEnabled" properties; specifying other values is not rejected and
+# leads to blank elements in the website settings UI.
+
+### Disable the ListenBrainz Music Player
+POST https://api.listenbrainz.org/1/settings/brainzplayer
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{ "brainzplayerEnabled": false }
+
+### Configure the ListenBrainz Music Player
+POST https://api.listenbrainz.org/1/settings/brainzplayer
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "brainzplayerEnabled": true,
+  "youtubeEnabled": false,
+  "spotifyEnabled": true,
+  "soundcloudEnabled": true,
+  "appleMusicEnabled": false,
+  "funkwhaleEnabled": false,
+  "internetArchiveEnabled": true,
+  "dataSourcesPriority": [
+    "spotify",
+    "soundcloud",
+    "internetArchive",
+    "youtube",
+    "appleMusic",
+    "funkwhale"
+  ]
+}

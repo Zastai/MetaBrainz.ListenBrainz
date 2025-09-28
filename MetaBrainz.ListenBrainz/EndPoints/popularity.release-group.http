@@ -1,0 +1,10 @@
+﻿### Taylor Swift: 1989: Original vs Taylor's Version
+POST https://api.listenbrainz.org/1/popularity/release-group
+Content-Type: application/json
+
+{
+  "release_group_mbids": [
+    "4d9ec1c2-58ec-48a4-aa0a-916718adead0",
+    "1c4770b3-b7a3-4d44-a7a9-8e2dbb74b85a"
+  ]
+}

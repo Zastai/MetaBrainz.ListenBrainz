@@ -1,0 +1,31 @@
+﻿# Note: other valid values for `inc` that are not documented for this endpoint:
+#       `recording` - has no effect
+#       `release_group` - provides data; see request below
+# Conversely, `artist` and `release` *are* documented, but have no effect; `artist` because it's included by default), but `release`
+# is clearly not treated as an alias for `release_group` here.
+# Also, unlike the `/1/metadata/recording` and `/1/metadata/release_group` endpoints this does not return a dict where the mbid is
+# the key and the value is a dict with the requested metadata elements (artist/recording/release/release_group/tag) as key. Instead,
+# you get an object containing the artist metadata, with additional `release_group` and/or `tag` fields if requested.
+
+### Alanis Morissette
+GET https://api.listenbrainz.org/1/metadata/artist
+  ?artist_mbids=4bdcee62-4902-4773-8cd1-e252e2e31225
+
+### Alanis Morissette (with release group metadata)
+GET https://api.listenbrainz.org/1/metadata/artist
+  ?artist_mbids=4bdcee62-4902-4773-8cd1-e252e2e31225
+  &inc=release_group
+
+### Alanis Morissette (with tags)
+GET https://api.listenbrainz.org/1/metadata/artist
+  ?artist_mbids=4bdcee62-4902-4773-8cd1-e252e2e31225
+  &inc=tag
+
+### Alanis Morissette (Everything)
+GET https://api.listenbrainz.org/1/metadata/artist
+  ?artist_mbids=4bdcee62-4902-4773-8cd1-e252e2e31225
+  &inc=release_group tag
+
+### Michael & Janet Jackson
+GET https://api.listenbrainz.org/1/metadata/artist
+  ?artist_mbids=f27ec8db-af05-4f36-916e-3d57f91ecf5e,6be2828f-6c0d-4059-99d4-fa18acf1a296

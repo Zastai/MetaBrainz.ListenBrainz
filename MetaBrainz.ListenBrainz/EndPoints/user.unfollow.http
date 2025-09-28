@@ -1,0 +1,3 @@
+﻿### Unfollow Wesley Crusher
+POST https://api.listenbrainz.org/1/user/wilwheaton/unfollow
+Authorization: Token {{lb-user-token}}

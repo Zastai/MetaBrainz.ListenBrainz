@@ -1,0 +1,34 @@
+﻿### Lana Del Rey's First 6 Albums
+# Does not seem to work when release_group_mbids is specified instead of release_mbids.
+# Undocumented parameter: "layout", an integer representing predefined grid layout (alternative to `tiles`).
+POST https://api.listenbrainz.org/1/art/grid/
+Content-Type: application/json
+# Background: transparent, white or black, or a hex color code (#xxxxxx)
+# Image Size: 128-1024
+# Dimension: 1-5
+# Cover Art Size: 250 or 500
+
+{
+  "background": "transparent",
+  "image_size": 420,
+  "dimension": 3,
+  "skip-missing": true,
+  "show-caa": false,
+  "cover_art_size": 500,
+  "tiles": [
+    "0,1,3,4",
+    "2",
+    "5",
+    "6",
+    "7",
+    "8"
+  ],
+  "release_mbids": [
+    "821b5fd1-8fdd-4976-8258-90c661cc6423",
+    "30867238-3e17-48e8-94dc-9d7ffa311310",
+    "423095ac-6e49-42a3-89e4-a18aa85b9d79",
+    "00d42a8c-af17-46c3-a20f-f439b46ffe77",
+    "a48fdd57-39fb-48aa-96be-7d1e60e81bda",
+    "6c38e1bd-975a-4c11-9f4f-e362ff7229f9"
+  ]
+}

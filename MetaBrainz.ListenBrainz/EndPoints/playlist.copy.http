@@ -1,0 +1,5 @@
+﻿### Copy the Last Created Playlist
+POST https://api.listenbrainz.org/1/playlist/{{last-created-playlist}}/copy
+Authorization: Token {{lb-user-token}}
+
+> {% client.global.set("last-copied-playlist", response.body.playlist_mbid) %}

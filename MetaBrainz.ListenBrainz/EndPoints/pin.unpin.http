@@ -1,0 +1,3 @@
+﻿### Pin the Current Pinned Recording
+POST https://api.listenbrainz.org/1/pin/unpin
+Authorization: Token {{lb-user-token}}

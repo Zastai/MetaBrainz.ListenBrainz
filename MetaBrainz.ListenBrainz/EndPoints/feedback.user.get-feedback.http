@@ -1,0 +1,6 @@
+﻿# Response Documentation: https://listenbrainz.readthedocs.io/en/latest/users/feedback-json.html#fetching-feedback-json
+
+### Me
+GET https://api.listenbrainz.org/1/feedback/user/{{lb-user-name}}/get-feedback
+  ?count=13
+  &offset=13

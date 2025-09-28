@@ -1,0 +1,13 @@
+﻿### My Fresh Release Recommendations, Sorted by Artist
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/fresh_releases
+  ?sort=artist_credit_name
+
+### My Upcoming Recommended Releases, Sorted by Confidence
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/fresh_releases
+  ?past=false
+  &sort=confidence
+
+### My Recent Recommended Releases, Sorted by Release Date
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/fresh_releases
+  ?future=false
+  &sort=release_date

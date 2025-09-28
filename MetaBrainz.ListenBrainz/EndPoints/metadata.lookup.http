@@ -1,0 +1,40 @@
+﻿### Rick Roll!
+GET https://api.listenbrainz.org/1/metadata/lookup
+  ?artist_name=Rick Astley
+  &recording_name=Never Gonna Give You Up
+
+### Rick Roll! (with some metadata)
+GET https://api.listenbrainz.org/1/metadata/lookup
+  ?artist_name=Rick Astley
+  &recording_name=Never Gonna Give You Up
+  &metadata=true
+
+### Rick Roll! (with full metadata)
+GET https://api.listenbrainz.org/1/metadata/lookup
+  ?artist_name=Rick Astley
+  &recording_name=Never Gonna Give You Up
+  &metadata=true
+  &inc=artist release tag
+
+### Several Meme Songs
+# The docs say that this returns the same data as the GET version, but there are extra fields (`index` for the position of the
+# corresponding request item, and `xxx_arg` fields for the provided values).
+POST https://api.listenbrainz.org/1/metadata/lookup/
+Content-Type: application/json
+
+{
+  "recordings": [
+    {
+      "recording_name": "Caramelldansen (Speedycake Remix)",
+      "artist_name": "Caramell"
+    },
+    {
+      "recording_name": "Crab Rave",
+      "artist_name": "Noisestorm"
+    },
+    {
+      "recording_name": "Beep Beep I’m a Sheep",
+      "artist_name": "LilDeuceDeuce"
+    }
+  ]
+}

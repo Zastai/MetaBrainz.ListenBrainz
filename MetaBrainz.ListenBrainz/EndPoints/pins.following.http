@@ -1,0 +1,4 @@
+﻿### Up to Five Pins by People I Follow
+GET https://api.listenbrainz.org/1/{{lb-user-name}}/pins/following
+  ?count=5
+  &offset=0

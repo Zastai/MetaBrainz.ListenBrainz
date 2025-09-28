@@ -1,0 +1,31 @@
+﻿# Body Content Documentation: https://listenbrainz.readthedocs.io/en/latest/users/feedback-json.html#feedback-json-doc
+
+### Remove Track Feedback
+POST https://api.listenbrainz.org/1/feedback/recording-feedback
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "score": 0,
+  "recording_mbid": "6d61e3d4-0298-4da2-ab5a-74604b7cc6c7"
+}
+
+### Mark Track As Loved
+POST https://api.listenbrainz.org/1/feedback/recording-feedback
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "score": 1,
+  "recording_mbid": "cd4caaa7-1ac6-488c-a198-501c80994db7"
+}
+
+### Mark Track As Hated
+POST https://api.listenbrainz.org/1/feedback/recording-feedback
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "score": -1,
+  "recording_mbid": "93d73271-7d5c-41e1-8bf3-2f3b00e86557"
+}

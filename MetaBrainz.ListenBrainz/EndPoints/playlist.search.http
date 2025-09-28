@@ -1,0 +1,2 @@
+﻿### Find Sexy Playlists
+GET https://api.listenbrainz.org/1/playlist/search?query=Sexy

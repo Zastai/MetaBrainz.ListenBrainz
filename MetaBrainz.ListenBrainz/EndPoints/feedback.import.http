@@ -1,0 +1,9 @@
+﻿### Import Feedback from Last.FM
+POST https://api.listenbrainz.org/1/feedback/import
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "service": "lastfm",
+  "user_name": "{{last-fm-user}}"
+}

@@ -1,0 +1,6 @@
+﻿### Update Blurb for a Pin
+POST https://api.listenbrainz.org/1/pin/update/{{last-pin-added}}
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{ "blurb_content": "Pins are not just for holding pieces of cloth together." }

@@ -1,0 +1,9 @@
+﻿### Hide an Event We Created (pin or recommendation from other users only)
+POST https://api.listenbrainz.org/1/user/{{lb-user-name}}/feed/events/hide
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "event_type": "recording_recommendation",
+  "event_id": -1
+}

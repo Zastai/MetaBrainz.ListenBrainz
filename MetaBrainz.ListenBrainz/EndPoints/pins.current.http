@@ -1,0 +1,2 @@
+﻿### My Current Pin
+GET https://api.listenbrainz.org/1/{{lb-user-name}}/pins/current

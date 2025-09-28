@@ -1,0 +1,19 @@
+﻿# The body contents are not documented!
+
+### Remove Time Zone Setting
+POST https://api.listenbrainz.org/1/settings/timezone
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "zonename": null
+}
+
+### Set Time Zone to Europe/Brussels
+POST https://api.listenbrainz.org/1/settings/timezone
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "zonename": "Europe/Brussels"
+}

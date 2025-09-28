@@ -1,0 +1,15 @@
+﻿### This Week
+GET https://api.listenbrainz.org/1/stats/sitewide/era-activity
+  ?range=this_week
+
+### This Month
+GET https://api.listenbrainz.org/1/stats/sitewide/era-activity
+  ?range=this_month
+
+### This Year
+GET https://api.listenbrainz.org/1/stats/sitewide/era-activity
+  ?range=this_year
+
+### All Time
+GET https://api.listenbrainz.org/1/stats/sitewide/era-activity
+  ?range=all_time

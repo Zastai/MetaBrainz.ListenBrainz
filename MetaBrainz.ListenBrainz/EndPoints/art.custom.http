@@ -1,0 +1,14 @@
+﻿# Note: The custom types are documented by pointing to art.listenbrainz.org, but that currently just shows the main LB page.
+#       The 4 options below are taken from the code.
+### Top 5 Artists (This Week)
+GET https://api.listenbrainz.org/1/art/designer-top-5/{{lb-user-name}}/this_week/999
+
+### Top 10 Releases (This Month)
+GET https://api.listenbrainz.org/1/art/designer-top-10/{{lb-user-name}}/this_month/999
+
+### Alternate Top 10 Releases (This Month)
+GET https://api.listenbrainz.org/1/art/designer-top-10-alt/{{lb-user-name}}/this_month/999
+
+### Top 5 Releases, As Cover Art (This Month)
+# This one only aligns properly for size 750.
+GET https://api.listenbrainz.org/1/art/lps-on-the-floor/{{lb-user-name}}/this_month/750

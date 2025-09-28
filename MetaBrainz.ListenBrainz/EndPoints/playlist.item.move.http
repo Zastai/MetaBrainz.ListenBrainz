@@ -1,0 +1,23 @@
+﻿### Move the First Two Tracks Down 2 Positions
+POST https://api.listenbrainz.org/1/playlist/{{last-created-playlist}}/item/move
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "mbid": "56d2735d-abc7-4070-9c3f-bc27593d922d",
+  "from": 0,
+  "to": 2,
+  "count": 2
+}
+
+### Move Them Back
+POST https://api.listenbrainz.org/1/playlist/{{last-created-playlist}}/item/move
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "mbid": "56d2735d-abc7-4070-9c3f-bc27593d922d",
+  "from": 2,
+  "to": 0,
+  "count": 2
+}

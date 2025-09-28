@@ -1,0 +1,12 @@
+﻿### Pin "I Know" by "Fiona Apple"
+POST https://api.listenbrainz.org/1/pin
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "recording_mbid": "cd4caaa7-1ac6-488c-a198-501c80994db7",
+  "blurb_content": "I Know...",
+  "pinned_until": 2395180800
+}
+
+> {% client.global.set("last-pin-added", response.body.pinned_recording.row_id) %}

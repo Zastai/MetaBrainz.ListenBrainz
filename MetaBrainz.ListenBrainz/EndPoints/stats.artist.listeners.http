@@ -1,0 +1,15 @@
+﻿### Pink Floyd (This Week)
+GET https://api.listenbrainz.org/1/stats/artist/83d91898-7763-47d7-b03b-b92132375c47/listeners
+  ?range=this_week
+
+### Pink Floyd (This Month)
+GET https://api.listenbrainz.org/1/stats/artist/83d91898-7763-47d7-b03b-b92132375c47/listeners
+  ?range=this_month
+
+### The Alan Parsons Project (This Year)
+GET https://api.listenbrainz.org/1/stats/artist/f98711e5-06f7-43ed-8239-da0f61a9c460/listeners
+  ?range=this_year
+
+### Hormonia (All Time)
+GET https://api.listenbrainz.org/1/stats/artist/c6a04a38-045b-4dc4-9e9e-423c498632a8/listeners
+  ?range=all_time

@@ -1,0 +1,2 @@
+﻿### Who Am I Following?
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/following

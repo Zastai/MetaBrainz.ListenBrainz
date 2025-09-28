@@ -1,0 +1,17 @@
+﻿### Fresh Releases, Sorted by Artist
+GET https://api.listenbrainz.org/1/explore/fresh-releases
+  ?sort=artist_credit_name
+
+### Upcoming Fresh Releases, Sorted by Release Date
+GET https://api.listenbrainz.org/1/explore/fresh-releases
+  ?past=false
+  &sort=release_date
+
+### Recent Fresh Releases, Sorted by Release Date
+GET https://api.listenbrainz.org/1/explore/fresh-releases
+  ?future=false
+  &sort=release_date
+
+### Releases That Were Fresh in the Summer of 2024
+GET https://api.listenbrainz.org/1/explore/fresh-releases
+  ?release_date=2024-08-01

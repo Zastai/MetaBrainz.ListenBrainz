@@ -1,0 +1,11 @@
+﻿### Get Playlist Information from Apple Music
+GET https://api.listenbrainz.org/1/playlist/import/apple_music
+Authorization: Token {{lb-user-token}}
+
+### Get Playlist Information from SoundCloud
+GET https://api.listenbrainz.org/1/playlist/import/soundcloud
+Authorization: Token {{lb-user-token}}
+
+### Get Playlist Information from Spotify
+GET https://api.listenbrainz.org/1/playlist/import/spotify
+Authorization: Token {{lb-user-token}}

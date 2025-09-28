@@ -1,0 +1,14 @@
+﻿### Unspecified Result Format (currently 2024)
+GET https://api.listenbrainz.org/1/stats/user/{{lb-user-name}}/year-in-music
+
+### 2021 Result Format
+GET https://api.listenbrainz.org/1/stats/user/{{lb-user-name}}/year-in-music/2021
+
+### 2022 Result Format
+GET https://api.listenbrainz.org/1/stats/user/{{lb-user-name}}/year-in-music/2022
+
+### 2023 Result Format
+GET https://api.listenbrainz.org/1/stats/user/{{lb-user-name}}/year-in-music/2023
+
+### 2024 Result Format
+GET https://api.listenbrainz.org/1/stats/user/{{lb-user-name}}/year-in-music/2024

@@ -1,0 +1,11 @@
+﻿# Prompt Docs: https://troi.readthedocs.io/en/latest/lb_radio.html
+
+### Beatles Only Radio (hard mode, so relatively obscure tracks will be selected)
+GET https://api.listenbrainz.org/1/explore/lb-radio
+  ?prompt=artist:(The Beatles)::nosim
+  &mode=hard
+
+### Radio Based on My Activity
+GET https://api.listenbrainz.org/1/explore/lb-radio
+  ?prompt=stats:{{lb-user-name}}
+  &mode=medium

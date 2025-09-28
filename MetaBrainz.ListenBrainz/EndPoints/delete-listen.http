@@ -1,0 +1,9 @@
+﻿### Delete a Listen
+POST https://api.listenbrainz.org/1/delete-listen
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "listened_at": 1234567,
+  "recording_msid": "12345678-1234-5678-9abc-123456789abc"
+}
