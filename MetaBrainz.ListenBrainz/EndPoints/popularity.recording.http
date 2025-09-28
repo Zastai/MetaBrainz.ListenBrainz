@@ -1,0 +1,10 @@
+﻿### Shine on You Crazy Diamond (both parts)
+POST https://api.listenbrainz.org/1/popularity/recording
+Content-Type: application/json
+
+{
+  "recording_mbids": [
+    "54029746-25ba-4f88-9885-387ac581e45f",
+    "5bdf011c-a186-4c1c-b7b6-e0faed39d4c3"
+  ]
+}

@@ -1,0 +1,27 @@
+﻿### Get My Recommendation Feedback
+GET https://api.listenbrainz.org/1/recommendation/feedback/user/{{lb-user-name}}
+
+### Get My Recommendation Feedback (subset)
+GET https://api.listenbrainz.org/1/recommendation/feedback/user/{{lb-user-name}}
+  ?count=13
+  &offset=42
+
+### Get Bad Recommendations
+GET https://api.listenbrainz.org/1/recommendation/feedback/user/{{lb-user-name}}
+  ?rating=bad_recommendation
+
+### Get Recommendations I Disliked
+GET https://api.listenbrainz.org/1/recommendation/feedback/user/{{lb-user-name}}
+  ?rating=dislike
+
+### Get Recommendations I Hated
+GET https://api.listenbrainz.org/1/recommendation/feedback/user/{{lb-user-name}}
+  ?rating=hate
+
+### Get Recommendations I Liked
+GET https://api.listenbrainz.org/1/recommendation/feedback/user/{{lb-user-name}}
+  ?rating=like
+
+### Get Recommendations I Loved
+GET https://api.listenbrainz.org/1/recommendation/feedback/user/{{lb-user-name}}
+  ?rating=love

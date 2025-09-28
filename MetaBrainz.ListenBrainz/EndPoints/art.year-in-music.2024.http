@@ -1,0 +1,35 @@
+﻿# The 'image' parameter is undocumented but required.
+# The 'season' parameter is undocumented.
+
+### Overview
+GET https://api.listenbrainz.org/1/art/year-in-music/2024/{{lb-user-name}}
+  ?image=overview
+  &season=spring
+
+### Stats
+GET https://api.listenbrainz.org/1/art/year-in-music/2024/{{lb-user-name}}
+  ?image=stats
+  &season=summer
+
+### Artists
+GET https://api.listenbrainz.org/1/art/year-in-music/2024/{{lb-user-name}}
+  ?image=artists
+  &season=autumn
+
+### Tracks
+GET https://api.listenbrainz.org/1/art/year-in-music/2024/{{lb-user-name}}
+  ?image=tracks
+  &season=winter
+
+### Albums
+GET https://api.listenbrainz.org/1/art/year-in-music/2024/{{lb-user-name}}
+  ?image=albums
+
+### Playlist: Discovery
+GET https://api.listenbrainz.org/1/art/year-in-music/2024/{{lb-user-name}}
+  ?image=discovery-playlist
+
+### Playlist: Missed Tracks
+GET https://api.listenbrainz.org/1/art/year-in-music/2024/{{lb-user-name}}
+  ?image=missed-playlist
+  &season=winter

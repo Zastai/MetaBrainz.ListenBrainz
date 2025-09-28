@@ -1,0 +1,41 @@
+﻿# Note: other valid values for `inc` that are not documented for this endpoint:
+#       `recording` - has no effect (because it's included by default)
+#       `release_group` - seems to be ignored
+
+### The Cardigans - Communication (default - recording only)
+GET https://api.listenbrainz.org/1/metadata/recording
+  ?recording_mbids=8db64e5d-aee8-41de-96dd-809061b96a10
+
+### The Cardigans - Communication (with artist metadata)
+GET https://api.listenbrainz.org/1/metadata/recording
+  ?recording_mbids=8db64e5d-aee8-41de-96dd-809061b96a10
+  &inc=artist
+
+### The Cardigans - Communication (with release group metadata)
+GET https://api.listenbrainz.org/1/metadata/recording
+  ?recording_mbids=8db64e5d-aee8-41de-96dd-809061b96a10
+  &inc=release
+
+### The Cardigans - Communication (with tags)
+GET https://api.listenbrainz.org/1/metadata/recording
+  ?recording_mbids=8db64e5d-aee8-41de-96dd-809061b96a10
+  &inc=tag
+
+### The Cardigans - Communication (with artist and release group metadata plus tags)
+GET https://api.listenbrainz.org/1/metadata/recording
+  ?recording_mbids=8db64e5d-aee8-41de-96dd-809061b96a10
+  &inc=artist release tag
+
+### Some Alan Parsons tracks (with tags and artist info)
+POST https://api.listenbrainz.org/1/metadata/recording
+Content-Type: application/json
+
+{
+  "recording_mbids": [
+    "515ca6fa-ad4e-4575-bf4f-96b39922da8c",
+    "1ceb0e12-c98d-4c6a-8269-bfb2d5287a6b",
+    "fd6e4755-c82d-4f65-b442-f4a58a3ac473",
+    "24fd6930-2eb7-4e75-832a-5105d803a350"
+  ],
+  "inc": "tag artist"
+}

@@ -1,0 +1,14 @@
+﻿### Export Playlist to Apple Music
+POST https://api.listenbrainz.org/1/playlist/{{last-created-playlist}}/export/apple_music
+  ?is_public=false
+Authorization: Token {{lb-user-token}}
+
+### Export Playlist to SoundCloud
+POST https://api.listenbrainz.org/1/playlist/{{last-created-playlist}}/export/soundcloud
+  ?is_public=false
+Authorization: Token {{lb-user-token}}
+
+### Export Playlist to Spotify
+POST https://api.listenbrainz.org/1/playlist/{{last-created-playlist}}/export/spotify
+  ?is_public=false
+Authorization: Token {{lb-user-token}}

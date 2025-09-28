@@ -1,0 +1,3 @@
+﻿### Zastai
+GET https://api.listenbrainz.org/1/user/Zastai/services
+Authorization: Token {{lb-user-token}}

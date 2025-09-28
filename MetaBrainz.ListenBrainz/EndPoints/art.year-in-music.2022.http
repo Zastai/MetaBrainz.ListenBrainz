@@ -1,0 +1,26 @@
+﻿# The 'image' parameter is undocumented but required.
+# The 'overview' image type is accepted but returns 204 No Content
+
+### Stats
+GET https://api.listenbrainz.org/1/art/year-in-music/2022/{{lb-user-name}}
+  ?image=stats
+
+### Artists
+GET https://api.listenbrainz.org/1/art/year-in-music/2022/{{lb-user-name}}
+  ?image=artists
+
+### Tracks
+GET https://api.listenbrainz.org/1/art/year-in-music/2022/{{lb-user-name}}
+  ?image=tracks
+
+### Albums
+GET https://api.listenbrainz.org/1/art/year-in-music/2022/{{lb-user-name}}
+  ?image=albums
+
+### Playlist: Discovery
+GET https://api.listenbrainz.org/1/art/year-in-music/2022/{{lb-user-name}}
+  ?image=discovery-playlist
+
+### Playlist: Missed Tracks
+GET https://api.listenbrainz.org/1/art/year-in-music/2022/{{lb-user-name}}
+  ?image=missed-playlist

@@ -1,0 +1,9 @@
+﻿### Provide a MusicBrainz ID for a recording given its MessyBrainz ID.
+POST https://api.listenbrainz.org/1/metadata/submit_manual_mapping/
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "recording_msid": "messybrainz id",
+  "recording_mbid": "musicbrainz id"
+}

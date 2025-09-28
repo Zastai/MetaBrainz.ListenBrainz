@@ -1,0 +1,12 @@
+﻿# This endpoint seems to be obsolete; it still works, but releases don't have listen/user counts
+### Dark Side of the Moon vs Selling England by the Pound vs In the Court of the Crimson King (original UK releases on vinyl)
+POST https://api.listenbrainz.org/1/popularity/release
+Content-Type: application/json
+
+{
+  "release_mbids": [
+    "b84ee12a-09ef-421b-82de-0441a926375b",
+    "b20fe9b2-ffdb-4765-8d1b-60e4c91577eb",
+    "3b727dc0-49a5-4bd1-8ff3-d070995e0662"
+  ]
+}

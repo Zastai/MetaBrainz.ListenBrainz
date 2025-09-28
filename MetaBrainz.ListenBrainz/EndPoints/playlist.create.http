@@ -1,0 +1,18 @@
+﻿### Create Private Empty Playlist
+POST https://api.listenbrainz.org/1/playlist/create
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "playlist": {
+    "title": "API Test (Private)",
+    "extension": {
+      "https://musicbrainz.org/doc/jspf#playlist": {
+        "public": false
+      }
+    },
+    "track": []
+  }
+}
+
+> {% client.global.set("last-created-playlist", response.body.playlist_mbid) %}

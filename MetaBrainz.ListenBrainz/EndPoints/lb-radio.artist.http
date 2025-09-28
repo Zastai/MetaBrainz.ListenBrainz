@@ -1,0 +1,23 @@
+﻿### Björk Radio (Easy Mode, Popular Stuff)
+GET https://api.listenbrainz.org/1/lb-radio/artist/87c5dedd-371d-4a53-9f7f-80522fb7f3cb
+  ?mode=easy
+  &max_similar_artists=10
+  &max_recordings_per_artist=5
+  &pop_begin=50
+  &pop_end=100
+
+### Taylor Swift Radio (Medium Mode, Deep Cuts)
+GET https://api.listenbrainz.org/1/lb-radio/artist/20244d07-534f-4eff-b4d4-930878889970
+  ?mode=medium
+  &max_similar_artists=33
+  &max_recordings_per_artist=3
+  &pop_begin=25
+  &pop_end=50
+
+### Freezepop Radio (Hard Mode)
+GET https://api.listenbrainz.org/1/lb-radio/artist/bb1f91d2-1b54-4ee5-b55a-626492a5904f
+  ?mode=hard
+  &max_similar_artists=23
+  &max_recordings_per_artist=3
+  &pop_begin=0
+  &pop_end=100

@@ -1,0 +1,14 @@
+﻿# Body Content Documentation: https://listenbrainz.readthedocs.io/en/latest/users/feedback-json.html#feedback-json-doc
+
+### I Know - Fiona Apple
+GET https://api.listenbrainz.org/1/feedback/recording/cd4caaa7-1ac6-488c-a198-501c80994db7/get-feedback-mbid
+
+### Money - Pink Floyd (subset of fans)
+GET https://api.listenbrainz.org/1/feedback/recording/7fef22bd-76aa-4803-b56b-93a5d6e70662/get-feedback-mbid
+  ?score=1
+  &count=42
+  &offset=123
+
+### Money - Pink Floyd (all haters)
+GET https://api.listenbrainz.org/1/feedback/recording/7fef22bd-76aa-4803-b56b-93a5d6e70662/get-feedback-mbid
+  ?score=-1

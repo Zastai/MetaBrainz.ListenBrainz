@@ -1,0 +1,21 @@
+﻿### Rate "Simmer" by Hayley Williams ★★★★☆
+# This requires a linked CritiqueBrainz account. The text must be >= 25 characters for this to be accepted.
+POST https://api.listenbrainz.org/1/user/{{lb-user-name}}/timeline-event/create/review
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "metadata": {
+    "entity_name": "Simmer",
+    "entity_id": "5ba73041-4de2-4e91-8a38-1443212e7156",
+    "entity_type": "recording",
+    "text": "",
+    "language": "en",
+    "rating": 4
+  }
+}
+
+> {%
+  client.global.set("last-created-event-type", response.body.event_type)
+  client.global.set("last-created-event-id", response.body.id)
+%}

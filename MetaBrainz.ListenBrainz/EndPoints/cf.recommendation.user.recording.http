@@ -1,0 +1,7 @@
+﻿### My Recommendations
+GET https://api.listenbrainz.org/1/cf/recommendation/user/{{lb-user-name}}/recording
+
+### My Recommendations (subset)
+GET https://api.listenbrainz.org/1/cf/recommendation/user/{{lb-user-name}}/recording
+  ?count=13
+  &offset=42

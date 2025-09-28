@@ -1,0 +1,12 @@
+﻿### Thank a User for a Recommendation/Pin
+# The payload format is not documented.
+POST https://api.listenbrainz.org/1/user/{{lb-user-name}}/timeline-event/create/thanks
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "metadata": {
+    "original_event_type": "{{last-created-event-type}}",
+    "original_event_id": "{{last-created-event-id}}"
+  }
+}

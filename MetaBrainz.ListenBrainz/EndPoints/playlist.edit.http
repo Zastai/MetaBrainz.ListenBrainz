@@ -1,0 +1,15 @@
+﻿### Make the Last Created Playlist Public
+POST https://api.listenbrainz.org/1/playlist/edit/{{last-created-playlist}}
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "playlist": {
+    "title": "API Test (Public)",
+    "extension": {
+      "https://musicbrainz.org/doc/jspf#playlist": {
+        "public": true
+      }
+    }
+  }
+}

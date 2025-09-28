@@ -1,0 +1,35 @@
+﻿# Note: other valid values for `inc` that are not documented for this endpoint:
+#       `recording` - provides data; see request below
+#       `release_group` - has no effect (because it's included by default)
+
+### The Time Machine (default)
+GET https://api.listenbrainz.org/1/metadata/release_group
+  ?release_group_mbids=81ba9e12-67fa-3c19-a297-857b2deb69bb
+
+### The Time Machine (with artist metadata)
+GET https://api.listenbrainz.org/1/metadata/release_group
+  ?release_group_mbids=81ba9e12-67fa-3c19-a297-857b2deb69bb
+  &inc=artist
+
+### The Time Machine (with recording metadata)
+# This one is not documented
+GET https://api.listenbrainz.org/1/metadata/release_group
+  ?release_group_mbids=81ba9e12-67fa-3c19-a297-857b2deb69bb
+  &inc=recording
+
+### The Time Machine (with release metadata)
+# This seems to essentially just add a `release` key duplicating what was already returned as `release_group`; it does not provide
+# a list of all the releases in the group.
+GET https://api.listenbrainz.org/1/metadata/release_group
+  ?release_group_mbids=81ba9e12-67fa-3c19-a297-857b2deb69bb
+  &inc=release
+
+### The Time Machine (with tags)
+GET https://api.listenbrainz.org/1/metadata/release_group
+  ?release_group_mbids=81ba9e12-67fa-3c19-a297-857b2deb69bb
+  &inc=tag
+
+### The Time Machine (with everything)
+GET https://api.listenbrainz.org/1/metadata/release_group
+  ?release_group_mbids=81ba9e12-67fa-3c19-a297-857b2deb69bb
+  &inc=artist recording release tag

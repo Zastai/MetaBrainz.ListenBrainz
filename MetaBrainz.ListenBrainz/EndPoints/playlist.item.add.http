@@ -1,0 +1,38 @@
+﻿### Append 2 Songs
+POST https://api.listenbrainz.org/1/playlist/{{last-created-playlist}}/item/add
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "playlist": {
+    "track": [
+      {
+        "identifier": [ "https://musicbrainz.org/recording/56d2735d-abc7-4070-9c3f-bc27593d922d" ]
+      },
+      {
+        "identifier": [ "https://musicbrainz.org/recording/365acb58-2b40-438f-8d10-11cc321f24d7" ]
+      }
+    ]
+  }
+}
+
+### Insert 3 Songs in the Middle
+POST https://api.listenbrainz.org/1/playlist/{{last-created-playlist}}/item/add/1
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "playlist": {
+    "track": [
+      {
+        "identifier": [ "https://musicbrainz.org/recording/c974df91-798b-403b-ba91-e7e36b87473c" ]
+      },
+      {
+        "identifier": [ "https://musicbrainz.org/recording/6d61e3d4-0298-4da2-ab5a-74604b7cc6c7" ]
+      },
+      {
+        "identifier": [ "https://musicbrainz.org/recording/89fbd0f7-3ed1-4fb0-9e9a-2897d8d7310f" ]
+      }
+    ]
+  }
+}

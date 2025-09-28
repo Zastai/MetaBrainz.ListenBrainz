@@ -1,0 +1,4 @@
+﻿### Up to Five of My Pins
+GET https://api.listenbrainz.org/1/{{lb-user-name}}/pins
+  ?count=5
+  &offset=0

@@ -1,0 +1,15 @@
+﻿### Me (This Week)
+GET https://api.listenbrainz.org/1/stats/user/{{lb-user-name}}/artist-evolution-activity
+  ?range=this_week
+
+### Me (This Month)
+GET https://api.listenbrainz.org/1/stats/user/{{lb-user-name}}/artist-evolution-activity
+  ?range=this_month
+
+### Me (This Year)
+GET https://api.listenbrainz.org/1/stats/user/{{lb-user-name}}/artist-evolution-activity
+  ?range=this_year
+
+### Me (All Time)
+GET https://api.listenbrainz.org/1/stats/user/{{lb-user-name}}/artist-evolution-activity
+  ?range=all_time

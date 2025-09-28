@@ -1,0 +1,19 @@
+﻿### My Feed
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/feed/events
+Authorization: Token {{lb-user-token}}
+
+### Most Recent Feed Item
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/feed/events
+  ?count=1
+Authorization: Token {{lb-user-token}}
+
+### My Feed (2024)
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/feed/events
+  ?min_ts=1704067200
+  &max_ts=1735689599
+Authorization: Token {{lb-user-token}}
+
+### Specific Event
+# This seems to always error out (status 500 "An unknown error occurred."), regardless of which event ID is supplied.
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/feed/events/12345
+Authorization: Token {{lb-user-token}}

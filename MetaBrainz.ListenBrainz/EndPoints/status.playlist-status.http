@@ -1,0 +1,2 @@
+﻿### Metrics for the Recommendation Playlists
+GET https://api.listenbrainz.org/1/status/playlist-status

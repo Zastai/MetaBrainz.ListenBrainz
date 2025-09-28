@@ -1,0 +1,9 @@
+﻿### Delete Tracks 3 & 4
+POST https://api.listenbrainz.org/1/playlist/{{last-created-playlist}}/item/delete
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "index": 2,
+  "count": 2
+}

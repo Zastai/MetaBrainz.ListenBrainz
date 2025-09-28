@@ -1,0 +1,15 @@
+﻿### Recommend "Simmer" by Hayley Williams
+POST https://api.listenbrainz.org/1/user/{{lb-user-name}}/timeline-event/create/recording
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "metadata": {
+    "recording_mbid": "5ba73041-4de2-4e91-8a38-1443212e7156"
+  }
+}
+
+> {%
+  client.global.set("last-created-event-type", response.body.event_type)
+  client.global.set("last-created-event-id", response.body.id)
+%}

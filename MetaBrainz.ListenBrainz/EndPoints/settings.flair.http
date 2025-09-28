@@ -1,0 +1,32 @@
+﻿### Remove Flair
+POST https://api.listenbrainz.org/1/settings/flair
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "flair": null
+}
+
+### Set Flair to "Wave"
+POST https://api.listenbrainz.org/1/settings/flair
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+# Note: the values to be specified here are not documented.
+# They are:
+#  anaglyph
+#  extruded
+#  flip-3d
+#  flip-horizontal
+#  flip-vertical
+#  highlighter
+#  lb-colors-sweep
+#  light-sweep
+#  shake
+#  sliced
+#  tornado
+#  underline
+#  wave
+{
+  "flair": "flip-3d"
+}

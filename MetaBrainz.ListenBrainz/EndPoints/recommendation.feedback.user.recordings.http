@@ -1,0 +1,3 @@
+﻿### Get My Recommendation Feedback for Specific Recordings
+GET https://api.listenbrainz.org/1/recommendation/feedback/user/{{lb-user-name}}/recordings
+  ?mbids=5e05d900-51e0-4dda-81e2-f4c0bd7ed5e6

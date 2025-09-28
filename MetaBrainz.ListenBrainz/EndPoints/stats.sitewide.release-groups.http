@@ -1,0 +1,19 @@
+﻿### This Week
+GET https://api.listenbrainz.org/1/stats/sitewide/release-groups
+  ?range=this_week
+
+### This Month
+GET https://api.listenbrainz.org/1/stats/sitewide/release-groups
+  ?range=this_month
+  &count=5
+
+### This Year
+GET https://api.listenbrainz.org/1/stats/sitewide/release-groups
+  ?range=this_year
+  &count=13
+  &offset=42
+
+### All Time
+GET https://api.listenbrainz.org/1/stats/sitewide/release-groups
+  ?range=all_time
+  &count=69

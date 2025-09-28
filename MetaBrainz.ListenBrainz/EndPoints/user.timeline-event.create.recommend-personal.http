@@ -1,0 +1,20 @@
+﻿### Rick Roll My Followers
+# The users must follow you; but even then I seem to always get 403 "You don't have permissions to post to this user's timeline."
+POST https://api.listenbrainz.org/1/user/{{lb-user-name}}/timeline-event/create/recommend-personal
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "metadata": {
+    "recording_mbid": "8f3471b5-7e6a-48da-86a9-c1c07a0f47ae",
+    "users": [
+      "Zastai"
+    ],
+    "blurb": "I really mean it!"
+  }
+}
+
+> {%
+  client.global.set("last-created-event-type", response.body.event_type)
+  client.global.set("last-created-event-id", response.body.id)
+%}

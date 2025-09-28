@@ -1,0 +1,3 @@
+﻿### Validate Token
+GET https://api.listenbrainz.org/1/validate-token
+Authorization: Token {{lb-user-token}}

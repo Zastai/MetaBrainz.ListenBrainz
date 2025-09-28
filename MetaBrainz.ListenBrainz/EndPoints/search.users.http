@@ -1,0 +1,7 @@
+﻿### Default
+# Without a search term, there is no error but an empty list is returned.
+GET https://api.listenbrainz.org/1/search/users
+
+### Simple Search
+GET https://api.listenbrainz.org/1/search/users
+  ?search_term=zas

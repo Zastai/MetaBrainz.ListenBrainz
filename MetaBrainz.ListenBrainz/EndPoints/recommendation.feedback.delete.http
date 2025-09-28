@@ -1,0 +1,8 @@
+﻿### Delete Feedback for a Recording
+POST https://api.listenbrainz.org/1/recommendation/feedback/delete
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "recording_mbid": "5e05d900-51e0-4dda-81e2-f4c0bd7ed5e6"
+}

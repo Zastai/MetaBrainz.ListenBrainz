@@ -1,0 +1,14 @@
+﻿### My Followed Users Feed
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/feed/events/listens/following
+Authorization: Token {{lb-user-token}}
+
+### My Followed Users Feed (Last Item)
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/feed/events/listens/following
+  ?count=1
+Authorization: Token {{lb-user-token}}
+
+### My Followed Users Feed (2024)
+GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/feed/events/listens/following
+  ?min_ts=1704067200
+  &max_ts=1735689599
+Authorization: Token {{lb-user-token}}

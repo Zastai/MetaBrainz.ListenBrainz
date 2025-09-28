@@ -1,0 +1,11 @@
+﻿### Import Playlist from Apple Music
+GET https://api.listenbrainz.org/1/playlist/apple_music/xxx/tracks
+Authorization: Token {{lb-user-token}}
+
+### Import Playlist from SoundCloud
+GET https://api.listenbrainz.org/1/playlist/soundcloud/xxx/tracks
+Authorization: Token {{lb-user-token}}
+
+### Import Playlist from Spotify
+GET https://api.listenbrainz.org/1/playlist/spotify/2lBjppPvakcMb3Tu8dMklm/tracks
+Authorization: Token {{lb-user-token}}

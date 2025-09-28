@@ -1,0 +1,38 @@
+﻿# These require a user token.
+# Payload format documentation: https://listenbrainz.readthedocs.io/en/latest/users/json.html#submission-json
+
+### Set "Playing Now"
+POST https://api.listenbrainz.org/1/submit-listens
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "listen_type": "playing_now",
+  "payload": [
+    "--- listen data here ---"
+  ]
+}
+
+### Submit One Listen
+POST https://api.listenbrainz.org/1/submit-listens
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "listen_type": "single",
+  "payload": [
+    "--- listen data here ---"
+  ]
+}
+
+### Submit Multiple Listens
+POST https://api.listenbrainz.org/1/submit-listens
+Authorization: Token {{lb-user-token}}
+Content-Type: application/json
+
+{
+  "listen_type": "import",
+  "payload": [
+    "--- listen data here ---"
+  ]
+}
