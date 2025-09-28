@@ -163,8 +163,8 @@ public sealed partial class ListenBrainz {
     var sb = new StringBuilder();
     var separator = '?';
     foreach (var option in options) {
-      // FIXME: Which parts (if any) need URL/Data escaping?
-      sb.Append(separator).Append(option.Key).Append('=').Append(option.Value);
+      // Assumption: the keys will always be simple snake or kebab case and therefore never need escaping.
+      sb.Append(separator).Append(option.Key).Append('=').Append(Uri.EscapeDataString(option.Value));
       separator = '&';
     }
     return sb.ToString();

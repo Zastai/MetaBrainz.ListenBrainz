@@ -9,6 +9,18 @@
 
 ## Namespace: MetaBrainz.ListenBrainz
 
+### Type: LBRadioMode
+
+```cs
+public enum LBRadioMode {
+
+  Easy = 0,
+  Hard = 2,
+  Medium = 1,
+
+}
+```
+
 ### Type: ListenBrainz
 
 ```cs
@@ -123,6 +135,8 @@ public sealed class ListenBrainz : System.IDisposable {
   public void ConfigureClient(System.Action<System.Net.Http.HttpClient>? code);
 
   public void ConfigureClientCreation(System.Func<System.Net.Http.HttpClient>? code);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ILBRadioPlaylist> CreateLBRadioPlaylistAsync(string prompt, LBRadioMode mode, System.Threading.CancellationToken cancellationToken = default);
 
   public sealed override void Dispose();
 
@@ -728,6 +742,22 @@ public interface ILatestImport : MetaBrainz.Common.Json.IJsonBasedObject {
   }
 
   string? User {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: ILBRadioPlaylist
+
+```cs
+public interface ILBRadioPlaylist : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.Collections.Generic.IReadOnlyList<string> Feedback {
+    public abstract get;
+  }
+
+  MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist Playlist {
     public abstract get;
   }
 
