@@ -8,7 +8,6 @@ using MetaBrainz.ListenBrainz.Json.Writers;
 namespace MetaBrainz.ListenBrainz.Json;
 
 internal static class Converters {
-
   public static IEnumerable<JsonConverter> Readers {
     get {
       yield return ArtistActivityReader.Instance;
@@ -27,6 +26,7 @@ internal static class Converters {
       yield return ListeningActivityReader.Instance;
       yield return PlayingNowReader.Instance;
       yield return PlaylistReader.Instance;
+      yield return RecommendedPlaylistReader.Instance;
       yield return RecordingStatisticsReader.Instance;
       yield return ReleaseGroupListenersReader.Instance;
       yield return ReleaseGroupStatisticsReader.Instance;
@@ -43,5 +43,4 @@ internal static class Converters {
       yield return ListenDataPayloadWriter.Instance;
     }
   }
-
 }
