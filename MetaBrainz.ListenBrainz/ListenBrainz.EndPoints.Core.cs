@@ -579,4 +579,16 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
+#region /1/user/xxx/playlists/recommendations
+
+  /// <summary>Gets a user's recommendation playlists</summary>
+  /// <param name="user">The MusicBrainz ID of the user whose recommendations playlists are requested.</param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The result of the validation.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IRecommendedPlaylist> PlaylistRecommendations(string user, CancellationToken cancellationToken = default) =>
+    this.GetAsync<IRecommendedPlaylist, RecommendedPlaylist>($"user/{user}/playlists/recommendations", null, cancellationToken);
+
+#endregion
 }
