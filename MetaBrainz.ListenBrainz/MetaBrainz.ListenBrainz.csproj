@@ -8,7 +8,7 @@
     <Title>ListenBrainz Web Service Client Library</Title>
     <Description>This package provides classes for accessing the ListenBrainz API (v1).</Description>
     <PackageCopyrightOwners>Tim Van Holder</PackageCopyrightOwners>
-    <PackageCopyrightYears>2018, 2019, 2020, 2021, 2022, 2023, 2025</PackageCopyrightYears>
+    <PackageCopyrightYears>2018, 2019, 2020, 2021, 2022, 2023, 2025, 2026</PackageCopyrightYears>
     <PackageRepositoryName>MetaBrainz.ListenBrainz</PackageRepositoryName>
     <PackageTags>ListenBrainz music metadata listens audioscrobbler last.fm</PackageTags>
     <Version>5.1.0-pre</Version>
