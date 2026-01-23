@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-  <Sdk Name="MetaBrainz.Build.Sdk" Version="4.0.0" />
+  <Sdk Name="MetaBrainz.Build.Sdk" Version="4.1.1" />
 
   <PropertyGroup>
     <Authors>Zastai</Authors>
@@ -11,7 +11,7 @@
     <PackageCopyrightYears>2018, 2019, 2020, 2021, 2022, 2023, 2025</PackageCopyrightYears>
     <PackageRepositoryName>MetaBrainz.ListenBrainz</PackageRepositoryName>
     <PackageTags>ListenBrainz music metadata listens audioscrobbler last.fm</PackageTags>
-    <Version>5.0.1-pre</Version>
+    <Version>5.1.0-pre</Version>
   </PropertyGroup>
 
   <PropertyGroup>
