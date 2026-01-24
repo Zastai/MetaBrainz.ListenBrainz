@@ -6,6 +6,6 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 public interface IArtistEvolutionActivity : IStatistics {
 
   /// <summary>Artist listening information over a given period of time.</summary>
-  IReadOnlyList<IArtistTimeRange>? Activity { get; }
+  IReadOnlyList<IArtistTimeRange> Activity { get; }
 
 }

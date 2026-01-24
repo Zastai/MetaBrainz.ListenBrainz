@@ -431,7 +431,7 @@ public interface IAlbumInfo : MetaBrainz.Common.Json.IJsonBasedObject {
 ### Type: IArtistActivity
 
 ```cs
-public interface IArtistActivity : MetaBrainz.Common.Json.IJsonBasedObject {
+public interface IArtistActivity : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
   System.Collections.Generic.IReadOnlyList<IArtistActivityInfo> Artists {
     public abstract get;
@@ -513,7 +513,7 @@ public interface IArtistCredit {
 ```cs
 public interface IArtistEvolutionActivity : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
-  System.Collections.Generic.IReadOnlyList<IArtistTimeRange>? Activity {
+  System.Collections.Generic.IReadOnlyList<IArtistTimeRange> Activity {
     public abstract get;
   }
 
@@ -748,9 +748,9 @@ public interface IFoundPlaylists : MetaBrainz.Common.Json.IJsonBasedObject {
 ### Type: IGenreActivity
 
 ```cs
-public interface IGenreActivity : MetaBrainz.Common.Json.IJsonBasedObject {
+public interface IGenreActivity : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
-  System.Collections.Generic.IReadOnlyList<IGenreActivityDetails>? Activity {
+  System.Collections.Generic.IReadOnlyList<IGenreActivityDetails> Activity {
     public abstract get;
   }
 

@@ -6,6 +6,6 @@ namespace MetaBrainz.ListenBrainz.Objects;
 
 internal sealed class ArtistEvolutionActivity : Statistics, IArtistEvolutionActivity {
 
-  public IReadOnlyList<IArtistTimeRange>? Activity { get; init; }
+  public required IReadOnlyList<IArtistTimeRange> Activity { get; init; }
 
 }

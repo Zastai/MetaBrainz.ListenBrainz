@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 
-using MetaBrainz.Common.Json;
 using MetaBrainz.ListenBrainz.Interfaces;
 
 namespace MetaBrainz.ListenBrainz.Objects;
 
-internal sealed class GenreActivity : JsonBasedObject, IGenreActivity {
+internal sealed class GenreActivity : Statistics, IGenreActivity {
 
-  public IReadOnlyList<IGenreActivityDetails>? Activity { get; init; }
+  public required IReadOnlyList<IGenreActivityDetails> Activity { get; init; }
 
 }
