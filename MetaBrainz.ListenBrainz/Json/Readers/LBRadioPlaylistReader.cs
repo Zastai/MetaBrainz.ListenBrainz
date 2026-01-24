@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text.Json;
 
 using MetaBrainz.Common.Json;
-using MetaBrainz.ListenBrainz.Interfaces;
 using MetaBrainz.ListenBrainz.Interfaces.JSPF;
 using MetaBrainz.ListenBrainz.Json.Readers.JSPF;
 using MetaBrainz.ListenBrainz.Objects;

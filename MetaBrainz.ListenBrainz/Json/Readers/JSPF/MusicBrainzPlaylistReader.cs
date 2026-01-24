@@ -4,7 +4,6 @@ using System.Text.Json;
 
 using MetaBrainz.Common.Json;
 using MetaBrainz.Common.Json.Converters;
-using MetaBrainz.ListenBrainz.Interfaces.JSPF;
 using MetaBrainz.ListenBrainz.Objects.JSPF;
 
 namespace MetaBrainz.ListenBrainz.Json.Readers.JSPF;
