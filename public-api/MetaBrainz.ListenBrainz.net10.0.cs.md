@@ -431,7 +431,7 @@ public interface IAlbumInfo : MetaBrainz.Common.Json.IJsonBasedObject {
 ### Type: IArtistActivity
 
 ```cs
-public interface IArtistActivity : MetaBrainz.Common.Json.IJsonBasedObject {
+public interface IArtistActivity : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
   System.Collections.Generic.IReadOnlyList<IArtistActivityInfo> Artists {
     public abstract get;
