@@ -172,6 +172,10 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IEraActivity?> GetEraActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFoundFeedback> GetFeedbackForMessyRecordingAsync(System.Guid msid, int? score = default, int? count = default, int? offset = default, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFoundFeedback> GetFeedbackForRecordingAsync(System.Guid mbid, int? score = default, int? count = default, int? offset = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IGenreActivity?> GetGenreActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ILatestImport> GetLatestImportAsync(string user, System.Threading.CancellationToken cancellationToken = default);
@@ -240,6 +244,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   [System.ObsoleteAttribute("Create a SubmittedListenData and pass it to the overload taking an ISubmittedListenData instead.")]
   public System.Threading.Tasks.Task SetNowPlayingAsync(string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task SubmitRecordingFeedbackAsync(MetaBrainz.ListenBrainz.Interfaces.ISubmittedRecordingFeedback feedback, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task SubmitSingleListenAsync(MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen listen, System.Threading.CancellationToken cancellationToken = default);
 
@@ -702,6 +708,30 @@ public interface IFetchedListens : MetaBrainz.Common.Json.IJsonBasedObject {
 }
 ```
 
+### Type: IFoundFeedback
+
+```cs
+public interface IFoundFeedback : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  int Count {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IRecordingFeedback> Feedback {
+    public abstract get;
+  }
+
+  int Offset {
+    public abstract get;
+  }
+
+  int TotalCount {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IFoundPlaylists
 
 ```cs
@@ -1015,6 +1045,38 @@ public interface IPlayingTrack : MetaBrainz.Common.Json.IJsonBasedObject {
 }
 ```
 
+### Type: IRecordingFeedback
+
+```cs
+public interface IRecordingFeedback : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  System.DateTimeOffset Created {
+    public abstract get;
+  }
+
+  System.Guid? Id {
+    public abstract get;
+  }
+
+  System.Guid? MessyId {
+    public abstract get;
+  }
+
+  int Score {
+    public abstract get;
+  }
+
+  object? TrackMetadata {
+    public abstract get;
+  }
+
+  string User {
+    public abstract get;
+  }
+
+}
+```
+
 ### Type: IRecordingInfo
 
 ```cs
@@ -1321,6 +1383,26 @@ public interface ISubmittedListen : ISubmittedListenData {
 public interface ISubmittedListenData {
 
   ISubmittedTrackInfo Track {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: ISubmittedRecordingFeedback
+
+```cs
+public interface ISubmittedRecordingFeedback {
+
+  System.Guid? Id {
+    public abstract get;
+  }
+
+  System.Guid? MessyId {
+    public abstract get;
+  }
+
+  int Score {
     public abstract get;
   }
 
@@ -2034,6 +2116,31 @@ public class SubmittedListenData : MetaBrainz.ListenBrainz.Interfaces.ISubmitted
   [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
   [System.ObsoleteAttribute("Use an object initializer to set the track info.")]
   public SubmittedListenData(string track, string artist, string? release = null);
+
+}
+```
+
+### Type: SubmittedRecordingFeedback
+
+```cs
+public sealed class SubmittedRecordingFeedback : MetaBrainz.ListenBrainz.Interfaces.ISubmittedRecordingFeedback {
+
+  System.Guid? Id {
+    public sealed override get;
+    public set;
+  }
+
+  System.Guid? MessyId {
+    public sealed override get;
+    public set;
+  }
+
+  int Score {
+    public sealed override get;
+    public set;
+  }
+
+  public SubmittedRecordingFeedback();
 
 }
 ```

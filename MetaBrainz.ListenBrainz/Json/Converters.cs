@@ -19,6 +19,7 @@ internal static class Converters {
       yield return EraActivityReader.Instance;
       yield return ErrorInfoReader.Instance;
       yield return FetchedListensReader.Instance;
+      yield return FoundFeedbackReader.Instance;
       yield return FoundPlaylistsReader.Instance;
       yield return GenreActivityReader.Instance;
       yield return LBRadioPlaylistReader.Instance;
@@ -41,6 +42,7 @@ internal static class Converters {
     get {
       yield return ListenPayloadWriter.Instance;
       yield return ListenDataPayloadWriter.Instance;
+      yield return RecordingFeedbackWriter.Instance;
     }
   }
 
