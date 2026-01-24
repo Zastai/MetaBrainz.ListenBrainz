@@ -18,6 +18,6 @@ public interface IArtistStatistics : IStatistics {
   int Offset { get; }
 
   /// <summary>The total number of (distinct) artists listened to.</summary>
-  public int TotalCount { get; }
+  int TotalCount { get; }
 
 }
