@@ -242,21 +242,9 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task SetNowPlayingAsync(MetaBrainz.ListenBrainz.Interfaces.ISubmittedListenData listen, System.Threading.CancellationToken cancellationToken = default);
 
-  [System.ObsoleteAttribute("Create a SubmittedListenData and pass it to the overload taking an ISubmittedListenData instead.")]
-  public System.Threading.Tasks.Task SetNowPlayingAsync(string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
-
   public System.Threading.Tasks.Task SubmitRecordingFeedbackAsync(MetaBrainz.ListenBrainz.Interfaces.ISubmittedRecordingFeedback feedback, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task SubmitSingleListenAsync(MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen listen, System.Threading.CancellationToken cancellationToken = default);
-
-  [System.ObsoleteAttribute("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
-  public System.Threading.Tasks.Task SubmitSingleListenAsync(System.DateTimeOffset timestamp, string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
-
-  [System.ObsoleteAttribute("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
-  public System.Threading.Tasks.Task SubmitSingleListenAsync(long timestamp, string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
-
-  [System.ObsoleteAttribute("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
-  public System.Threading.Tasks.Task SubmitSingleListenAsync(string track, string artist, string? release = null, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.ITokenValidationResult> ValidateTokenAsync(string token, System.Threading.CancellationToken cancellationToken = default);
 
@@ -2086,18 +2074,6 @@ public class SubmittedListen : SubmittedListenData, MetaBrainz.ListenBrainz.Inte
 
   public SubmittedListen();
 
-  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
-  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
-  public SubmittedListen(System.DateTimeOffset timestamp, string track, string artist, string? release = null);
-
-  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
-  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
-  public SubmittedListen(long timestamp, string track, string artist, string? release = null);
-
-  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
-  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
-  public SubmittedListen(string track, string artist, string? release = null);
-
 }
 ```
 
@@ -2112,10 +2088,6 @@ public class SubmittedListenData : MetaBrainz.ListenBrainz.Interfaces.ISubmitted
   }
 
   public SubmittedListenData();
-
-  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
-  [System.ObsoleteAttribute("Use an object initializer to set the track info.")]
-  public SubmittedListenData(string track, string artist, string? release = null);
 
 }
 ```
@@ -2171,10 +2143,6 @@ public class SubmittedTrackInfo : MetaBrainz.ListenBrainz.Interfaces.ISubmittedT
   }
 
   public SubmittedTrackInfo();
-
-  [System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute]
-  [System.ObsoleteAttribute("Use an object initializer to set the properties.")]
-  public SubmittedTrackInfo(string name, string artist, string? release = null);
 
 }
 ```

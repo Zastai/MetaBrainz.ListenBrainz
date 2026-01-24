@@ -11,7 +11,7 @@
     <PackageCopyrightYears>2018, 2019, 2020, 2021, 2022, 2023, 2025, 2026</PackageCopyrightYears>
     <PackageRepositoryName>MetaBrainz.ListenBrainz</PackageRepositoryName>
     <PackageTags>ListenBrainz music metadata listens audioscrobbler last.fm</PackageTags>
-    <Version>5.1.0-pre</Version>
+    <Version>6.0.0-pre</Version>
   </PropertyGroup>
 
   <PropertyGroup>
