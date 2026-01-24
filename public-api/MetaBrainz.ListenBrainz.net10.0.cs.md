@@ -222,6 +222,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task ImportListensAsync(System.Threading.CancellationToken cancellationToken, params MetaBrainz.ListenBrainz.Interfaces.ISubmittedListen[] listens);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IRecommendedPlaylist> PlaylistRecommendations(string user, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task SetLatestImportAsync(string user, System.DateTimeOffset timestamp, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task SetLatestImportAsync(string user, long timestamp, System.Threading.CancellationToken cancellationToken = default);
@@ -999,6 +1001,31 @@ public interface IPlayingNow : MetaBrainz.Common.Json.IJsonBasedObject {
 public interface IPlayingTrack : MetaBrainz.Common.Json.IJsonBasedObject {
 
   ITrackInfo Info {
+    public abstract get;
+  }
+
+}
+```
+
+### Type: IRecommendedPlaylist
+
+```cs
+public interface IRecommendedPlaylist : MetaBrainz.Common.Json.IJsonBasedObject {
+
+  int Count {
+    public abstract get;
+  }
+
+  int Offset {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist> Playlists {
+    public abstract get;
+    public abstract init;
+  }
+
+  int TotalCount {
     public abstract get;
   }
 
