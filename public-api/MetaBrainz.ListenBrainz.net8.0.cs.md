@@ -144,6 +144,8 @@ public sealed class ListenBrainz : System.IDisposable {
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFoundPlaylists> FindPlaylistsAsync(string query, int? count = default, int? offset = default, System.Threading.CancellationToken cancellationToken = default);
 
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFoundPlaylists> FindPlaylistsByNameAsync(string user, string name, int? count = default, int? offset = default, System.Threading.CancellationToken cancellationToken = default);
+
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistActivity?> GetArtistActivityAsync(StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistActivity?> GetArtistActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
@@ -161,6 +163,8 @@ public sealed class ListenBrainz : System.IDisposable {
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistStatistics?> GetArtistStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IArtistStatistics?> GetArtistStatisticsAsync(string user, int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFoundPlaylists> GetCollaboratorPlaylistsAsync(string user, int? count = default, int? offset = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IUserDailyActivity?> GetDailyActivityAsync(string user, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
@@ -195,6 +199,12 @@ public sealed class ListenBrainz : System.IDisposable {
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IPlayingNow> GetPlayingNowAsync(string user, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.JSPF.IPlaylist> GetPlaylistAsync(System.Guid id, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFoundPlaylists> GetPlaylistsCreatedByAsync(string user, int? count = default, int? offset = default, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFoundPlaylists> GetPlaylistsCreatedForAsync(string user, int? count = default, int? offset = default, System.Threading.CancellationToken cancellationToken = default);
+
+  public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IFoundPlaylists> GetRecommendationPlaylistsAsync(string user, int? count = default, int? offset = default, System.Threading.CancellationToken cancellationToken = default);
 
   public System.Threading.Tasks.Task<MetaBrainz.ListenBrainz.Interfaces.IRecordingStatistics?> GetRecordingStatisticsAsync(int? count = default, int? offset = default, StatisticsRange? range = default, System.Threading.CancellationToken cancellationToken = default);
 
