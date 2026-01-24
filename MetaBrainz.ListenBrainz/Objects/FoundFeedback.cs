@@ -9,9 +9,9 @@ internal sealed class FoundFeedback : JsonBasedObject, IFoundFeedback {
 
   public required int Count { get; init; }
 
-  public required int Offset { get; init; }
-
   public required IReadOnlyList<IRecordingFeedback> Feedback { get; init; }
+
+  public required int Offset { get; init; }
 
   public required int TotalCount { get; init; }
 

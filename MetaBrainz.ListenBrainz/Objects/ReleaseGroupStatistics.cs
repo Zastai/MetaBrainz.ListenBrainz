@@ -6,9 +6,9 @@ namespace MetaBrainz.ListenBrainz.Objects;
 
 internal sealed class ReleaseGroupStatistics : Statistics, IReleaseGroupStatistics {
 
-  public IReadOnlyList<IReleaseGroupInfo>? ReleaseGroups { get; init; }
-
   public int? Offset { get; init; }
+
+  public IReadOnlyList<IReleaseGroupInfo>? ReleaseGroups { get; init; }
 
   public int? TotalCount { get; init; }
 

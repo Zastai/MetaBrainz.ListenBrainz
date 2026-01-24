@@ -8,8 +8,8 @@ internal abstract class ListenerInfo : Statistics, IListenerInfo {
 
   public required IReadOnlyList<ITopListener> TopListeners { get; init; }
 
-  public required int TotalListens { get; init; }
-
   public required int TotalListeners { get; init; }
+
+  public required int TotalListens { get; init; }
 
 }
