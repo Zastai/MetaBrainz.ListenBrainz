@@ -77,8 +77,7 @@ public sealed partial class ListenBrainz {
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on <a href="https://listenbrainz.org/profile/">their profile page</a>.<br/>
+  /// This will access the <c>POST /1/submit-listens</c> endpoint and requires <see cref="UserToken"/> to be set.<br/>
   /// Submissions will happen every <see cref="MaxListensPerRequest"/> listens. As such, one call to this method may result in
   /// multiple web service requests, which may affect rate limiting.
   /// </remarks>
@@ -103,8 +102,7 @@ public sealed partial class ListenBrainz {
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on <a href="https://listenbrainz.org/profile/">their profile page</a>.<br/>
+  /// This will access the <c>POST /1/submit-listens</c> endpoint and requires <see cref="UserToken"/> to be set.<br/>
   /// Submissions will happen every <see cref="MaxListensPerRequest"/> listens. As such, one call to this method may result in
   /// multiple web service requests, which may affect rate limiting.
   /// </remarks>
@@ -135,8 +133,7 @@ public sealed partial class ListenBrainz {
   /// <param name="listens">The listens to import.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on <a href="https://listenbrainz.org/profile/">their profile page</a>.<br/>
+  /// This will access the <c>POST /1/submit-listens</c> endpoint and requires <see cref="UserToken"/> to be set.<br/>
   /// Submissions will happen every <see cref="MaxListensPerRequest"/> listens. As such, one call to this method may result in
   /// multiple web service requests, which may affect rate limiting.
   /// </remarks>
@@ -149,8 +146,7 @@ public sealed partial class ListenBrainz {
   /// <param name="listens">The listens to import.</param>
   /// <return>A task that will perform the operation.</return>
   /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on <a href="https://listenbrainz.org/profile/">their profile page</a>.<br/>
+  /// This will access the <c>POST /1/submit-listens</c> endpoint and requires <see cref="UserToken"/> to be set.<br/>
   /// Submissions will happen every <see cref="MaxListensPerRequest"/> listens. As such, one call to this method may result in
   /// multiple web service requests, which may affect rate limiting.
   /// </remarks>
@@ -194,11 +190,7 @@ public sealed partial class ListenBrainz {
   /// <param name="listen">The listen data to send.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
+  /// <remarks>This will access the <c>POST /1/submit-listens</c> endpoint and requires <see cref="UserToken"/> to be set.</remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SetNowPlayingAsync(ISubmittedListenData listen, CancellationToken cancellationToken = default)
@@ -210,11 +202,7 @@ public sealed partial class ListenBrainz {
   /// <param name="release">The name of the release containing the track being listened to.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
+  /// <remarks>This will access the <c>POST /1/submit-listens</c> endpoint and requires <see cref="UserToken"/> to be set.</remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   [Obsolete("Create a SubmittedListenData and pass it to the overload taking an ISubmittedListenData instead.")]
@@ -239,11 +227,7 @@ public sealed partial class ListenBrainz {
   /// <param name="listen">The listen data to send.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
+  /// <remarks>This will access the <c>POST /1/submit-listens</c> endpoint and requires <see cref="UserToken"/> to be set.</remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   public Task SubmitSingleListenAsync(ISubmittedListen listen, CancellationToken cancellationToken = default)
@@ -258,11 +242,7 @@ public sealed partial class ListenBrainz {
   /// <param name="release">The name of the release containing the track being listened to.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
+  /// <remarks>This will access the <c>POST /1/submit-listens</c> endpoint and requires <see cref="UserToken"/> to be set.</remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   [Obsolete("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
@@ -290,11 +270,7 @@ public sealed partial class ListenBrainz {
   /// <param name="release">The name of the release containing the track being listened to.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
   /// <return>A task that will perform the operation.</return>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
+  /// <remarks>This will access the <c>POST /1/submit-listens</c> endpoint and requires <see cref="UserToken"/> to be set.</remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   [Obsolete("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
@@ -318,11 +294,7 @@ public sealed partial class ListenBrainz {
   /// <param name="artist">The name of the artist performing the track being listened to.</param>
   /// <param name="release">The name of the release containing the track being listened to.</param>
   /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
-  /// <remarks>
-  /// This will access the <c>POST /1/submit-listens</c> endpoint.<br/>
-  /// Users can find their token on their profile page:
-  /// <a href="https://listenbrainz.org/profile/">https://listenbrainz.org/profile/</a>.
-  /// </remarks>
+  /// <remarks>This will access the <c>POST /1/submit-listens</c> endpoint and requires <see cref="UserToken"/> to be set.</remarks>
   /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
   /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
   [Obsolete("Create a SubmittedListen and pass it to the overload taking an ISubmittedListen instead.")]
