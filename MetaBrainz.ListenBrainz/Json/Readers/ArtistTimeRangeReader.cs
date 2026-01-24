@@ -35,7 +35,12 @@ internal class ArtistTimeRangeReader : ObjectReader<ArtistTimeRange> {
             break;
           case "time_unit": {
             // LB-1833: the sitewide endpoints return integer values (days-of-month or year, so ushort is enough as a range)
-            timeUnit = reader.TryGetUInt16(out var number) ? number.ToString(CultureInfo.InvariantCulture) : reader.GetString();
+            if (reader.TokenType == JsonTokenType.Number && reader.TryGetUInt16(out var number)) {
+              timeUnit = number.ToString(CultureInfo.InvariantCulture);
+            }
+            else {
+              timeUnit = reader.GetString();
+            }
             break;
           }
           default:

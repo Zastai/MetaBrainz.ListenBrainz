@@ -11,9 +11,13 @@ internal sealed class YearInMusicData : JsonBasedObject, IYearInMusicData {
 
   public int? ArtistCount { get; init; }
 
+  public IReadOnlyList<IArtistTimeRange>? ArtistEvolutionActivity { get; init; }
+
   public IReadOnlyList<IArtistCountryInfo>? ArtistMap { get; init; }
 
   public string? DayOfWeek { get; init; }
+
+  public IReadOnlyList<IGenreActivityDetails>? GenreActivity { get; init; }
 
   public int? ListenCount { get; init; }
 
