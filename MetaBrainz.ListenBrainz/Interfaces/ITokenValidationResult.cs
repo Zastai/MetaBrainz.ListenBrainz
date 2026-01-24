@@ -9,17 +9,17 @@ namespace MetaBrainz.ListenBrainz.Interfaces;
 public interface ITokenValidationResult {
 
   /// <summary>The status code for the request.</summary>
-  public HttpStatusCode Code { get; }
+  HttpStatusCode Code { get; }
 
   /// <summary>The message for the request.</summary>
-  public string Message { get; }
+  string Message { get; }
 
   /// <summary>The user name associated with the token.</summary>
-  public string? User { get; }
+  string? User { get; }
 
   /// <summary>
   /// Indicates whether or not the token was valid. If this is <see langword="null"/>, only the message indicates the validity.
   /// </summary>
-  public bool? Valid { get; }
+  bool? Valid { get; }
 
 }

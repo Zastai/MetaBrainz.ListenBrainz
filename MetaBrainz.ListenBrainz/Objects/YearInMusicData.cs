@@ -11,9 +11,13 @@ internal sealed class YearInMusicData : JsonBasedObject, IYearInMusicData {
 
   public int? ArtistCount { get; init; }
 
+  public IReadOnlyList<IArtistTimeRange>? ArtistEvolutionActivity { get; init; }
+
   public IReadOnlyList<IArtistCountryInfo>? ArtistMap { get; init; }
 
   public string? DayOfWeek { get; init; }
+
+  public IReadOnlyList<IGenreActivityDetails>? GenreActivity { get; init; }
 
   public int? ListenCount { get; init; }
 
@@ -34,6 +38,8 @@ internal sealed class YearInMusicData : JsonBasedObject, IYearInMusicData {
   public int? ReleaseCount { get; init; }
 
   public int? ReleaseGroupCount { get; init; }
+
+  public IReadOnlySet<ISimilarUser>? SimilarUsers { get; init; }
 
   public IReadOnlyList<ITopArtist>? TopArtists { get; init; }
 
@@ -56,8 +62,6 @@ internal sealed class YearInMusicData : JsonBasedObject, IYearInMusicData {
   public IPlaylist? TopRecordingsPlaylist { get; init; }
 
   public IReadOnlyDictionary<string, Uri>? TopRecordingsPlaylistCoverArt { get; init; }
-
-  public IReadOnlyDictionary<string, decimal>? SimilarUsers { get; init; }
 
   public IReadOnlyList<IReleaseGroupInfo>? TopReleaseGroups { get; init; }
 

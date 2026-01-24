@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 
 using MetaBrainz.Common.Json;
@@ -16,11 +18,13 @@ internal sealed class YearInMusicDataReader : ObjectReader<YearInMusicData> {
   public static readonly YearInMusicDataReader Instance = new();
 
   protected override YearInMusicData ReadObjectContents(ref Utf8JsonReader reader, JsonSerializerOptions options) {
+    IReadOnlyList<IArtistTimeRange>? artistActivity = null;
     int? artistCount = null;
     IReadOnlyList<IArtistCountryInfo>? artistMap = null;
     string? dayOfWeek = null;
     IReadOnlyDictionary<string, Uri>? discoveriesCoverArt = null;
     IPlaylist? discoveriesPlaylist = null;
+    IReadOnlyList<IGenreActivityDetails>? genreActivity = null;
     int? listenCount = null;
     double? listenedMinutes = null;
     IReadOnlyList<IListenTimeRange>? listensPerDay = null;
@@ -50,11 +54,17 @@ internal sealed class YearInMusicDataReader : ObjectReader<YearInMusicData> {
       try {
         reader.Read();
         switch (prop) {
+          case "artist_evolution_activity":
+            artistActivity = reader.ReadList(ArtistTimeRangeReader.Instance, options);
+            break;
           case "artist_map":
             artistMap = reader.ReadList(ArtistCountryInfoReader.Instance, options);
             break;
           case "day_of_week":
             dayOfWeek = reader.GetString();
+            break;
+          case "genre_activity":
+            genreActivity = reader.ReadList(GenreActivityDetailsReader.Instance, options);
             break;
           case "listens_per_day":
             listensPerDay = reader.ReadList(ListenTimeRangeReader.Instance, options);
@@ -152,8 +162,10 @@ internal sealed class YearInMusicDataReader : ObjectReader<YearInMusicData> {
     TimeSpan? listeningTime = listenedMinutes is null ? null : TimeSpan.FromSeconds(listenedMinutes.Value);
     return new YearInMusicData {
       ArtistCount = artistCount,
+      ArtistEvolutionActivity = artistActivity,
       ArtistMap = artistMap,
       DayOfWeek = dayOfWeek,
+      GenreActivity = genreActivity,
       ListenCount = listenCount,
       ListeningTime = listeningTime,
       ListensPerDay = listensPerDay,
@@ -164,7 +176,7 @@ internal sealed class YearInMusicDataReader : ObjectReader<YearInMusicData> {
       RecordingCount = recordingCount,
       ReleaseCount = releaseCount,
       ReleaseGroupCount = releaseGroupCount,
-      SimilarUsers = similarUsers,
+      SimilarUsers = similarUsers?.Select(YearInMusicDataReader.SimilarUserFromDictionaryEntry).ToHashSet(),
       TopArtists = topArtists,
       TopGenres = topGenres,
       TopDiscoveriesPlaylist = discoveriesPlaylist,
@@ -182,5 +194,10 @@ internal sealed class YearInMusicDataReader : ObjectReader<YearInMusicData> {
       UnhandledProperties = rest,
     };
   }
+
+  private static ISimilarUser SimilarUserFromDictionaryEntry(KeyValuePair<string, decimal> item) => new SimilarUser {
+    Name = item.Key,
+    Similarity = item.Value * 100
+  };
 
 }

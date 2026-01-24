@@ -7,11 +7,11 @@ public interface ISubmittedRecordingFeedback {
 
   /// <summary>The MusicBrainz ID identifying the recording for which feedback is being provided.</summary>
   /// <remarks>When submitting, at least one of this property and <see cref="MessyId"/> must be set.</remarks>
-  public Guid? Id { get; }
+  Guid? Id { get; }
 
   /// <summary>The MessyBrainz ID identifying the recording for which feedback is being provided.</summary>
   /// <remarks>When submitting, at least one of this property and <see cref="Id"/> must be set.</remarks>
-  public Guid? MessyId { get; }
+  Guid? MessyId { get; }
 
   /// <summary>
   /// The score to submit.<br/>
@@ -35,6 +35,6 @@ public interface ISubmittedRecordingFeedback {
   ///   </item>
   /// </list>
   /// </summary>
-  public int Score { get; }
+  int Score { get; }
 
 }

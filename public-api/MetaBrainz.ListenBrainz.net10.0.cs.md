@@ -1650,11 +1650,19 @@ public interface IYearInMusicData : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
+  System.Collections.Generic.IReadOnlyList<IArtistTimeRange>? ArtistEvolutionActivity {
+    public abstract get;
+  }
+
   System.Collections.Generic.IReadOnlyList<IArtistCountryInfo>? ArtistMap {
     public abstract get;
   }
 
   string? DayOfWeek {
+    public abstract get;
+  }
+
+  System.Collections.Generic.IReadOnlyList<IGenreActivityDetails>? GenreActivity {
     public abstract get;
   }
 
@@ -1698,7 +1706,7 @@ public interface IYearInMusicData : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
-  System.Collections.Generic.IReadOnlyDictionary<string, decimal>? SimilarUsers {
+  System.Collections.Generic.IReadOnlySet<ISimilarUser>? SimilarUsers {
     public abstract get;
   }
 

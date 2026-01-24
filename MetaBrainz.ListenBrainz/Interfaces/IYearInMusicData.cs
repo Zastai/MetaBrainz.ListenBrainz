@@ -14,12 +14,19 @@ public interface IYearInMusicData : IJsonBasedObject {
   /// <remarks>This field is only provided for the Year in Music 2022 and later.</remarks>
   int? ArtistCount { get; }
 
+  /// <summary>Artist listening information over the course of the year.</summary>
+  /// <remarks>This field is only provided for the Year in Music 2022 and later.</remarks>
+  IReadOnlyList<IArtistTimeRange>? ArtistEvolutionActivity { get; }
+
   /// <summary>Information about artist listen counts, grouped by country.</summary>
   /// <remarks>This field is only provided for the Year in Music 2022 and later.</remarks>
   IReadOnlyList<IArtistCountryInfo>? ArtistMap { get; }
 
   /// <summary>The weekday that sees the most listens recorded.</summary>
   string? DayOfWeek { get; }
+
+  /// <summary>Listening information grouped by genre and hour of day.</summary>
+  IReadOnlyList<IGenreActivityDetails>? GenreActivity { get; }
 
   /// <summary>The total number of listens that were recorded over the course of the year.</summary>
   int? ListenCount { get; }
@@ -60,11 +67,8 @@ public interface IYearInMusicData : IJsonBasedObject {
   /// <remarks>This field is only provided for the Year in Music 2023 and later.</remarks>
   int? ReleaseGroupCount { get; }
 
-  /// <summary>
-  /// Users with tastes similar to this one.<br/>
-  /// The key is the user ID, the value is the degree of similarity (between 0 and 1, so multiply by 100 for the percentage.
-  /// </summary>
-  IReadOnlyDictionary<string, decimal>? SimilarUsers { get; }
+  /// <summary>Users with tastes similar to this one.</summary>
+  IReadOnlySet<ISimilarUser>? SimilarUsers { get; }
 
   /// <summary>Information about a user's top artists.</summary>
   IReadOnlyList<ITopArtist>? TopArtists { get; }
