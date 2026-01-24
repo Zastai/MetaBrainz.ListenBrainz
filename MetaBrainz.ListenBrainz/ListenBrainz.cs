@@ -65,48 +65,42 @@ public sealed partial class ListenBrainz : IDisposable {
 
   #region Static Fields / Properties
 
-  private static int _defaultPort = -1;
-
   /// <summary>The default port number to use for requests (-1 to not specify any explicit port).</summary>
   public static int DefaultPort {
-    get => ListenBrainz._defaultPort;
+    get;
     set {
       if (value is < -1 or > 65535) {
         throw new ArgumentOutOfRangeException(nameof(ListenBrainz.DefaultPort), value,
                                               "The default port number must not be less than -1 or greater than 65535.");
       }
-      ListenBrainz._defaultPort = value;
+      field = value;
     }
-  }
-
-  private static string _defaultServer = "api.listenbrainz.org";
+  } = -1;
 
   /// <summary>The default server to use for requests.</summary>
   public static string DefaultServer {
-    get => ListenBrainz._defaultServer;
+    get;
     set {
       if (string.IsNullOrWhiteSpace(value)) {
         throw new ArgumentException("The default server name must not be blank.", nameof(ListenBrainz.DefaultServer));
       }
-      ListenBrainz._defaultServer = value.Trim();
+      field = value.Trim();
     }
-  }
-
-  private static string _defaultUrlScheme = "https";
+  } = "api.listenbrainz.org";
 
   /// <summary>The default URL scheme (internet access protocol) to use for requests.</summary>
   public static string DefaultUrlScheme {
-    get => ListenBrainz._defaultUrlScheme;
+    get;
     set {
       if (string.IsNullOrWhiteSpace(value)) {
         throw new ArgumentException("The default URL scheme must not be blank.", nameof(ListenBrainz.DefaultUrlScheme));
       }
-      ListenBrainz._defaultUrlScheme = value.Trim();
+      field = value.Trim();
     }
-  }
+  } = "https";
 
   /// <summary>The default user agent values to use for requests.</summary>
-  public static IList<ProductInfoHeaderValue> DefaultUserAgent { get; } = new List<ProductInfoHeaderValue>();
+  public static List<ProductInfoHeaderValue> DefaultUserAgent { get; } = [ ];
 
   /// <summary>The default user token to use for requests; used as initial value for <see cref="UserToken"/>.</summary>
   public static string? DefaultUserToken { get; set; }
@@ -159,8 +153,7 @@ public sealed partial class ListenBrainz : IDisposable {
   /// </summary>
   /// <param name="application">The application name to use in the user agent property for all requests.</param>
   /// <param name="version">The version number to use in the user agent property for all requests.</param>
-  public ListenBrainz(string application, Version? version) : this(application, version?.ToString()) {
-  }
+  public ListenBrainz(string application, Version? version) : this(application, version?.ToString()) { }
 
   /// <summary>
   /// Initializes a new ListenBrainz API client instance.<br/>
@@ -171,8 +164,7 @@ public sealed partial class ListenBrainz : IDisposable {
   /// <param name="contact">
   /// The contact address (typically HTTP[S] or MAILTO) to use in the user agent property for all requests.
   /// </param>
-  public ListenBrainz(string application, Version? version, Uri contact) : this(application, version?.ToString(), contact.ToString()) {
-  }
+  public ListenBrainz(string application, Version? version, Uri contact) : this(application, version, contact.ToString()) { }
 
   /// <summary>
   /// Initializes a new ListenBrainz API client instance.<br/>
@@ -227,21 +219,17 @@ public sealed partial class ListenBrainz : IDisposable {
   /// <summary>The base URI for all requests.</summary>
   public Uri BaseUri => new UriBuilder(this.UrlScheme, this.Server, this.Port, ListenBrainz.WebServiceRoot).Uri;
 
-  private int _port = ListenBrainz.DefaultPort;
-
   /// <summary>The port number to use for requests (-1 to not specify any explicit port).</summary>
   public int Port {
-    get => this._port;
+    get;
     set {
       if (value is < -1 or > 65535) {
         throw new ArgumentOutOfRangeException(nameof(ListenBrainz.Port), value,
                                               "The port number must not be less than -1 or greater than 65535.");
       }
-      this._port = value;
+      field = value;
     }
-  }
-
-  private RateLimitInfo _rateLimitInfo;
+  } = ListenBrainz.DefaultPort;
 
   private readonly ReaderWriterLockSlim _rateLimitLock = new();
 
@@ -250,39 +238,44 @@ public sealed partial class ListenBrainz : IDisposable {
     get {
       this._rateLimitLock.EnterReadLock();
       try {
-        return this._rateLimitInfo;
+        return field;
       }
       finally {
         this._rateLimitLock.ExitReadLock();
       }
     }
+    private set {
+      this._rateLimitLock.EnterWriteLock();
+      try {
+        field = value;
+      }
+      finally {
+        this._rateLimitLock.ExitWriteLock();
+      }
+    }
   }
-
-  private string _server = ListenBrainz.DefaultServer;
 
   /// <summary>The server to use for requests.</summary>
   public string Server {
-    get => this._server;
+    get;
     set {
       if (string.IsNullOrWhiteSpace(value)) {
         throw new ArgumentException("The server name must not be blank.", nameof(ListenBrainz.Server));
       }
-      this._server = value.Trim();
+      field = value.Trim();
     }
-  }
-
-  private string _urlScheme = ListenBrainz.DefaultUrlScheme;
+  } = ListenBrainz.DefaultServer;
 
   /// <summary>The URL scheme (internet access protocol) to use for requests.</summary>
   public string UrlScheme {
-    get => this._urlScheme;
+    get;
     set {
       if (string.IsNullOrWhiteSpace(value)) {
         throw new ArgumentException("The URL scheme must not be blank.", nameof(ListenBrainz.UrlScheme));
       }
-      this._urlScheme = value.Trim();
+      field = value.Trim();
     }
-  }
+  } = ListenBrainz.DefaultUrlScheme;
 
   /// <summary>The user agent values to use for requests.</summary>
   /// <remarks>
@@ -329,7 +322,7 @@ public sealed partial class ListenBrainz : IDisposable {
 
   private bool _disposed;
 
-  private readonly List<ProductInfoHeaderValue> _userAgent = new(ListenBrainz.DefaultUserAgent);
+  private readonly List<ProductInfoHeaderValue> _userAgent = [..ListenBrainz.DefaultUserAgent];
 
   private HttpClient Client {
     get {
@@ -357,9 +350,7 @@ public sealed partial class ListenBrainz : IDisposable {
   /// <summary>Sets up code to run to configure a newly-created HTTP client.</summary>
   /// <param name="code">The configuration code for an HTTP client, or <see langword="null"/> to clear such code.</param>
   /// <remarks>The configuration code will be called <em>after</em> <see cref="UserAgent"/> is applied.</remarks>
-  public void ConfigureClient(Action<HttpClient>? code) {
-    this._clientConfiguration = code;
-  }
+  public void ConfigureClient(Action<HttpClient>? code) => this._clientConfiguration = code;
 
   /// <summary>Sets up code to run to create an HTTP client.</summary>
   /// <param name="code">The creation code for an HTTP client, or <see langword="null"/> to clear such code.</param>
@@ -367,9 +358,7 @@ public sealed partial class ListenBrainz : IDisposable {
   /// <see cref="UserAgent"/> and any code set via <see cref="ConfigureClient(System.Action{System.Net.Http.HttpClient}?)"/> will be
   /// applied to the client returned by <paramref name="code"/>.
   /// </remarks>
-  public void ConfigureClientCreation(Func<HttpClient>? code) {
-    this._clientCreation = code;
-  }
+  public void ConfigureClientCreation(Func<HttpClient>? code) => this._clientCreation = code;
 
   /// <summary>Discards any and all resources held by this ListenBrainz client.</summary>
   /// <remarks>Further attempts at web service requests will cause <see cref="ObjectDisposedException"/> to be thrown.</remarks>
