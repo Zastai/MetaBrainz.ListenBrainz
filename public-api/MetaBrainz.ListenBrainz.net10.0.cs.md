@@ -748,9 +748,9 @@ public interface IFoundPlaylists : MetaBrainz.Common.Json.IJsonBasedObject {
 ### Type: IGenreActivity
 
 ```cs
-public interface IGenreActivity : MetaBrainz.Common.Json.IJsonBasedObject {
+public interface IGenreActivity : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
-  System.Collections.Generic.IReadOnlyList<IGenreActivityDetails>? Activity {
+  System.Collections.Generic.IReadOnlyList<IGenreActivityDetails> Activity {
     public abstract get;
   }
 
