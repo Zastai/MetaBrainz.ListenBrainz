@@ -159,7 +159,7 @@ public sealed partial class ListenBrainz {
     if (ListenBrainz.TraceSource.Switch.ShouldTrace(TraceEventType.Verbose)) {
       var message = await response.GetStringContentAsync(cancellationToken).ConfigureAwait(false);
       if (message.Length > 0) {
-        ListenBrainz.TraceSource.TraceEvent(TraceEventType.Verbose, 9, "MESSAGE: {0}", TextUtils.FormatMultiLine(message));
+        ListenBrainz.TraceSource.TraceEvent(TraceEventType.Verbose, 10, "MESSAGE: {0}", TextUtils.FormatMultiLine(message));
       }
     }
   }
