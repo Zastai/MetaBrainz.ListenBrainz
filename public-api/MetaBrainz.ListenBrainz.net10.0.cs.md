@@ -513,7 +513,7 @@ public interface IArtistCredit {
 ```cs
 public interface IArtistEvolutionActivity : IStatistics, MetaBrainz.Common.Json.IJsonBasedObject {
 
-  System.Collections.Generic.IReadOnlyList<IArtistTimeRange>? Activity {
+  System.Collections.Generic.IReadOnlyList<IArtistTimeRange> Activity {
     public abstract get;
   }
 

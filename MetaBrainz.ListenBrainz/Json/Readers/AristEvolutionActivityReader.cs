@@ -63,7 +63,7 @@ internal sealed class ArtistEvolutionActivityReader : PayloadReader<ArtistEvolut
       reader.Read();
     }
     return new ArtistEvolutionActivity {
-      Activity = activity,
+      Activity = activity ?? throw new JsonException("Expected artist evolution activity not found or null."),
       LastUpdated = lastUpdated ?? throw new JsonException("Expected last-updated timestamp not found or null."),
       NewestListen = newestListen,
       OldestListen = oldestListen,
