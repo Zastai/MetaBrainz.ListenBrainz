@@ -564,6 +564,135 @@ public sealed partial class ListenBrainz {
 
   #endregion
 
+  #region /1/user/xxx/playlists/
+
+  /// <summary>Gets playlists that were created by a specific user.</summary>
+  /// <param name="user">The MusicBrainz ID of the user.</param>
+  /// <param name="count">
+  /// The (maximum) number of results to return. If not specified (or <see langword="null"/>), up to
+  /// <seealso cref="DefaultItemsPerGet"/> will be returned. Values over <see cref="MaxItemsPerGet"/> will be treated as if they
+  /// were exactly <see cref="MaxItemsPerGet"/>.
+  /// </param>
+  /// <param name="offset">
+  /// The offset (from the start of the results) of the matching playlists to return. If this is equal to or higher than the total
+  /// number of matches, no results will be returned.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The playlists that were found (if any). These will only contain the playlist information, not their tracks.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IFoundPlaylists> GetPlaylistsCreatedByAsync(string user, int? count = null, int? offset = null,
+                                                          CancellationToken cancellationToken = default) {
+    var options = ListenBrainz.OptionsForPageableResource(2, count, offset);
+    return this.GetAsync<IFoundPlaylists, FoundPlaylists>($"user/{user}/playlists", options, cancellationToken);
+  }
+
+  #endregion
+
+  #region /1/user/xxx/playlists/collaborator
+
+  /// <summary>Gets playlists where a specific user is listed as a collaborator.</summary>
+  /// <param name="user">The MusicBrainz ID of the user.</param>
+  /// <param name="count">
+  /// The (maximum) number of results to return. If not specified (or <see langword="null"/>), up to
+  /// <seealso cref="DefaultItemsPerGet"/> will be returned. Values over <see cref="MaxItemsPerGet"/> will be treated as if they
+  /// were exactly <see cref="MaxItemsPerGet"/>.
+  /// </param>
+  /// <param name="offset">
+  /// The offset (from the start of the results) of the matching playlists to return. If this is equal to or higher than the total
+  /// number of matches, no results will be returned.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The playlists that were found (if any). These will only contain the playlist information, not their tracks.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IFoundPlaylists> GetCollaboratorPlaylistsAsync(string user, int? count = null, int? offset = null,
+                                                             CancellationToken cancellationToken = default) {
+    var options = ListenBrainz.OptionsForPageableResource(2, count, offset);
+    return this.GetAsync<IFoundPlaylists, FoundPlaylists>($"user/{user}/playlists/recommendations", options, cancellationToken);
+  }
+
+  #endregion
+
+  #region /1/user/xxx/playlists/createdfor
+
+  /// <summary>Gets playlists that were created for a specific user.</summary>
+  /// <param name="user">The MusicBrainz ID of the user.</param>
+  /// <param name="count">
+  /// The (maximum) number of results to return. If not specified (or <see langword="null"/>), up to
+  /// <seealso cref="DefaultItemsPerGet"/> will be returned. Values over <see cref="MaxItemsPerGet"/> will be treated as if they
+  /// were exactly <see cref="MaxItemsPerGet"/>.
+  /// </param>
+  /// <param name="offset">
+  /// The offset (from the start of the results) of the matching playlists to return. If this is equal to or higher than the total
+  /// number of matches, no results will be returned.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The playlists that were found (if any). These will only contain the playlist information, not their tracks.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IFoundPlaylists> GetPlaylistsCreatedForAsync(string user, int? count = null, int? offset = null,
+                                                           CancellationToken cancellationToken = default) {
+    var options = ListenBrainz.OptionsForPageableResource(2, count, offset);
+    return this.GetAsync<IFoundPlaylists, FoundPlaylists>($"user/{user}/playlists/createdfor", options, cancellationToken);
+  }
+
+  #endregion
+
+  #region /1/user/xxx/playlists/recommendations
+
+  /// <summary>Gets recommendation playlists for a specific user.</summary>
+  /// <param name="user">The MusicBrainz ID of the user.</param>
+  /// <param name="count">
+  /// The (maximum) number of results to return. If not specified (or <see langword="null"/>), up to
+  /// <seealso cref="DefaultItemsPerGet"/> will be returned. Values over <see cref="MaxItemsPerGet"/> will be treated as if they
+  /// were exactly <see cref="MaxItemsPerGet"/>.
+  /// </param>
+  /// <param name="offset">
+  /// The offset (from the start of the results) of the matching playlists to return. If this is equal to or higher than the total
+  /// number of matches, no results will be returned.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The playlists that were found (if any). These will only contain the playlist information, not their tracks.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IFoundPlaylists> GetRecommendationPlaylistsAsync(string user, int? count = null, int? offset = null,
+                                                               CancellationToken cancellationToken = default) {
+    var options = ListenBrainz.OptionsForPageableResource(2, count, offset);
+    return this.GetAsync<IFoundPlaylists, FoundPlaylists>($"user/{user}/playlists/recommendations", options, cancellationToken);
+  }
+
+  #endregion
+
+  #region /1/user/xxx/playlists/search
+
+  /// <summary>Finds playlists for a specific user by name.</summary>
+  /// <param name="user">The MusicBrainz ID of the user.</param>
+  /// <param name="name">The playlist name.</param>
+  /// <param name="count">
+  /// The (maximum) number of results to return. If not specified (or <see langword="null"/>), up to
+  /// <seealso cref="DefaultItemsPerGet"/> will be returned. Values over <see cref="MaxItemsPerGet"/> will be treated as if they
+  /// were exactly <see cref="MaxItemsPerGet"/>.
+  /// </param>
+  /// <param name="offset">
+  /// The offset (from the start of the results) of the matching playlists to return. If this is equal to or higher than the total
+  /// number of matches, no results will be returned.
+  /// </param>
+  /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+  /// <returns>The playlists that were found (if any). These will only contain the playlist information, not their tracks.</returns>
+  /// <exception cref="HttpRequestException">When there was a problem sending the web service request.</exception>
+  /// <exception cref="HttpError">When the web service sends a response indicating an error.</exception>
+  public Task<IFoundPlaylists> FindPlaylistsByNameAsync(string user, string name, int? count = null, int? offset = null,
+                                                        CancellationToken cancellationToken = default) {
+    // LB-1837: The documentation says the parameter is `name`, but it actually responds to `query` instead. So pass both.
+    var options = ListenBrainz.OptionsForPageableResource(4, count, offset);
+    options["name"] = name;
+    options["query"] = name;
+    return this.GetAsync<IFoundPlaylists, FoundPlaylists>($"user/{user}/playlists/search", options, cancellationToken);
+  }
+
+  #endregion
+
   #region /1/validate-token
 
   /// <summary>Validates a given user token.</summary>

@@ -5,8 +5,9 @@
 ### Me
 GET https://api.listenbrainz.org/1/user/{{lb-user-name}}/playlists/search
   ?query="Science Fiction"
+  &name="Double Feature"
 
-### Rob (subset)
+### Wil Wheaton (subset)
 GET https://api.listenbrainz.org/1/user/wilwheaton/playlists/search
   ?query=Shut Up Wesley
   &count=3
