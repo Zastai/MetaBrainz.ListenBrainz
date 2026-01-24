@@ -75,7 +75,7 @@ public sealed class ListenBrainz : System.IDisposable {
     public static set;
   }
 
-  System.Collections.Generic.IList<System.Net.Http.Headers.ProductInfoHeaderValue> DefaultUserAgent {
+  System.Collections.Generic.List<System.Net.Http.Headers.ProductInfoHeaderValue> DefaultUserAgent {
     public static get;
   }
 
