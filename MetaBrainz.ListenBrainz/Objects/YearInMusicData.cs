@@ -35,6 +35,8 @@ internal sealed class YearInMusicData : JsonBasedObject, IYearInMusicData {
 
   public int? ReleaseGroupCount { get; init; }
 
+  public IReadOnlySet<ISimilarUser>? SimilarUsers { get; init; }
+
   public IReadOnlyList<ITopArtist>? TopArtists { get; init; }
 
   public IPlaylist? TopDiscoveriesPlaylist { get; init; }
@@ -56,8 +58,6 @@ internal sealed class YearInMusicData : JsonBasedObject, IYearInMusicData {
   public IPlaylist? TopRecordingsPlaylist { get; init; }
 
   public IReadOnlyDictionary<string, Uri>? TopRecordingsPlaylistCoverArt { get; init; }
-
-  public IReadOnlyDictionary<string, decimal>? SimilarUsers { get; init; }
 
   public IReadOnlyList<IReleaseGroupInfo>? TopReleaseGroups { get; init; }
 

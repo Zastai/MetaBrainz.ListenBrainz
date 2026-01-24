@@ -60,11 +60,8 @@ public interface IYearInMusicData : IJsonBasedObject {
   /// <remarks>This field is only provided for the Year in Music 2023 and later.</remarks>
   int? ReleaseGroupCount { get; }
 
-  /// <summary>
-  /// Users with tastes similar to this one.<br/>
-  /// The key is the user ID, the value is the degree of similarity (between 0 and 1, so multiply by 100 for the percentage.
-  /// </summary>
-  IReadOnlyDictionary<string, decimal>? SimilarUsers { get; }
+  /// <summary>Users with tastes similar to this one.</summary>
+  IReadOnlySet<ISimilarUser>? SimilarUsers { get; }
 
   /// <summary>Information about a user's top artists.</summary>
   IReadOnlyList<ITopArtist>? TopArtists { get; }

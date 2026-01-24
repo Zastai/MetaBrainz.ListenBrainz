@@ -1698,7 +1698,7 @@ public interface IYearInMusicData : MetaBrainz.Common.Json.IJsonBasedObject {
     public abstract get;
   }
 
-  System.Collections.Generic.IReadOnlyDictionary<string, decimal>? SimilarUsers {
+  System.Collections.Generic.IReadOnlySet<ISimilarUser>? SimilarUsers {
     public abstract get;
   }
 

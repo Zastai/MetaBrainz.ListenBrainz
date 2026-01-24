@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 
 using MetaBrainz.Common.Json;
@@ -164,7 +166,7 @@ internal sealed class YearInMusicDataReader : ObjectReader<YearInMusicData> {
       RecordingCount = recordingCount,
       ReleaseCount = releaseCount,
       ReleaseGroupCount = releaseGroupCount,
-      SimilarUsers = similarUsers,
+      SimilarUsers = similarUsers?.Select(YearInMusicDataReader.SimilarUserFromDictionaryEntry).ToHashSet(),
       TopArtists = topArtists,
       TopGenres = topGenres,
       TopDiscoveriesPlaylist = discoveriesPlaylist,
@@ -182,5 +184,10 @@ internal sealed class YearInMusicDataReader : ObjectReader<YearInMusicData> {
       UnhandledProperties = rest,
     };
   }
+
+  private static ISimilarUser SimilarUserFromDictionaryEntry(KeyValuePair<string, decimal> item) => new SimilarUser {
+    Name = item.Key,
+    Similarity = item.Value * 100
+  };
 
 }
