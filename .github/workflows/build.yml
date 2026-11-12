@@ -23,7 +23,7 @@ jobs:
     - name: Check out the project
       uses: actions/checkout@v6
     - name: Set up .NET ${{env.dotnet-version}}
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       id: setup
       with:
         dotnet-version: ${{env.dotnet-version}}
